@@ -29,12 +29,20 @@ public class Product
     private double costPrice;
     private double salePrice;
 
+    /* product <->  Image[one to many ]*/
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Image> image;
 
+    /* Category <-> Product [Many to one ]*/
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 
     private boolean is_activated;
+
+    /*  used in category */
+    public void setActivated(boolean categoryActivated) {
+        this.is_activated = categoryActivated;
+    }
 }

@@ -24,7 +24,13 @@ public interface ProductService
     List<ProductDto> findAllProducts();
     List<ProductDto> findAllByOrderDesc();
     void deleteProduct(long id);
+
+//    Long countAllProducts();
+
     Product findBYId(long id);
     List<Product> findProductsByCategory(long id);
     Page<ProductDto> searchProducts(int pageNo,String keyword);
+
+    void disableCategoryAndProductsById(Long id);
+    boolean existsByName(String name);
 }

@@ -97,6 +97,13 @@ public class CategoryServiceImpl implements CategoryService
     public Category findById(long id) {
         return categoryRepository.findById(id);
     }
+
+    @Override
+    public void disableCategoryAndProductsById(Long id) {
+        Category category = categoryRepository.getById(id);
+        category.disableCategoryAndProducts();
+        categoryRepository.save(category);
+    }
 }
 
 

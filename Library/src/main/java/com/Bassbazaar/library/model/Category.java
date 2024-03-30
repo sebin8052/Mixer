@@ -29,7 +29,7 @@ public class Category
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "category", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     private List<Product> products;
 
-/*    public void disableCategoryAndProducts()
+    public void disableCategoryAndProducts()          // used to disable category and their product
 {
         setActivated(false);
         setDeleted(true);
@@ -39,8 +39,8 @@ public class Category
                 product.setActivated(false);
             }
         }
-    }  */
+    }
 }
 
 
-// one to one :1 category have multilple product
+

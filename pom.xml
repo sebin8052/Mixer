@@ -12,6 +12,7 @@
       <modules>
      <module>Admin</module>
      <module>Customer</module>
+     <module>Library</module>
       </modules>
 
     <properties>

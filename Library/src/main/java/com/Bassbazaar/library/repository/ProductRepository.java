@@ -1,5 +1,6 @@
 package com.Bassbazaar.library.repository;
 
+import com.Bassbazaar.library.model.Category;
 import com.Bassbazaar.library.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,5 +32,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     List<Product> findAllByActivatedTrueAndSortBy(@Param("sort") String sort);
 
     List<Product> findAllByNameContainingIgnoreCase(String keyword);
+
+    List<Product> findProductsByCategory(Category category);
+    boolean existsByName(String name);
+
+
 
 }

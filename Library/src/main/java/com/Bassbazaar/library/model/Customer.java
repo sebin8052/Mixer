@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,11 +30,16 @@ public class Customer implements Serializable
     @Column(name = "is_activated")
     private boolean isActivated;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
 
+    private static final long OTP_VALID_DURATION = 5 * 60 * 1000;
+    @Column(name = "one_time_password")
+    private String otp;
+
+    @Column(name = "otp_requested_time")
+    private LocalDateTime otpRequestedTime;
 
 }
 
-//serializable: class is serialized
-//   --
-//means class can converted into bytestream  for storage and transmission
 

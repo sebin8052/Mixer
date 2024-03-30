@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,6 +29,10 @@ public class CustomerDto implements Serializable
     @NotNull(message = "password not null")
     @Size(min = 3,message = "minimum 3 letter required")
     private String password;
+    private String confirmPassword;
+
+/*    private List<Address> address;*/
+
     private boolean is_activated;
     private String role;
 }

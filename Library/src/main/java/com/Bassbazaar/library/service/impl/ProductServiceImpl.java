@@ -1,8 +1,10 @@
 package com.Bassbazaar.library.service.impl;
 
 import com.Bassbazaar.library.dto.ProductDto;
+import com.Bassbazaar.library.model.Category;
 import com.Bassbazaar.library.model.Image;
 import com.Bassbazaar.library.model.Product;
+import com.Bassbazaar.library.repository.CategoryRepository;
 import com.Bassbazaar.library.repository.ImageRepository;
 import com.Bassbazaar.library.repository.ProductRepository;
 import com.Bassbazaar.library.service.ProductService;
@@ -26,7 +28,7 @@ public class ProductServiceImpl implements ProductService
     private ProductRepository productRepository;
     private ImageRepository imageRepository;
 
-
+    private CategoryRepository categoryRepository;
     private ImageUpload imageUpload;
 
     @Autowired
@@ -266,4 +268,24 @@ public class ProductServiceImpl implements ProductService
         Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
         return dtoPage;
     }
+
+
+    @Override
+    public void disableCategoryAndProductsById(Long id) {
+        Category category = categoryRepository.getById(id);
+        category.disableCategoryAndProducts();
+        categoryRepository.save(category);
+        List<Product> products = productRepository.findProductsByCategory(category);
+        for (Product product : products) {
+            product.setActivated(category.isActivated());
+            productRepository.save(product);
+        }
+    }
+
+
+    @Override
+    public boolean existsByName(String name) {
+        return productRepository.existsByName(name);
+    }
+
 }

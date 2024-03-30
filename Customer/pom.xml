@@ -85,6 +85,13 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>                          <!-- use to create random string for email -->
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.14.10 </version> <!-- Use the version suitable for your project -->
+        </dependency>
+
     </dependencies>
 
     <build>

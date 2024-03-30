@@ -10,6 +10,6 @@ public interface UserOtpService
     public UserOtp findByEmail(String email);
 
 
-//    public void deleteByEmail(String email);
+
 
 }

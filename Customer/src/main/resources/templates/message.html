@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>message Password</title>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/imgs/theme/mixer.jpg}">
+    <style>
+        body {
+            background-image: url(https://st4.depositphotos.com/12985790/21415/i/600/depositphotos_214150544-stock-photo-low-angle-view-smiling-girlfriend.jpg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .container-fluid {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="logo logo-width-1">
+    <a th:href="@{/}">
+        <img th:src="@{/imgs/theme/mixer.jpg}" style="height: 70px;" alt="logo">
+    </a>
+</div>
+<div class="container-fluid">
+    <div class="text-center">
+        <h2 th:text="${title}" style="color: black;"></h2>
+        <h4 th:text="${message}" style="color: black;"></h4>
+    </div>
+</div>
+</body>
+</html>

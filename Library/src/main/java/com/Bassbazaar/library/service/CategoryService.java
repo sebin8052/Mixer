@@ -25,4 +25,6 @@ public interface  CategoryService
     Long countAllCategories();
 
     Category findById(long id);
+
+    void disableCategoryAndProductsById(Long id);
 }

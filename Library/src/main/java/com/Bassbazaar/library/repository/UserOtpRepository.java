@@ -13,8 +13,6 @@ public interface UserOtpRepository extends JpaRepository<UserOtp,Long>
 
 
 
-/*    @Transactional
-    void deleteByEmail(String email);*/
 
 
 }

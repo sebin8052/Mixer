@@ -1,6 +1,7 @@
 package com.Bassbazaar.library.service.impl;
 
 
+import com.Bassbazaar.library.Exception.CustomerNotFoundException;
 import com.Bassbazaar.library.dto.CustomerDto;
 import com.Bassbazaar.library.model.Customer;
 import com.Bassbazaar.library.repository.CustomerRepository;
@@ -64,5 +65,47 @@ public class CustomerServiceImpl implements CustomerService
         customer.setActivated(true);
         customerRepository.save(customer);
     }
+
+    @Override
+    public Customer update(CustomerDto customerDto) {
+        Customer customer=customerRepository.findByEmail(customerDto.getEmail());
+        customer.setPassword(customerDto.getPassword());
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public void changePass(CustomerDto customerDto) {
+        Customer customer=customerRepository.findByEmail(customerDto.getEmail());
+        customer.setPassword(customerDto.getPassword());
+        customerRepository.save(customer);
+    }
+
+    @Override
+    public void updateResetPasswordToken(String token, String email) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer != null) {
+            customer.setResetPasswordToken(token);
+            customerRepository.save(customer);
+        } else {
+            throw new CustomerNotFoundException("Could not find any customer with the email " + email);
+        }
+    }
+
+    @Override
+    public Customer getByResetPasswordToken(String token)
+    {
+     return customerRepository.findByResetPasswordToken(token);
+
+    }
+
+
+    public void updatePassword(Customer customer,String newPassword)
+    {
+        customer.setPassword(newPassword);
+        customer.setResetPasswordToken(null);
+        customerRepository.save(customer);
+    }
+
+
 
 }
