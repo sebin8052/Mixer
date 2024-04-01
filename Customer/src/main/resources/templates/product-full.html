@@ -20,7 +20,7 @@
 
 <div th:replace="~{fragments::mobiletop}"></div>
 
-
+                           <!-- Breadcrumb-->
 <main class="main">
     <div class="page-header breadcrumb-wrap">
         <div class="container">
@@ -31,6 +31,7 @@
             </div>
         </div>
     </div>
+
     <section class="mt-50 mb-50">
         <div class="container">
             <div class="row">
@@ -56,6 +57,7 @@
                                         </th:block>
                                     </div>
                                 </div>
+
                                 <!-- End Gallery -->
                                 <div class="social-icons single-share">
                                     <ul class="text-grey-5 d-inline-block">
@@ -67,6 +69,9 @@
                                     </ul>
                                 </div>
                             </div>
+
+                            <!-- Product name [Thumbnail right]-->
+
                             <div class="col-md-6 col-sm-12 col-xs-12">
                                 <div class="detail-info">
                                     <h2 th:text = "${productDto.name}" class="title-detail"></h2>
@@ -85,6 +90,9 @@
                                             <span class="font-small ml-5 text-muted"> (25 reviews)</span>
                                         </div>
                                     </div>
+
+                                    <!-- Product Price -->
+
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
                                             <ins><span class="text-brand" th:unless="${productDto.salePrice > 0}">₹[(${productDto.costPrice})]</span></ins>
@@ -93,6 +101,9 @@
                                             <!--                      <span class="save-price  font-md color3 ml-15">25% Off</span>-->
                                         </div>
                                     </div>
+
+                                    <!-- Product Short Descrition -->
+
                                     <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                     <div class="short-desc mb-30">
                                         <p th:text="${productDto.shortDescription}"></p>
@@ -112,11 +123,20 @@
                                     <ul class="product-meta font-xs color-grey mt-50">
                                         <li>Availability:<span th:text="${productDto.currentQuantity}" class="in-stock text-success ml-5"></span></li>
                                     </ul>
+                                    <!-- Add to cart and Buy Now [Form] -->
+
+                                    <form id="addToCart" th:action="@{/add-to-cart}" method="post">
+                                        <input type="hidden" name="productId" th:value="${productDto.id}" />
+                                        <input type="hidden" name="buyNow" value="false" />
+                                        <button class="btn btn-lg" id="addToCartButton" type="submit" style="background-color: blue; color: white;"><i class="fi-rs-shopping-cart mr-5"></i>Add to cart</button>
+                                        <button class="btn btn-lg" id="buyNowButton" type="submit" onclick="setBuyNow()"><i class="fi-rs-shopping-bag mr-5"></i>Buy Now</button>
+                                    </form>
+
                                 </div>
-                                <!-- Detail Info -->
                             </div>
                         </div>
 
+                        <!--  DESCRIPTION -->
                         <div class="tab-style3">
                             <ul class="nav nav-tabs text-uppercase">
                                 <li class="nav-item">
@@ -154,6 +174,8 @@
                                         </p>
                                     </div>
                                 </div>
+
+                                <!--ADDITIONAL INFO -->
                                 <div class="tab-pane fade" id="Additional-info">
                                     <table class="font-md">
                                         <tbody>
@@ -452,11 +474,20 @@
 
 
 <footer th:replace="~{fragments::downbar}"></footer>
-
-
 <div th:replace = "~{fragments::script}"></div>
 <script th:src="@{/js/plugins/jquery.elevatezoom.js}"></script>
-<!-- Template  JS -->
+
+<script>
+    function setBuyNow() {
+        document.getElementById("addToCartButton").disabled = true; // Disable "Add to Cart" button
+        document.getElementById("buyNowButton").disabled = true; // Disable "Buy Now" button
+        document.getElementsByName("buyNow")[0].value = "true"; // Set buyNow hidden input to true
+        document.getElementById("addToCart").submit(); // Submit the form
+    }
+</script>
+
+
 <script th:src="@{/js/shop.js?v=3.4}"></script>
 </body>
 </html>
+
