@@ -1,6 +1,7 @@
 package com.Bassbazaar.library.dto;
 
 
+import com.Bassbazaar.library.model.Address;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,7 +32,7 @@ public class CustomerDto implements Serializable
     private String password;
     private String confirmPassword;
 
-/*    private List<Address> address;*/
+    private List<Address> address;
 
     private boolean is_activated;
     private String role;

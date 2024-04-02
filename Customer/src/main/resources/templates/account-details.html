@@ -25,6 +25,9 @@
         <div th:if="${success}" class="text-center alert alert-success">
             <p th:text="${success}"></p>
         </div>
+
+                <!--    update customer form      -->
+
         <form method="post" th:action="@{/update-account}" th:object="${customer}" id="accountForm">
             <div class="row">
                 <div class="form-group">
@@ -49,7 +52,11 @@
             </div>
         </form>
 
+
         <div class="card-body">
+
+            <!-- Change password of the user account -->
+
             <form th:action="@{/change-password}" method="post" name="passwordForm" id="passswordForm">
                 <h5 class="formTitle">
                     <i>Change Password</i>
@@ -77,6 +84,7 @@
                     </button>
                 </div>
             </form>
+
         </div>
         <script th:src="@{/js/account.js}"></script>
     </div>

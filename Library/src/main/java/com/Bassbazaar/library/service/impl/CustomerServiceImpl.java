@@ -106,6 +106,44 @@ public class CustomerServiceImpl implements CustomerService
         customerRepository.save(customer);
     }
 
+    /* Account of Customer */
 
+    @Override
+    public CustomerDto findByEmailCustomerDto(String email) {
+        Customer customer = customerRepository.findByEmail(email);
+        CustomerDto customerDto=new CustomerDto();
+        customerDto.setEmail(customer.getEmail());
+        customerDto.setId(customer.getId());
+        customerDto.setFirstName(customer.getFirstName());
+        customerDto.setLastName(customer.getLastName());
+        customerDto.setMobileNumber(customer.getMobileNumber());
+        customerDto.setAddress(customer.getAddress());
+        customerDto.setPassword(customer.getPassword());
+        customerDto.set_activated(customer.isActivated());
+        return customerDto;
+    }
+
+    @Override
+    public CustomerDto updateAccount(CustomerDto customerDto, String email) {
+        Customer customer= findByEmail(email);
+        customer.setFirstName(customerDto.getFirstName());
+        customer.setLastName(customerDto.getLastName());
+        customer.setMobileNumber(customerDto.getMobileNumber());
+        customerRepository.save(customer);
+        CustomerDto customerDtoUpdated = convertEntityToDto(customer);
+        return customerDtoUpdated;
+    }
+
+    public CustomerDto convertEntityToDto(Customer customer)
+    {
+        CustomerDto customerDto=new CustomerDto();
+        customerDto.setId(customer.getId());
+        customerDto.setFirstName(customer.getFirstName());
+        customerDto.setLastName(customer.getLastName());
+        customerDto.setMobileNumber(customer.getMobileNumber());
+        customerDto.set_activated(customer.isActivated());
+        customerDto.setPassword(customer.getPassword());
+        return customerDto;
+    }
 
 }

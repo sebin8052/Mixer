@@ -131,5 +131,56 @@ public class UserController
 
     /* Account details in the Customer */
 
+    @GetMapping("/account-details")
+    public String getUpdateAccount(Principal principal,Model model){
+        if(principal==null){
+            return "redirect:/login";
+        }else{
+            CustomerDto customer = customerService.findByEmailCustomerDto(principal.getName());
+            model.addAttribute("customer",customer);
+            return "account-details";
+        }
+    }
+
+    @PostMapping("/update-account")
+    public String UpdateAccount(@ModelAttribute("customer")CustomerDto customerDto,
+                                RedirectAttributes redirectAttributes,
+                                Principal principal)
+    {
+        if(principal==null){
+            return "redirect:/login";
+        }else{
+            CustomerDto customerUpdated = customerService.updateAccount(customerDto,principal.getName());
+            redirectAttributes.addFlashAttribute("customer",customerUpdated);
+            redirectAttributes.addFlashAttribute("success","Updated Successfully");
+            return "redirect:/dashboard?tab=account-detail";
+
+        }
+    }
+
+    @PostMapping("/change-password")
+    public String changePass(@RequestParam("oldPassword") String oldPassword,
+                             @RequestParam("newPassword") String newPassword,
+                             @RequestParam("repeatNewPassword") String repeatPassword,
+                             RedirectAttributes attributes,
+                             Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        } else {
+            CustomerDto customer = customerService.findByEmailCustomerDto(principal.getName());
+            if (passwordEncoder.matches(oldPassword, customer.getPassword())
+                    && !passwordEncoder.matches(newPassword, oldPassword)
+                    && !passwordEncoder.matches(newPassword, customer.getPassword())
+                    && repeatPassword.equals(newPassword) && newPassword.length() >= 3) {
+                customer.setPassword(passwordEncoder.encode(newPassword));
+                customerService.changePass(customer);
+                attributes.addFlashAttribute("success", "Your password has been changed successfully!");
+                return "redirect:/dashboard?tab=account-detail";
+            } else {
+                attributes.addFlashAttribute("message", "Entered Password Does Not Match");
+                return "redirect:/dashboard?tab=account-detail";
+            }
+        }
+    }
 
 }

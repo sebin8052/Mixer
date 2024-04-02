@@ -24,9 +24,9 @@ public interface CustomerService
 
     Customer update(CustomerDto customerDto);
 
-  /*  CustomerDto findByEmailCustomerDto(String email); */// -> usercontroller
+    CustomerDto findByEmailCustomerDto(String email); // -> usercontroller
 
-   /* CustomerDto updateAccount(CustomerDto customerDto,String email);*/ //-> usercontroller
+    CustomerDto updateAccount(CustomerDto customerDto,String email); //-> usercontroller
 
     void changePass(CustomerDto customerDto);
     void updateResetPasswordToken(String token, String email) throws CustomerNotFoundException;
