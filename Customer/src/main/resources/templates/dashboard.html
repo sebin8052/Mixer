@@ -21,6 +21,8 @@
 </head>
 <body>
 
+  <!-- header automatically changed -->
+
 <header  class="header-area header-style-5">
     <div class="header-top header-top-ptb-1 d-none d-lg-block">
         <div class="container">
@@ -57,7 +59,7 @@
             </div>
         </div>
     </div>
-
+               <!-- Nav bar-->
     <div class="header-bottom sticky-bar sticky-white-bg">
         <div class="container">
             <div class="header-wrap header-space-between position-relative">
@@ -85,6 +87,7 @@
                     </nav>
                 </div>
 
+                <!-- Right side Nav item[wishlist  /Cart] -->
                 <div class="header-action-2">
                     <div class="header-action-icon-2">
                         <a th:href="@{shop-wishlist.html}">
@@ -97,6 +100,7 @@
                         </a>
                     </div>
                 </div>
+
                 <div class="header-action-icon d-block d-lg-none">
                     <div class="burger-icon">
                         <span class="burger-icon-top"></span>
@@ -118,13 +122,16 @@
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
-                <a th:href="@{index.html}" rel="nofollow">Home</a>
+                <a th:href="@{/}" rel="nofollow">Home</a>
                 <span></span> Pages
                 <span></span> Account
             </div>
         </div>
     </div>
-    <section class="pt-25 pb-150">
+
+                      <!-- Content in the Dasboard.html   -->
+
+ <!--   <section class="pt-25 pb-150">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 m-auto">
@@ -138,9 +145,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
                                     </li>
-                                    <!--                                    <li class="nav-item">-->
-                                    <!--                                        <a class="nav-link" id="wallet-tab" data-bs-toggle="tab" href="#wallets" role="tab" aria-controls="wallets" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Wallet</a>-->
-                                    <!--                                    </li>-->
+                                    &lt;!&ndash;                                    <li class="nav-item">&ndash;&gt;
+                                    &lt;!&ndash;                                        <a class="nav-link" id="wallet-tab" data-bs-toggle="tab" href="#wallets" role="tab" aria-controls="wallets" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Wallet</a>&ndash;&gt;
+                                    &lt;!&ndash;                                    </li>&ndash;&gt;
                                     <li class="nav-item">
                                         <a class="nav-link" id="address-tab" data-bs-toggle="tab"  href="#address" role="tab"  aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
                                     </li>
@@ -175,17 +182,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--                                <div class="tab-pane fade" id="wallets" role="tabpanel" aria-labelledby="wallet-tab">-->
-                                <!--                                    <div class="card">-->
-                                <!--&lt;!&ndash;                                        <div class="card-header">&ndash;&gt;-->
-                                <!--&lt;!&ndash;                                            <h5 class="mb-0">Wallet</h5>&ndash;&gt;-->
-                                <!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
-                                <!--                                        <div class="wallets" id="wallet-content">-->
+                                &lt;!&ndash;                                <div class="tab-pane fade" id="wallets" role="tabpanel" aria-labelledby="wallet-tab">&ndash;&gt;
+                                &lt;!&ndash;                                    <div class="card">&ndash;&gt;
+                                &lt;!&ndash;&lt;!&ndash;                                        <div class="card-header">&ndash;&gt;&ndash;&gt;
+                                &lt;!&ndash;&lt;!&ndash;                                            <h5 class="mb-0">Wallet</h5>&ndash;&gt;&ndash;&gt;
+                                &lt;!&ndash;&lt;!&ndash;                                        </div>&ndash;&gt;&ndash;&gt;
+                                &lt;!&ndash;                                        <div class="wallets" id="wallet-content">&ndash;&gt;
 
-                                <!--                                        </div>-->
+                                &lt;!&ndash;                                        </div>&ndash;&gt;
 
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
+                                &lt;!&ndash;                                    </div>&ndash;&gt;
+                                &lt;!&ndash;                                </div>&ndash;&gt;
                                 <div  class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                     <div class="row">
 
@@ -202,9 +209,9 @@
                                     <div th:if="${success}" class="text-center alert alert-success">
                                         <p th:text="${success}"></p>
                                     </div>
-                                    <!--                                    <div th:if = "${message}" class="text-center alert-danger">-->
-                                    <!--                                        <p th:text = "${message}"></p>-->
-                                    <!--                                    </div>-->
+                                    &lt;!&ndash;                                    <div th:if = "${message}" class="text-center alert-danger">&ndash;&gt;
+                                    &lt;!&ndash;                                        <p th:text = "${message}"></p>&ndash;&gt;
+                                    &lt;!&ndash;                                    </div>&ndash;&gt;
                                     <div class="account-details" >
 
                                     </div>
@@ -215,7 +222,144 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section>-->
+
+
+    <section class="pt-25 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 m-auto">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="dashboard-menu">
+                                <ul class="nav flex-column" role="tablist">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="address-tab" data-bs-toggle="tab"  href="#address" role="tab"  aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                                    </li>
+
+<!--                                    <li class="nav-item">
+                                        <a class="nav-link" id="referal-tab" data-bs-toggle="tab" href="#ReferralCode" role="tab" aria-controls="ReferralCode-tab" aria-selected="true">
+                                            <i class="fi-rs-user mr-10"></i>Send Referral
+                                        </a>
+                                    </li>-->
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/logout}"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+
+                            <div class="tab-content dashboard-content">
+
+                                <!-- Dashboard-->
+                                <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                                    <div class="card">
+
+                                        <div class="card-header">
+                                            <h5>Welcome </h5><h5 th:text="${customer.firstName}" class="mb-0"></h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details.</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Orders-->
+
+                                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                    <div class="row">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Your Orders</h5>
+                                        </div>
+                                        <div class="orders" >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Address-->
+
+                                <div  class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                    <div class="row">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Billing Address</h5>
+                                        </div>
+                                        <div class="address-content" id="billing-address-content">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Referal code -->
+
+<!--                                <div class="tab-pane fade" id="ReferralCode" role="tabpanel" aria-labelledby="ReferralCode-tab">
+                                    <div class="row">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Referral Code</h5>
+                                        </div>
+                                        <div class="ReferralCode">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Referral</h5>
+                                                </div>
+                                                <div th:if="${error != null}">
+                                                    <p class="text-danger" th:text="${error}"></p>
+                                                </div>
+                                                <div th:if="${message != null}">
+                                                    <p class="text-warning" th:text="${message}"></p>
+                                                </div>
+                                                <form th:action="@{/sendReferal}" method="post" style="max-width: 420px; margin: 0 auto;">
+                                                    <div class="border border-secondary rounded p-3">
+                                                        <div>
+                                                            <p>Send the referral link to a new user <br> you will get 100rs</p>
+                                                        </div>
+                                                        <div>
+                                                            <p>
+                                                                <input type="email" name="email" class="form-control" />
+                                                            </p>
+                                                            <p class="text-center">
+                                                                <input type="submit" value="Send" class="btn btn-primary" />
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+
+                                <!-- Accoung details -->
+
+                                <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                                    <div th:if="${success}" class="text-center alert alert-success">
+                                        <p th:text="${success}"></p>
+                                    </div>
+                                    <div class="account-details" >
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 1
 </main>
 
 
@@ -229,7 +373,8 @@
 <script th:src="@{/js/tab.js}"></script>
 <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js}" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js}" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
+
+  <script>
     $(document).ready(function() {
         const openTabValue = "[[${openTab}]]" ;
         const errorMessage = "[[${message}]]";
@@ -246,9 +391,5 @@
         $('#orderTable').DataTable();
     });
 </script>
-
-
-
-
 </body>
 </html>

@@ -40,6 +40,10 @@ public class Customer implements Serializable
     @Column(name = "otp_requested_time")
     private LocalDateTime otpRequestedTime;
 
+
+    /* Customer mapped to many address*/
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Address> address;
 }
 
 

@@ -43,6 +43,7 @@ public class LoginRegisterController {
         return "login";
     }
 
+/*
     @GetMapping("/dashboard")
     public String getDashboard(@RequestParam(required = false) String tab, Model model, Principal principal, HttpSession session) {
         if (principal == null) {
@@ -62,6 +63,7 @@ public class LoginRegisterController {
             return "dashboard";
         }
     }
+*/
 
 
     @GetMapping("/register")
