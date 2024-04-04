@@ -41,9 +41,14 @@ public class Customer implements Serializable
     private LocalDateTime otpRequestedTime;
 
 
-    /* Customer mapped to many address*/
+     /*     Address    */
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Address> address;
+
+    /* ShoppingCart*/
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private ShoppingCart cart;
 }
+
 
 

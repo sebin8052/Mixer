@@ -1,5 +1,6 @@
 package com.Bassbazaar.library.service.impl;
 
+import com.Bassbazaar.library.Exception.ProductNameAlreadyExistsException;
 import com.Bassbazaar.library.dto.ProductDto;
 import com.Bassbazaar.library.model.Category;
 import com.Bassbazaar.library.model.Image;
@@ -21,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService
@@ -33,10 +36,12 @@ public class ProductServiceImpl implements ProductService
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,
-                              ImageUpload imageUpload, ImageRepository imageRepository) {
+                              ImageUpload imageUpload, ImageRepository imageRepository ,CategoryRepository categoryRepository)
+    {
         this.imageRepository = imageRepository;
         this.productRepository = productRepository;
         this.imageUpload = imageUpload;
+        this.categoryRepository=categoryRepository;
     }
 
     @Override
@@ -50,11 +55,10 @@ public class ProductServiceImpl implements ProductService
         List<ProductDto> productDtos = transferData(products);
         return productDtos;
     }
-    private List<ProductDto> transferData(List<Product> products)
-    {
+
+    private List<ProductDto> transferData(List<Product> products) {
         List<ProductDto> productDtos = new ArrayList<>();
-        for (Product product : products)
-        {
+        for (Product product : products) {
             ProductDto productDto = new ProductDto();
             productDto.setId(product.getId());
             productDto.setName(product.getName());
@@ -64,7 +68,6 @@ public class ProductServiceImpl implements ProductService
             productDto.setShortDescription(product.getShortDescription());
             productDto.setLongDescription(product.getLongDescription());
             productDto.setBrand(product.getBrand());
-
             productDto.setImage(product.getImage());
             productDto.setCategory(product.getCategory());
             productDto.setActivated(product.is_activated());
@@ -74,12 +77,15 @@ public class ProductServiceImpl implements ProductService
     }
 
 
-
+                                  /* Duplicate product */
     @Override
     public Product save(List<MultipartFile> imageProducts, ProductDto productDto) {
+        String productName = productDto.getName();
+        if (existsByName(productName)) {
+            throw new ProductNameAlreadyExistsException("Product with the same name already exists");
+        }
         Product product = new Product();
         try {
-
             product.setName(productDto.getName());
             product.setBrand(productDto.getBrand());
             product.setShortDescription(productDto.getShortDescription());
@@ -89,9 +95,7 @@ public class ProductServiceImpl implements ProductService
             product.setCategory(productDto.getCategory());
             product.set_activated(true);
             Product savedProduct = productRepository.save(product);
-            if (imageProducts == null) {
-                product.setImage(null);
-            } else {
+            if (imageProducts != null) {
                 List<Image> imagesList = new ArrayList<>();
                 for (MultipartFile imageProduct : imageProducts) {
                     Image image = new Image();
@@ -133,8 +137,6 @@ public class ProductServiceImpl implements ProductService
         try {
             long id= productDto.getId();
             Product productUpdate = productRepository.findById(id);
-
-
             productUpdate.setCategory(productDto.getCategory());
             productUpdate.setName(productDto.getName());
             productUpdate.setBrand(productUpdate.getBrand());
@@ -157,7 +159,6 @@ public class ProductServiceImpl implements ProductService
                 }
                 productUpdate.setImage(imagesList);
             }
-
             return productUpdate;
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,33 +168,33 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     public void disable(long id) {
-        Product product=productRepository.findById(id);
-        product.set_activated(false);
-
-        productRepository.save(product);
+        Product product = productRepository.findById(id);
+        if (product != null) {
+            product.set_activated(false);
+            productRepository.save(product);
+        }
     }
 
     @Override
     public void enable(long id) {
         Product product=productRepository.findById(id);
         product.set_activated(true);
-
         productRepository.save(product);
-
     }
 
     @Override
     public Page<ProductDto> findAllByActivated(long id, int pageNo) {
         List<Product> products=productRepository.findAllByActivatedTrue(id);
         List<ProductDto>productDtoList = transferData(products);
-        Pageable pageable = PageRequest.of(pageNo, 3);
+        Pageable pageable = PageRequest.of(pageNo, 5);
         Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
         return dtoPage;
     }
-    @Override
-    public Page<ProductDto> findAllByActivated(int pageNo,String sort) {
-        List<Product> products;
 
+    /*               ProductorController [Customer]       */
+    @Override
+    public Page<ProductDto> findAllByActivated(int pageNo, String sort) {
+        List<Product> products;
         if ("lowToHigh".equals(sort)) {
             products = productRepository.findAllByActivatedTrueAndSortBy("lowToHigh");
         } else if ("highToLow".equals(sort)) {
@@ -201,17 +202,20 @@ public class ProductServiceImpl implements ProductService
         } else {
             products = productRepository.findAllByActivatedTrue();
         }
-
-        List<ProductDto> productDtoList = transferData(products);
-        Pageable pageable = PageRequest.of(pageNo, 3);
+        List<ProductDto> productDtoList = transferData(products.stream()
+                .filter(product -> product.getCategory().isActivated())
+                .collect(Collectors.toList()));
+        Pageable pageable = PageRequest.of(pageNo, 5);
         return toPage(productDtoList, pageable);
-
     }
+
 
     @Override
     public List<ProductDto> findAllProducts() {
-        List<Product> products=productRepository.findAllByActivatedTrue();
-        List<ProductDto>productDtoList = transferData(products);
+        List<Product> products = productRepository.findAllByActivatedTrue();
+        List<ProductDto> productDtoList = transferData(products.stream()
+                .filter(product -> product.getCategory().isActivated())
+                .collect(Collectors.toList()));
         return productDtoList;
     }
 
@@ -227,6 +231,7 @@ public class ProductServiceImpl implements ProductService
         return new PageImpl(subList, pageable, list.size());
     }
 
+
     @Override
     public List<ProductDto> findAllByOrderDesc() {
         List<Product> products = productRepository.findAllByOrderById();
@@ -234,7 +239,7 @@ public class ProductServiceImpl implements ProductService
         return productDtos;
     }
 
-
+/* ProductController [Admin]*/
 
     @Override
     @Transactional
@@ -242,11 +247,18 @@ public class ProductServiceImpl implements ProductService
         Product product = productRepository.findById(id);
         imageRepository.deleteImagesByProductId(id);
 
-
-
+        /* used when using CartItem, Wishlist,*/
+       /* Set<CartItem> cartItemSet=product.getCartItems();
+        for(CartItem cartItem : cartItemSet){
+            cartItem.setProduct(null);
+            cartItemRepository.save(cartItem);
+        }
+        Wishlist wishlist=product.getWishlist();
+        if(wishlist!=null) {
+            wishlistRepository.delete(wishlist);
+        }*/
         productRepository.delete(product);
     }
-
 
 
 
@@ -260,11 +272,12 @@ public class ProductServiceImpl implements ProductService
         return productRepository.findAllByCategoryId(id);
     }
 
+    /* ProductController [Customer]*/
     @Override
     public Page<ProductDto> searchProducts(int pageNo, String keyword) {
         List<Product> products = productRepository.findAllByNameContainingIgnoreCase(keyword);
         List<ProductDto> productDtoList = transferData(products);
-        Pageable pageable = PageRequest.of(pageNo, 3);
+        Pageable pageable = PageRequest.of(pageNo, 5);
         Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
         return dtoPage;
     }

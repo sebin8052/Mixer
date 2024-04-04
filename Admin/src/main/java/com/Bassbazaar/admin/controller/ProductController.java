@@ -1,5 +1,6 @@
 package com.Bassbazaar.admin.controller;
 
+import com.Bassbazaar.library.Exception.ProductNameAlreadyExistsException;
 import com.Bassbazaar.library.dto.CategoryDto;
 import com.Bassbazaar.library.dto.ProductDto;
 import com.Bassbazaar.library.model.Category;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -37,6 +39,14 @@ public class ProductController
         this.productService = productService;
         this.categoryService = categoryService;
     }
+
+    @ExceptionHandler(ProductNameAlreadyExistsException.class)
+     public ModelAndView handleProductNameAlreadyExistsException(ProductNameAlreadyExistsException ex)
+     {
+         ModelAndView modelAndView = new ModelAndView("add-product");
+         modelAndView.addObject("error",ex.getMessage());
+         return modelAndView;
+     }
 
     @GetMapping("/products")
     public String productList(Model model){

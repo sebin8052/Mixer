@@ -33,7 +33,7 @@ public class Address implements Serializable
      @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
      private Customer customer;
 
-     /*    @OneToMany(mappedBy = "shippingAddress")
-    private List<Order> order;*/
+     @OneToMany(mappedBy = "shippingAddress")
+    private List<Order> order;
 
 }

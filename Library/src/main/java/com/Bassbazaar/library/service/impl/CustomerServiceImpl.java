@@ -17,6 +17,10 @@ public class CustomerServiceImpl implements CustomerService
     @Autowired
     private CustomerRepository customerRepository;
 
+    public CustomerServiceImpl(CustomerRepository customerRepository)
+    {
+        this.customerRepository = customerRepository;
+    }
 
 
     @Override
@@ -30,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService
     public Customer save(CustomerDto customerDto)
     {
         Customer customer = new Customer();
+
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setMobileNumber(customerDto.getMobileNumber());
@@ -66,6 +71,7 @@ public class CustomerServiceImpl implements CustomerService
         customerRepository.save(customer);
     }
 
+
     @Override
     public Customer update(CustomerDto customerDto) {
         Customer customer=customerRepository.findByEmail(customerDto.getEmail());
@@ -80,6 +86,7 @@ public class CustomerServiceImpl implements CustomerService
         customerRepository.save(customer);
     }
 
+    /*   ForgetPassword  */
     @Override
     public void updateResetPasswordToken(String token, String email) throws CustomerNotFoundException {
         Customer customer = customerRepository.findByEmail(email);
@@ -95,6 +102,7 @@ public class CustomerServiceImpl implements CustomerService
     public Customer getByResetPasswordToken(String token)
     {
      return customerRepository.findByResetPasswordToken(token);
+
 
     }
 

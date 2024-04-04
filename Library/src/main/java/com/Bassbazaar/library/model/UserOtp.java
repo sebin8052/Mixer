@@ -22,4 +22,6 @@ public class UserOtp
     private Date otpRequestedTime;
     private Date createdAt;
     private Date updateOn;
+
+
 }

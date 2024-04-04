@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,6 +21,7 @@ public class Product
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long id;
+    @Column(unique = true)
     private String name;
     private String brand;
     private String shortDescription;
@@ -28,20 +30,20 @@ public class Product
     private int currentQuantity;
     private double costPrice;
     private double salePrice;
-
-    /* product <->  Image[one to many ]*/
-
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Image> image;
-
-    /* Category <-> Product [Many to one ]*/
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 
-    private boolean is_activated;
+/*    @OneToOne(mappedBy = "product")
+    private Wishlist wishlist;*/
 
-    /*  used in category */
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<CartItem> cartItems;
+
+    private boolean is_activated;
     public void setActivated(boolean categoryActivated) {
         this.is_activated = categoryActivated;
     }
