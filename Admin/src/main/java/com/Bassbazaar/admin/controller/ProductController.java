@@ -40,6 +40,7 @@ public class ProductController
         this.categoryService = categoryService;
     }
 
+    /* Duplicate product handled exception  */
     @ExceptionHandler(ProductNameAlreadyExistsException.class)
      public ModelAndView handleProductNameAlreadyExistsException(ProductNameAlreadyExistsException ex)
      {

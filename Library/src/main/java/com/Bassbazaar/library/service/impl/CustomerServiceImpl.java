@@ -80,7 +80,8 @@ public class CustomerServiceImpl implements CustomerService
     }
 
     @Override
-    public void changePass(CustomerDto customerDto) {
+    public void changePass(CustomerDto customerDto)
+    {
         Customer customer=customerRepository.findByEmail(customerDto.getEmail());
         customer.setPassword(customerDto.getPassword());
         customerRepository.save(customer);
@@ -138,14 +139,17 @@ public class CustomerServiceImpl implements CustomerService
         customer.setLastName(customerDto.getLastName());
         customer.setMobileNumber(customerDto.getMobileNumber());
         customerRepository.save(customer);
+
         CustomerDto customerDtoUpdated = convertEntityToDto(customer);
         return customerDtoUpdated;
     }
 
+
     public CustomerDto convertEntityToDto(Customer customer)
     {
         CustomerDto customerDto=new CustomerDto();
-        customerDto.setId(customer.getId());
+
+        customerDto.setId(customer.getId());                   // copies id from entity to DTO
         customerDto.setFirstName(customer.getFirstName());
         customerDto.setLastName(customer.getLastName());
         customerDto.setMobileNumber(customer.getMobileNumber());

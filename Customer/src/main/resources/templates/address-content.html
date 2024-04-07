@@ -26,8 +26,8 @@
         <div th:if = "${error}">
             <p class = "alert alert-danger" th:text = "${error}"></p>
         </div>
-        <!-- add address to the addressDto [form] -->
 
+        <!-- add address to the addressDto [form] -->
         <form id="addressForm" method="post"  th:object="${addressDto}"  th:action="@{/add-address}">
             <div class="row">
                 <div class="form-group col-md-6">
@@ -91,12 +91,21 @@
 
             <!-- Enable / Disable/ Delete -->
             <td>
-                <a th:if="${address.is_default()} == true" th:href="@{/disable-address/{id}(id = ${address.id})}"
+
+
+                <!--<a th:if="${address.is_default()} == true" th:href="@{/disable-address/{id}(id = ${address.id})}"
                    onclick="if (!(confirm('Are you sure you want to Disable this Address?'))) return false">Disable</a>
                 <a th:if="${address.is_default()} == false"  th:href="@{/enable-address/{id}(id = ${address.id})}"
                    onclick="if (!(confirm('Are you sure you want to Enable this Address?'))) return false">Enable</a>
+               -->
+
+
+                <!-- Delete Button -->
+
                 <a th:href="@{/delete-address/{id}(id = ${address.id})}"
-                   onclick="if (!(confirm('Are you sure you want to Delete this Address?'))) return false">Delete</a>
+                   onclick="if (!(confirm('Are you sure you want to Delete this Address?'))) return false">
+                    Delete
+                </a>
 
             </td>
         </tr>

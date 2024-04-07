@@ -36,8 +36,8 @@ public class Product
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 
-/*    @OneToOne(mappedBy = "product")
-    private Wishlist wishlist;*/
+                                                                                                            /*    @OneToOne(mappedBy = "product")
+                                                                                                                private Wishlist wishlist;*/
 
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)

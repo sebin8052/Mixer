@@ -33,6 +33,7 @@ public class LoginRegisterController {
         this.customerRepository = customerRepository;
     }
 
+
     @GetMapping("/login")
     public String getLoginForm(Model model, HttpSession session) {
         model.addAttribute("title", "Login Page");
@@ -43,27 +44,7 @@ public class LoginRegisterController {
         return "login";
     }
 
-/*
-    @GetMapping("/dashboard")
-    public String getDashboard(@RequestParam(required = false) String tab, Model model, Principal principal, HttpSession session) {
-        if (principal == null) {
-            return "redirect:/login";
-        } else {
-            Customer customer = customerService.findByEmail(principal.getName());
-            session.setAttribute("userLoggedIn", true);
-            session.setAttribute("username", customer.getFirstName() + " " + customer.getLastName());
-            if (tab != null && !tab.isEmpty()) {
-                model.addAttribute("openTab", tab);
-                System.out.println(tab);
-            } else {
-                model.addAttribute("openTab", "");
-            }
-            model.addAttribute("customer", customer);
-            model.addAttribute("title", "index");
-            return "dashboard";
-        }
-    }
-*/
+
 
 
     @GetMapping("/register")
@@ -89,8 +70,8 @@ public class LoginRegisterController {
             }
 
             String username = customerDto.getEmail();
-            Customer customer = customerService.findByEmail(username);
-            if (customer != null)
+            Customer existingCustomer = customerService.findByEmail(username);
+            if (existingCustomer != null)
             {
                 model.addAttribute("customerDto", customerDto);                                      //
                 model.addAttribute("error", "This Email is already Registered!");

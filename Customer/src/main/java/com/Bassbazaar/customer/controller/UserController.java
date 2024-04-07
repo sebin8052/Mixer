@@ -22,15 +22,21 @@ import java.util.List;
 @Controller
 public class UserController
 {
-    private CustomerService customerService;
+    private  CustomerService customerService;
 
-    private AddressService addressService;
+    private   AddressService addressService;
 
-    private PasswordEncoder passwordEncoder;
-    public UserController(CustomerService customerService, AddressService addressService, PasswordEncoder passwordEncoder) {
+    private  PasswordEncoder passwordEncoder;
+
+
+
+
+    public UserController(CustomerService customerService, AddressService addressService, PasswordEncoder passwordEncoder)
+    {
         this.customerService = customerService;
         this.addressService = addressService;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     @GetMapping("/dashboard")
@@ -61,8 +67,8 @@ public class UserController
         }else{
             Customer customer = customerService.findByEmail(principal.getName());
             List<Address> address = customer.getAddress();
-            model.addAttribute("addressList",address);  //list of address
-            model.addAttribute("size",address.size());  //no address
+            model.addAttribute("addressList",address);
+            model.addAttribute("size",address.size());
             model.addAttribute("addressDto",new AddressDto());
             return "address-content";
         }
@@ -84,6 +90,7 @@ public class UserController
         return "redirect:" + request.getHeader("Referer");
     }
 
+    @GetMapping("/update-address/{id}")
     public String getUpdateAddress(@PathVariable("id")Long address_Id, Model model, Principal principal){
         if(principal==null){
             return "redirect:/login";
@@ -93,6 +100,7 @@ public class UserController
         return"update-address";
     }
 
+/* Update address*/
     @PostMapping("/update-address/{id}")
     public String updateAddress(@Valid @ModelAttribute("addressDto")AddressDto addressDto, Model model,
                                 BindingResult result){
@@ -105,6 +113,8 @@ public class UserController
         return "redirect:/dashboard?tab=address";
     }
 
+
+
     @GetMapping("/delete-address/{id}")
     public String deleteAddress(@PathVariable("id")Long address_id,Model model){
         addressService.deleteAddress(address_id);
@@ -112,44 +122,38 @@ public class UserController
         return "redirect:/dashboard?tab=address";
     }
 
-    @GetMapping("/enable-address/{id}")
-    public String enableAddress(@PathVariable("id")long address_id,
-                                RedirectAttributes redirectAttributes){
-        addressService.enable(address_id);
-        redirectAttributes.addFlashAttribute("success","Address enabled");
-        return "redirect:/dashboard?tab=address";
-    }
-
-    @GetMapping("/disable-address/{id}")
-    public String disableAddress(@PathVariable("id")long address_id,
-                                 RedirectAttributes redirectAttributes){
-        addressService.disable(address_id);
-        redirectAttributes.addFlashAttribute("success","Address disabled");
-        return "redirect:/dashboard?tab=address";
-    }
 
 
     /* Account details in the Customer */
 
     @GetMapping("/account-details")
     public String getUpdateAccount(Principal principal,Model model){
-        if(principal==null){
+        if(principal==null)
+        {
             return "redirect:/login";
-        }else{
+        }
+        else
+        {
             CustomerDto customer = customerService.findByEmailCustomerDto(principal.getName());
             model.addAttribute("customer",customer);
             return "account-details";
         }
     }
 
+
+    /* Update account */
+
     @PostMapping("/update-account")
     public String UpdateAccount(@ModelAttribute("customer")CustomerDto customerDto,
                                 RedirectAttributes redirectAttributes,
                                 Principal principal)
     {
-        if(principal==null){
+        if(principal==null)
+        {
             return "redirect:/login";
-        }else{
+        }
+        else
+        {
             CustomerDto customerUpdated = customerService.updateAccount(customerDto,principal.getName());
             redirectAttributes.addFlashAttribute("customer",customerUpdated);
             redirectAttributes.addFlashAttribute("success","Updated Successfully");
@@ -158,6 +162,7 @@ public class UserController
         }
     }
 
+                         /* Change password[ account-details ]*/
     @PostMapping("/change-password")
     public String changePass(@RequestParam("oldPassword") String oldPassword,
                              @RequestParam("newPassword") String newPassword,
@@ -166,17 +171,25 @@ public class UserController
                              Principal principal) {
         if (principal == null) {
             return "redirect:/login";
-        } else {
+        }
+        else
+        {
             CustomerDto customer = customerService.findByEmailCustomerDto(principal.getName());
+
             if (passwordEncoder.matches(oldPassword, customer.getPassword())
                     && !passwordEncoder.matches(newPassword, oldPassword)
                     && !passwordEncoder.matches(newPassword, customer.getPassword())
-                    && repeatPassword.equals(newPassword) && newPassword.length() >= 3) {
+                    && repeatPassword.equals(newPassword) && newPassword.length() >= 3)
+            {
                 customer.setPassword(passwordEncoder.encode(newPassword));
+
                 customerService.changePass(customer);
+
                 attributes.addFlashAttribute("success", "Your password has been changed successfully!");
                 return "redirect:/dashboard?tab=account-detail";
-            } else {
+            }
+            else
+            {
                 attributes.addFlashAttribute("message", "Entered Password Does Not Match");
                 return "redirect:/dashboard?tab=account-detail";
             }

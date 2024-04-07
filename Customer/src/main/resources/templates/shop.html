@@ -47,9 +47,18 @@
                                         <span th:text="${sort=='' ? 'Featured' : (#strings.equals(sort, 'lowToHigh') ? 'Low-to-High': (#strings.equals(sort, 'highToLow') ? 'High-to-Low': sort)) }"><i class="fi-rs-angle-small-down"></i></span>
                                     </div>
                                 </div>
+
+
+                                <!-- Sort by customer requirement -->
                                 <div class="sort-by-dropdown">
                                     <ul>
                                         <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">Featured</a></li>
+                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">Popularity</a></li>
+                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">Average ratings</a></li>
+                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">New arrivals </a></li>
+                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">aA - zZ  </a></li>
+                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">zZ - aA </a></li>
+
                                         <li><a th:classappend="${#strings.equals(sort, 'lowToHigh') ? 'active' : ''}" class="" th:href="@{/products-list(sort='lowToHigh')}">Price: Low to High</a></li>
                                         <li><a th:classappend="${#strings.equals(sort, 'highToLow') ? 'active' : ''}" class="" th:href="@{/products-list(sort='highToLow')}">Price: High to Low</a></li>
                                     </ul>

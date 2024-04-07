@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService
         this.addressService = addressService;
     }
 
+
     @Override
     public Order save(ShoppingCart cart, long address_id, String paymentMethod, Double oldTotalPrice) {
         Order order = new Order();
@@ -96,16 +97,13 @@ public class OrderServiceImpl implements OrderService
         order.setOrderStatus("Cancelled");
         orderRepository.save(order);
 
-/*        if(order.getPaymentMethod().equals("Wallet") || order.getPaymentMethod().equals("RazorPay")){
-            walletService.returnCredit(order,customer);
-        }*/
+                                                                                                                            /*        if(order.getPaymentMethod().equals("Wallet") || order.getPaymentMethod().equals("RazorPay")){
+                                                                                                                                        walletService.returnCredit(order,customer);
+                                                                                                                                    }*/
 
     }
 
-    @Override
-    public List<Order> findAllOrders() {
-        return orderRepository.findAll();
-    }
+
 
     @Override
     public void acceptOrder(long id) {
@@ -116,6 +114,7 @@ public class OrderServiceImpl implements OrderService
         LocalDate newLocalDate = localDate.plusDays(5);
         Date newDate = Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         order.setDeliveryDate(newDate);
+
         order.setOrderStatus("Confirmed");
         orderRepository.save(order);
     }
@@ -154,6 +153,29 @@ public class OrderServiceImpl implements OrderService
         }
     }
 
+
+
+
+    @Override
+    public void returnOrder(long id, Customer customer) {
+        Order order=orderRepository.findById(id);
+        order.setOrderStatus("Returned");
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void replaceOrderCustomer(long id, Customer customer) {
+        Order order=orderRepository.findById(id);
+        order.setOrderStatus("Replace");
+        orderRepository.save(order);
+    }
+
+    @Override
+    public List<Order> findAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    /* Add the Order Status */
     @Override
     public void updateOrderStatus(String status, long order_id) {
         if(order_id != 0) {
@@ -171,17 +193,4 @@ public class OrderServiceImpl implements OrderService
         }
     }
 
-    @Override
-    public void returnOrder(long id, Customer customer) {
-        Order order=orderRepository.findById(id);
-        order.setOrderStatus("Returned");
-        orderRepository.save(order);
-    }
-
-    @Override
-    public void replaceOrderCustomer(long id, Customer customer) {
-        Order order=orderRepository.findById(id);
-        order.setOrderStatus("Replace");
-        orderRepository.save(order);
-    }
 }

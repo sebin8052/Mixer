@@ -155,10 +155,10 @@
     /*Fix Bootstrap 5 tab & slick slider*/
 
     $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-		$('.carausel-4-columns').slick('setPosition');
-	});
+        $('.carausel-4-columns').slick('setPosition');
+    });
 
-     /*------ Timer Countdown ----*/
+    /*------ Timer Countdown ----*/
 
     $('[data-countdown]').each(function() {
         var $this = $(this), finalDate = $(this).data('countdown');
@@ -330,11 +330,11 @@
     searchToggle.on('click', function(e){
         e.preventDefault();
         if($(this).hasClass('open')){
-           $(this).removeClass('open');
-           $(this).siblings('.categori-dropdown-active-large').removeClass('open');
+            $(this).removeClass('open');
+            $(this).siblings('.categori-dropdown-active-large').removeClass('open');
         }else{
-           $(this).addClass('open');
-           $(this).siblings('.categori-dropdown-active-large').addClass('open');
+            $(this).addClass('open');
+            $(this).siblings('.categori-dropdown-active-large').addClass('open');
         }
     })
 
@@ -420,11 +420,11 @@
         fade: false,
         arrows: false,
         responsive: [{
-                breakpoint: 991,
-                settings: {
-                    slidesToShow: 3,
-                }
-            },
+            breakpoint: 991,
+            settings: {
+                slidesToShow: 3,
+            }
+        },
             {
                 breakpoint: 767,
                 settings: {
@@ -495,15 +495,15 @@
         Checkout paymentMethod function
     ---------------------------------------*/
     paymentMethodChanged();
-	function paymentMethodChanged() {
-		var $order_review = $( '.payment-method' );
+    function paymentMethodChanged() {
+        var $order_review = $( '.payment-method' );
 
-		$order_review.on( 'click', 'input[name="payment_method"]', function() {
-			var selectedClass = 'payment-selected';
-			var parent = $( this ).parents( '.sin-payment' ).first();
-			parent.addClass( selectedClass ).siblings().removeClass( selectedClass );
-		} );
-	}
+        $order_review.on( 'click', 'input[name="payment_method"]', function() {
+            var selectedClass = 'payment-selected';
+            var parent = $( this ).parents( '.sin-payment' ).first();
+            parent.addClass( selectedClass ).siblings().removeClass( selectedClass );
+        } );
+    }
 
     /*---- CounterUp ----*/
     $('.count').counterUp({
@@ -543,7 +543,7 @@
     };
     sidebarSearch();
 
-     /*====== Sidebar menu Active ======*/
+    /*====== Sidebar menu Active ======*/
     function mobileHeaderActive() {
         var navbarTrigger = $('.burger-icon'),
             endTrigger = $('.mobile-menu-close'),
@@ -571,9 +571,9 @@
     mobileHeaderActive();
 
 
-   /*---------------------
-        Mobile menu active
-    ------------------------ */
+    /*---------------------
+         Mobile menu active
+     ------------------------ */
     var $offCanvasNav = $('.mobile-menu'),
         $offCanvasNavSubMenu = $offCanvasNav.find('.dropdown');
 

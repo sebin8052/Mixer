@@ -38,6 +38,9 @@ public class CustomerController
         List<Customer> customers = customerService.findAll();
         model.addAttribute("customers", customers);
         model.addAttribute("size", customers.size());
+
+        model.addAttribute("confirmationMessage","Are you sure you want to disable this  customers?");
+
         return "customers";
     }
 

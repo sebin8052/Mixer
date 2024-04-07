@@ -92,6 +92,14 @@
             <version>1.14.10 </version> <!-- Use the version suitable for your project -->
         </dependency>
 
+        <!-- ModelMapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.2.0</version> <!-- Use the latest version available -->
+        </dependency>
+
+
     </dependencies>
 
     <build>

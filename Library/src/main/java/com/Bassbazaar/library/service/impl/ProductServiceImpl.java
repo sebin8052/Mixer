@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService
     }
 
 
-                                  /* Duplicate product */
+                                  /*Product save */
     @Override
     public Product save(List<MultipartFile> imageProducts, ProductDto productDto) {
         String productName = productDto.getName();
@@ -237,6 +237,18 @@ public class ProductServiceImpl implements ProductService
         List<Product> products = productRepository.findAllByOrderById();
         List<ProductDto> productDtos = transferData(products);
         return productDtos;
+    }
+
+
+    /* sort the ProductBased on Alphabetical order*/
+
+
+    public List<ProductDto> findAllOrderByProductNameAsc()
+    {
+        List<Product> products = productRepository.findAllByOrderById();
+        List<ProductDto> productDtos =transferData(products);
+        return productDtos;
+
     }
 
 /* ProductController [Admin]*/
