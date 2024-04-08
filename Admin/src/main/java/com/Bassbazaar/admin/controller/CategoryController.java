@@ -35,10 +35,10 @@ public class CategoryController
         }
         model.addAttribute("title", "Manage Category");
 
-        List<Category> categories = categoryService.findAll();     //retrives the list of categories
-        model.addAttribute("categories", categories);   // access the info from categories referene withe help of categories attribute
-        model.addAttribute("size", categories.size());                // used for number of category[page]
-        model.addAttribute("categoryNew", new CategoryDto());
+        List<Category> categories = categoryService.findAll();
+        model.addAttribute("categories", categories);
+        model.addAttribute("size", categories.size());
+        model.addAttribute("categoryNew", new CategoryDto());    //used in save()
         return "categories";
     }
 
@@ -56,7 +56,7 @@ public class CategoryController
     @PostMapping("/save-category")
     public String save(@ModelAttribute("categoryNew") CategoryDto category, Model model, RedirectAttributes redirectAttributes)
     {
-        try                                 // save to the category using save() in repository
+        try
         {
             categoryService.save(category);
             redirectAttributes.addFlashAttribute("success", "Added successfully!");
@@ -73,12 +73,12 @@ public class CategoryController
             redirectAttributes.addFlashAttribute("error",
                     "Error server");
         }
-        return "redirect:/";
+        return "redirect:/categories";
     }
 
 
 
-// update the category
+
     @PostMapping("/update-category")
     public String update(Category category, RedirectAttributes redirectAttributes) {
         try {

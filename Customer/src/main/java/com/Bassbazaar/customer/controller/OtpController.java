@@ -55,7 +55,7 @@ public class OtpController
 
 
     @PostMapping("/sendVerificationEmailOtp")                                                                     // ------> (5)
-    public String sendVerificationEmailOtp(
+    public String sendVerificationEmailOtp  (
             @RequestParam("email")String email,
              HttpSession session,
             RedirectAttributes redirectAttributes) throws Exception

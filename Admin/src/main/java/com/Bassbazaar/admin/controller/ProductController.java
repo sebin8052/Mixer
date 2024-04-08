@@ -40,7 +40,7 @@ public class ProductController
         this.categoryService = categoryService;
     }
 
-    /* Duplicate product handled exception  */
+
     @ExceptionHandler(ProductNameAlreadyExistsException.class)
      public ModelAndView handleProductNameAlreadyExistsException(ProductNameAlreadyExistsException ex)
      {
@@ -65,6 +65,7 @@ public class ProductController
 
     @GetMapping("/add-product")
     public String addProductPage(Model model) {
+
         model.addAttribute("title", "Add Product");
         List<Category> categories = categoryService.findAllByActivatedTrue();
 
@@ -91,7 +92,7 @@ public class ProductController
             redirectAttributes.addFlashAttribute("success", "Added new product successfully!");
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Failed to add new product!");         //  duplicate product added
+            redirectAttributes.addFlashAttribute("error", "Failed to add new product!");
         }
         return "redirect:/products";
     }

@@ -37,6 +37,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     boolean existsByName(String name);
 
 
+
+
+
     /* Order The product based on Alphebatical order*/
 
     @Query(value = "SELECT * FROM products ORDER BY product_name ASC", nativeQuery = true)

@@ -58,7 +58,7 @@ public class CustomerController
     public String enable(@PathVariable("id")long id, RedirectAttributes redirectAttributes){
         redirectAttributes.addFlashAttribute("success","Customer Enabled");
 
-        customerService.enable(id);                                       //pathvariable : extract id from url and bind to id parameter[ long id ]
+        customerService.enable(id);
 
         return "redirect:/customers";
     }

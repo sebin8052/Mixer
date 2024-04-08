@@ -24,6 +24,9 @@
 <main class="main-wrap">
 
     <div class="container-fluid">
+
+        <!-- Update Product Form -->
+
         <form class="form-horizontal" th:action="@{/update-product/{id}(id = ${productDto.id})}" method="POST" th:object = "${productDto}"
               enctype="multipart/form-data">
             <fieldset>

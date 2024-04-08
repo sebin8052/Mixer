@@ -31,7 +31,7 @@ public class ForgotPasswordController
     @GetMapping("/forgot-password")
     public String showforgotpassword(Model model)
     {
-        model.addAttribute("pagetitle","Forgot password");   // for test
+        model.addAttribute("pagetitle","Forgot password");
 
         return "forgot-password";
     }
