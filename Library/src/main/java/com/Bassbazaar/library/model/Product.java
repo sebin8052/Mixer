@@ -30,15 +30,17 @@ public class Product
     private int currentQuantity;
     private double costPrice;
     private double salePrice;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Image> image;
+
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 
-                                                                                                            /*    @OneToOne(mappedBy = "product")
-                                                                                                                private Wishlist wishlist;*/
-
+    /* Wishlist */
+    @OneToOne(mappedBy = "product")
+    private Wishlist wishlist;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<CartItem> cartItems;

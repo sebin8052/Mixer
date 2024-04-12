@@ -30,6 +30,7 @@ public class Customer implements Serializable
     @Column(name = "is_activated")
     private boolean isActivated;
 
+    /*Forget password*/
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
@@ -48,6 +49,22 @@ public class Customer implements Serializable
     /* ShoppingCart*/
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private ShoppingCart cart;
+
+
+    /* Wallet  */
+    @OneToOne(mappedBy = "customer")
+    private Wallet wallet;
+
+    /* Wishlist  */
+    @OneToMany(mappedBy = "customer")
+    private List<Wishlist> wishlists;
+
+
+
+    /* for referal */
+
+    @Column(name="referalToken", unique = true)
+    private String referalToken;
 }
 
 

@@ -2,12 +2,8 @@ package com.Bassbazaar.library.service.impl;
 
 import com.Bassbazaar.library.Exception.ProductNameAlreadyExistsException;
 import com.Bassbazaar.library.dto.ProductDto;
-import com.Bassbazaar.library.model.Category;
-import com.Bassbazaar.library.model.Image;
-import com.Bassbazaar.library.model.Product;
-import com.Bassbazaar.library.repository.CategoryRepository;
-import com.Bassbazaar.library.repository.ImageRepository;
-import com.Bassbazaar.library.repository.ProductRepository;
+import com.Bassbazaar.library.model.*;
+import com.Bassbazaar.library.repository.*;
 import com.Bassbazaar.library.service.ProductService;
 import com.Bassbazaar.library.utils.ImageUpload;
 import jakarta.transaction.Transactional;
@@ -21,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,14 +31,17 @@ public class ProductServiceImpl implements ProductService
     private CategoryRepository categoryRepository;
     private ImageUpload imageUpload;
 
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository,
-                              ImageUpload imageUpload, ImageRepository imageRepository ,CategoryRepository categoryRepository)
-    {
-        this.imageRepository = imageRepository;
+    private CartItemRepository cartItemRepository;
+
+    private WishlistRepository wishlistRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository, ImageRepository imageRepository, CategoryRepository categoryRepository, ImageUpload imageUpload, CartItemRepository cartItemRepository, WishlistRepository wishlistRepository) {
         this.productRepository = productRepository;
+        this.imageRepository = imageRepository;
+        this.categoryRepository = categoryRepository;
         this.imageUpload = imageUpload;
-        this.categoryRepository=categoryRepository;
+        this.cartItemRepository = cartItemRepository;
+        this.wishlistRepository = wishlistRepository;
     }
 
     @Override
@@ -240,16 +240,7 @@ public class ProductServiceImpl implements ProductService
     }
 
 
-    /* sort the ProductBased on Alphabetical order*/
 
-
-    public List<ProductDto> findAllOrderByProductNameAsc()
-    {
-        List<Product> products = productRepository.findAllByOrderById();
-        List<ProductDto> productDtos =transferData(products);
-        return productDtos;
-
-    }
 
 /* ProductController [Admin]*/
 
@@ -258,9 +249,7 @@ public class ProductServiceImpl implements ProductService
     public void deleteProduct(long id) {
         Product product = productRepository.findById(id);
         imageRepository.deleteImagesByProductId(id);
-
-        /* used when using CartItem, Wishlist,*/
-       /* Set<CartItem> cartItemSet=product.getCartItems();
+        Set<CartItem> cartItemSet=product.getCartItems();
         for(CartItem cartItem : cartItemSet){
             cartItem.setProduct(null);
             cartItemRepository.save(cartItem);
@@ -268,9 +257,30 @@ public class ProductServiceImpl implements ProductService
         Wishlist wishlist=product.getWishlist();
         if(wishlist!=null) {
             wishlistRepository.delete(wishlist);
-        }*/
+        }
         productRepository.delete(product);
     }
+
+              /* Dashboard*/
+
+    @Override
+    public Long countAllProducts() {
+        return  productRepository.CountAllProducts();
+    }
+
+    @Override
+    public List<Object[]> getProductStats() {
+        return productRepository.getProductStatsForConfirmedOrders();
+    }
+
+
+    @Override
+    public List<Object[]> getProductsStatsBetweenDates(Date startDate, Date endDate) {
+        return productRepository.getProductsStatsForConfirmedOrdersBetweenDates(startDate,endDate);
+    }
+
+
+
 
 
 
@@ -313,4 +323,15 @@ public class ProductServiceImpl implements ProductService
         return productRepository.existsByName(name);
     }
 
+
+    /* sort the ProductBased on Alphabetical order*/
+
+
+    public List<ProductDto> findAllOrderByProductNameAsc()
+    {
+        List<Product> products = productRepository.findAllByOrderById();
+        List<ProductDto> productDtos =transferData(products);
+        return productDtos;
+
+    }
 }

@@ -38,6 +38,7 @@ public class Order
     @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.DETACH})
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
+
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL )
     private List<OrderDetail> orderDetails;
     @Override

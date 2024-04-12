@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService
@@ -156,6 +157,23 @@ public class CustomerServiceImpl implements CustomerService
         customerDto.set_activated(customer.isActivated());
         customerDto.setPassword(customer.getPassword());
         return customerDto;
+    }
+
+    /* Referal Controller*/
+
+    @Override
+    public void updateReferalCodeToken(String token, String email) {
+        Customer customer=customerRepository.findByEmail(email);
+        if(customer!=null){
+            customer.setReferalToken(token);
+            customerRepository.save(customer);
+        }
+    }
+
+
+    @Override
+    public Optional<List<Customer>> getByReferalToken(String token) {
+        return Optional.ofNullable(customerRepository.findByReferalToken(token));
     }
 
 }

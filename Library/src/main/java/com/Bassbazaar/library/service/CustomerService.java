@@ -6,6 +6,7 @@ import com.Bassbazaar.library.model.Customer;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerService
 {
@@ -32,4 +33,9 @@ public interface CustomerService
     void updateResetPasswordToken(String token, String email) throws CustomerNotFoundException;
     Customer getByResetPasswordToken(String token);
     void updatePassword(Customer customer, String newPassword);
+
+    /*    Referal service   */
+    Optional<List<Customer>> getByReferalToken(String token);
+    void updateReferalCodeToken(String token,String email);
+
 }

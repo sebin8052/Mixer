@@ -22,6 +22,17 @@ public interface OrderService
 
     List<Order> findAllOrdersByCustomer(long id);
 
+    /* Dashboard*/
+    List<Long> findAllOrderCountForEachMonth();
+
+    Double getTotalOrderAmount();
+    Long countTotalConfirmedOrders();
+
+    Double getTotalAmountForMonth();
+
+    List<Double> getTotalAmountForEachMonth();
+
+
     void updatePayment(Order order,boolean status);
 
     void updateOrderStatus(String status,long order_id);

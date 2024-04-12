@@ -7,6 +7,7 @@ import com.Bassbazaar.library.repository.ProductRepository;
 import com.Bassbazaar.library.service.AddressService;
 import com.Bassbazaar.library.service.OrderService;
 import com.Bassbazaar.library.service.ShoppingCartService;
+import com.Bassbazaar.library.service.WalletService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,14 +30,16 @@ public class OrderServiceImpl implements OrderService
 
     private AddressService addressService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ShoppingCartService shoppingCartService, ProductRepository productRepository, AddressService addressService) {
+    private WalletService walletService;
+
+    public OrderServiceImpl(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ShoppingCartService shoppingCartService, ProductRepository productRepository, AddressService addressService, WalletService walletService) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.shoppingCartService = shoppingCartService;
         this.productRepository = productRepository;
         this.addressService = addressService;
+        this.walletService = walletService;
     }
-
 
     @Override
     public Order save(ShoppingCart cart, long address_id, String paymentMethod, Double oldTotalPrice) {
@@ -96,13 +99,10 @@ public class OrderServiceImpl implements OrderService
         }
         order.setOrderStatus("Cancelled");
         orderRepository.save(order);
-
-                                                                                                                            /*        if(order.getPaymentMethod().equals("Wallet") || order.getPaymentMethod().equals("RazorPay")){
-                                                                                                                                        walletService.returnCredit(order,customer);
-                                                                                                                                    }*/
-
+        if(order.getPaymentMethod().equals("Wallet") || order.getPaymentMethod().equals("RazorPay")){
+            walletService.returnCredit(order,customer);
+        }
     }
-
 
 
     @Override
@@ -114,7 +114,6 @@ public class OrderServiceImpl implements OrderService
         LocalDate newLocalDate = localDate.plusDays(5);
         Date newDate = Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         order.setDeliveryDate(newDate);
-
         order.setOrderStatus("Confirmed");
         orderRepository.save(order);
     }
@@ -141,6 +140,59 @@ public class OrderServiceImpl implements OrderService
     public List<Order> findAllOrdersByCustomer(long id) {
         return orderRepository.findAllBy(id);
     }
+
+
+    /* Dashboard*/
+
+    @Override
+    public List<Long> findAllOrderCountForEachMonth() {
+        List<Long>orderCounts=new ArrayList<>();
+        LocalDate currentDate = LocalDate.now().withMonth(1);
+        for(int i=0 ; i < 12 ; i++){
+            LocalDate localStartDate=currentDate.withDayOfMonth(1);
+            LocalDate localEndDate=currentDate.withDayOfMonth(currentDate.lengthOfMonth());
+            long orderCount= orderRepository.countByOrderDateBetweenAndOrderStatus(localStartDate,localEndDate,"Delivered");
+            orderCounts.add(orderCount);
+            currentDate = currentDate.plusMonths(1);
+        }
+        return orderCounts;
+    }
+
+    @Override
+    public Double getTotalOrderAmount() {
+        return orderRepository.getTotalConfirmedOrdersAmount();
+    }
+
+    @Override
+    public Long countTotalConfirmedOrders() {
+        return orderRepository.countAllConfirmedOrders();
+    }
+
+    @Override
+    public Double getTotalAmountForMonth() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate startDate=currentDate.withDayOfMonth(1);
+        LocalDate endDate=currentDate.withDayOfMonth(currentDate.lengthOfMonth());
+        Double totalAmount = orderRepository.getTotalConfirmedOrdersAmountForMonth(startDate,endDate,"Delivered");
+        return totalAmount;
+    }
+
+
+    @Override
+    public List<Double> getTotalAmountForEachMonth() {
+        List<Double> totalRevenuePerMonth = new ArrayList<>();
+        LocalDate currentDate = LocalDate.now().withMonth(1);
+        for(int i=0 ; i < 12 ; i++){
+            LocalDate localStartDate=currentDate.withDayOfMonth(1);
+            LocalDate localEndDate=currentDate.withDayOfMonth(currentDate.lengthOfMonth());
+            Double totalRevenue = orderRepository.getTotalConfirmedOrdersAmountForMonth(localStartDate,localEndDate,"Delivered");
+            totalRevenuePerMonth.add(totalRevenue);
+            currentDate = currentDate.plusMonths(1);
+        }
+        return totalRevenuePerMonth;
+    }
+
+
 
     @Override
     public void updatePayment(Order order, boolean status) {

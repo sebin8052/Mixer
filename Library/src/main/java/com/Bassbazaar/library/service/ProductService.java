@@ -5,6 +5,7 @@ import com.Bassbazaar.library.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ProductService
@@ -25,7 +26,11 @@ public interface ProductService
     List<ProductDto> findAllByOrderDesc();
     void deleteProduct(long id);
 
-//    Long countAllProducts();
+    Long countAllProducts();
+
+    /* Dashboard*/
+    List<Object[]> getProductStats();
+    List<Object[]> getProductsStatsBetweenDates(Date startDate, Date endDate);
 
     Product findBYId(long id);
     List<Product> findProductsByCategory(long id);

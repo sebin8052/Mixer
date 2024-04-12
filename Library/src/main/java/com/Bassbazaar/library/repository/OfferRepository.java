@@ -1,11 +1,11 @@
 package com.Bassbazaar.library.repository;
 
-import com.Bassbazaar.library.model.CartItem;
+import com.Bassbazaar.library.model.Offer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CartItemRepository extends JpaRepository<CartItem,Long>
+public interface OfferRepository extends JpaRepository<Offer,Long>
 {
-
+    Offer findById(long id);
 }
