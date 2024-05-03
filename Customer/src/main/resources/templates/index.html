@@ -648,7 +648,39 @@
 <!-- Template  JS -->
 <script th:src="@{/js/shop.js?v=3.4}"></script>
 
-
+<script>
+    function submitForm(productId) {
+        console.log("clicked")
+        console.log(productId)
+        const formId = 'form_' + productId;
+        const form = document.getElementById(formId);
+        form.submit();
+    }
+    $(document).ready(function () {
+        $(".wish-btn").click(function (event) {
+            event.preventDefault();
+            const productId = $(this).data("product-id");
+            console.log(productId);
+            $.ajax({
+                url: "/mixer/add-wishlist",
+                type: "POST",
+                data: { productId: productId },
+                success: function (response) {
+                    alert("Added to wishlist successfully");
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 409) {
+                        alert("Product already exists in wishlist");
+                    }else if(xhr.status === 401){
+                        alert("User not logged in , Please Log in")
+                    } else {
+                        alert("Error adding to wishlist. Please try again later.");
+                    }
+                },
+            });
+        });
+    });
+</script>
 
 
 </script>

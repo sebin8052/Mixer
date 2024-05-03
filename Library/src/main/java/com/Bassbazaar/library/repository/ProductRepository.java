@@ -2,7 +2,9 @@ package com.Bassbazaar.library.repository;
 
 import com.Bassbazaar.library.model.Category;
 import com.Bassbazaar.library.model.Product;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -80,4 +82,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>
 
 
 
+    @Transactional
+    @Modifying
+    @Query(value = "delete from products where product_id = :id",nativeQuery = true)
+    void deleteProduct(@Param("id") long id);
 }

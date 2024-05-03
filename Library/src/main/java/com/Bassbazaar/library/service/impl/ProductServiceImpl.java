@@ -258,7 +258,7 @@ public class ProductServiceImpl implements ProductService
         if(wishlist!=null) {
             wishlistRepository.delete(wishlist);
         }
-        productRepository.delete(product);
+        productRepository.deleteProduct(id);
     }
 
               /* Dashboard*/

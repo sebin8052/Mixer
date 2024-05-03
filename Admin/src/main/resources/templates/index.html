@@ -186,5 +186,102 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<script>
+
+    $(document).ready(function() {
+        $('#salesTable').DataTable(
+            {
+                order: [
+                    [
+                        4, 'desc'
+                    ]
+                ]
+            }
+        );
+    });
+
+    function submitRange(){
+        const periodSelect = document.getElementById("periodSelect").value;
+        window.location.href = "/admin?filter="+periodSelect;
+    }
+
+    function generateReport(){
+        const dateFrom = document.getElementById("dateFrom").value;
+        const dateTo = document.getElementById("dateTo").value;
+        const reportType = document.getElementById("reportType").value;
+        const today = new Date();
+        if(dateFrom==="" || dateTo===""){
+            alert("Date should be selected")
+        }
+        else if (dateTo < dateFrom) {
+            alert("To date should be after From date");
+        }else if(dateTo > today){
+            alert("From date cannot be greater than today")
+        }else{
+            const data = {
+                from : dateFrom,
+                to : dateTo,
+                type : reportType};
+            if(reportType == "csv"){
+                getCsv(data);
+            }else{
+                getPdf(data);
+            }
+        }
+    }
+
+    function getCsv(data){
+        $.ajax({
+            url: "/admin/generateReport",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function(response) {
+                const link = document.createElement("a");
+                link.href = "data:text/csv;charset=utf-8," + encodeURIComponent(response);
+                link.download = "report-"+data.from+"-"+data.to+".csv";
+                link.style.display = "none";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function getPdf(data){
+        fetch('/admin/generateReport', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('Error sending ProductStats');
+                }
+            })
+            .then(blob => {
+
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${"report-"+data.from+"-"+data.to}.pdf`;
+                link.click();
+                URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error('An error occurred while sending the order ID:', error);
+            });
+    }
+
+</script>
+
+
 </body>
 </html>

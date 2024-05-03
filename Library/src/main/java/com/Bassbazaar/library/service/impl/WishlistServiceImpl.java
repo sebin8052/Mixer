@@ -21,7 +21,8 @@ public class WishlistServiceImpl implements WishlistService
 
     /*     WishlistController    */
     @Override
-    public List<Wishlist> findAllByCustomer(Customer customer) {
+    public List<Wishlist> findAllByCustomer(Customer customer)
+    {
         List<Wishlist>Wishlists=wishlistRepository.findAllByCustomerId(customer.getId());
         return Wishlists;
     }

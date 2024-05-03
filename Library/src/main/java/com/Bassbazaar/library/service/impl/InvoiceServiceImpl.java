@@ -1,17 +1,22 @@
 package com.Bassbazaar.library.service.impl;
 
 import com.Bassbazaar.library.model.Order;
+import com.Bassbazaar.library.model.OrderDetail;
 import com.Bassbazaar.library.service.AddressService;
 import com.Bassbazaar.library.service.CustomerService;
 import com.Bassbazaar.library.service.InvoiceService;
 import com.Bassbazaar.library.service.OrderService;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/*@Service
+@Service
 public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private OrderService orderService;
@@ -87,6 +92,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             return new byte[0];
         }
     }
-}*/
+}
 
 

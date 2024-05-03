@@ -198,11 +198,16 @@
                                         <input class="form-check-input payment_option" required="" type="radio" name="payment_option" value="COD" id="exampleRadios3" checked >
                                         <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#cod" aria-controls="cod">Cash on Delivery</label>
                                     </div>
+                                    <div class="custome-radio">
+                                        <input class="form-check-input payment_option" required="" type="radio" value="RazorPay" name="payment_option" id="exampleRadios5">
+                                        <label class="form-check-label " for="exampleRadios5" data-bs-toggle="collapse" data-target="#RazorPay" aria-controls="razorpay">Razor Pay</label>
+                                    </div>
 
-
-
-
-
+                                    <div class="custome-radio">
+                                        <input class="form-check-input payment_option" required="" type="radio" value="Wallet" name="payment_option" id="exampleRadios6"  th:disabled="${wallet.balance < shoppingCart.totalPrice ? 'disabled' : null}">
+                                        <label class="form-check-label " for="exampleRadios6" data-bs-toggle="collapse" data-target="#Wallet" aria-controls="wallet">Wallet <span>(Balance:[(${wallet.balance})])</span></label>
+                                        <a th:href="@{/wallets}">Add Balance</a>
+                                    </div>
 
 
                                 </div>
@@ -217,13 +222,27 @@
 
                     <!-- Coupon information -->
 
-
-
-                       <!-- Coupon information end -->
-
-                    <!-- Coupon -->
-
-
+                    <div class="toggle_info mt-20">
+                        <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Have a coupon?</span> <a href="#coupon" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to enter your code</a></span>
+                    </div>
+                    <div class="panel-collapse collapse coupon_form" id="coupon">
+                        <div class="panel-body">
+                            <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
+                            <form method="post" th:action="@{/check-out/apply-coupon}">
+                                <div class="form-group">
+                                    <input type="text" th:value="${param.couponCode}" placeholder="Enter Coupon Code..." name="couponCode">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn  btn-md" type="submit" name="action" th:value="${param.couponCode == null ? 'apply' : 'remove'}" th:text="${param.couponCode == null ? 'Apply Coupon' : 'Remove Coupon'}"></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="mt-25" th:each="coupon : ${coupons}" style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+                        <p th:text="${coupon.description}"></p>
+                        <p>Code: <strong th:text="${coupon.code}"></strong></p>
+                        <p>Discount % : <strong th:text="${coupon.offPercentage}"></strong></p>
+                    </div>
 
                     <!-- Coupon logic end -->
 
@@ -243,30 +262,30 @@
 
            <!--Coupon in the URL extract    -->
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const couponCode = urlParams.get("couponCode");
-    if (couponCode) {
-        const couponForm = document.getElementById("coupon");
-        if (couponForm) {
-            couponForm.classList.add("show"); // Add the "show" class to make it visible
-        }
-    }
+           const urlParams = new URLSearchParams(window.location.search);
+           const couponCode = urlParams.get("couponCode");
+           if (couponCode) {
+               const couponForm = document.getElementById("coupon");
+               if (couponForm) {
+                   couponForm.classList.add("show"); // Add the "show" class to make it visible
+               }
+           }
 
            <!-- checking the customer is checked the Address & payment    -->
-    function placeOrder(formID) {
-        const checkedAddress = $('.selectCheckBox:checked').val();
-        const paymentMethod = $('.payment_option:checked').val();
-        if(checkedAddress    === undefined ){
-            alert("Please choose a shipping address!!")
-        } else {
+           function placeOrder(formID) {
+               const checkedAddress = $('.selectCheckBox:checked').val();
+               const paymentMethod = $('.payment_option:checked').val();
+               if(checkedAddress    === undefined ){
+                   alert("Please choose a shipping address!!")
+               } else {
 
-            const addressId =document.getElementById("addressId");
-            const payment_Method= document.getElementById("paymentMethod");
-            addressId.value = checkedAddress;
-            payment_Method.value = paymentMethod;
-            paymentStart(addressId.value,payment_Method.value);
-        }
-    }
+                   const addressId =document.getElementById("addressId");
+                   const payment_Method= document.getElementById("paymentMethod");
+                   addressId.value = checkedAddress;
+                   payment_Method.value = paymentMethod;
+                   paymentStart(addressId.value,payment_Method.value);
+               }
+           }
 
 
     const paymentStart = (addressId,payment_Method) => {
@@ -286,7 +305,7 @@
                     if(response.status == "created")
                     {
                         let options ={
-                            key:'rzp_test_nM4wkm7W4ERD3z',
+                            key:'rzp_test_UNiTzy90sRVBuq',
                             amount: response.amount,
                             currency:'INR',
                             name:'mixer',
