@@ -28,16 +28,29 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
         this.customerService = customerService;
     }
 
+    /*
+    * set list of cart item - shopping cart
+    * calculate the total price , number of item in the cart
+    *
+    * */
     @Override
     public ShoppingCart addItemToCart(ProductDto productDto, int quantity, String username, Long sizeId) {
+
         Customer customer = customerService.findByEmail(username);
+
         ShoppingCart shoppingCart = customer.getCart();
-        if (shoppingCart == null) {
+
+        if (shoppingCart == null)
+        {
             shoppingCart = new ShoppingCart();
         }
-        Set<CartItem> cartItemList = shoppingCart.getCartItems();
+
+        Set<CartItem> cartItemList = shoppingCart.getCartItems(); // get cart item  from shopping cart
+
         CartItem cartItem = find(cartItemList, productDto.getId());
-        Product product = transfer(productDto);
+
+                 Product product = transfer(productDto);
+
         double unitPrice = 0;
         if(productDto.getSalePrice() == 0) {
             unitPrice = productDto.getCostPrice();
@@ -45,9 +58,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
             unitPrice = productDto.getSalePrice();
         }
         int itemQuantity = 0;
-        if (cartItemList == null) {
-            cartItemList = new HashSet<>();
-            if (cartItem == null) {
+
+        if (cartItemList == null)
+        {
+            cartItemList = new HashSet<>();  // if the shopping cart is null create new shopping cart
+
+            // Create a new cart item , if empty
+            if (cartItem == null)
+            {                                                  // set details of cartitem
                 cartItem = new CartItem();
                 cartItem.setProduct(product);
                 cartItem.setCart(shoppingCart);
@@ -56,12 +74,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
                 cartItem.setCart(shoppingCart);
                 cartItemList.add(cartItem);
                 cartItemRepository.save(cartItem);
-            } else {
+            }
+            else
+            {
+                // udpate [quanity]cart item if it exist in the cart
                 itemQuantity = cartItem.getQuantity() + quantity;
                 cartItem.setQuantity(itemQuantity);
                 cartItemRepository.save(cartItem);
             }
-        } else {
+        } else
+        {
             if (cartItem == null) {
                 cartItem = new CartItem();
                 cartItem.setProduct(product);
@@ -83,6 +105,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
                 cartItemRepository.save(cartItem);
             }
         }
+
         shoppingCart.setCartItems(cartItemList);
         double totalPrice = totalPrice(shoppingCart.getCartItems());
         int totalItem = totalItem(shoppingCart.getCartItems());
@@ -92,10 +115,32 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
         return shoppingCartRepository.save(shoppingCart);
     }
 
+    private Product transfer(ProductDto productDto)  // get product info
+    {
+        Product product = new Product();
+
+        product.setId(productDto.getId());
+        product.setName(productDto.getName());
+        product.setCurrentQuantity(productDto.getCurrentQuantity());
+        product.setCostPrice(productDto.getCostPrice());
+        product.setSalePrice(productDto.getSalePrice());
+        product.setShortDescription(productDto.getShortDescription());
+        product.setLongDescription(productDto.getLongDescription());
+        product.setImage(productDto.getImage());
+        product.setBrand(productDto.getBrand());
+        product.set_activated(productDto.isActivated());
+        product.setCategory(productDto.getCategory());
+        return product;
+    }
+
+
     @Override
-    public ShoppingCart updateCart(ProductDto productDto, int quantity, String username,Long cart_Item_Id,long size_id) {
+    public ShoppingCart updateCart(ProductDto productDto, int quantity, String username,Long cart_Item_Id,long size_id)
+    {
         Customer customer = customerService.findByEmail(username);
-        ShoppingCart shoppingCart = customer.getCart();
+
+        ShoppingCart shoppingCart = customer.getCart(); // the item in the cart -> the shoppingcart
+
         Set<CartItem> cartItemList = shoppingCart.getCartItems();
         CartItem item = find(cartItemList, productDto.getId(),cart_Item_Id);
         int itemQuantity = quantity;
@@ -110,15 +155,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
     }
 
     @Override
-    public ShoppingCart removeItemFromCart(ProductDto productDto, String username) {
+    public ShoppingCart removeItemFromCart(ProductDto productDto, String username)
+    {
         Customer customer = customerService.findByEmail(username);
         ShoppingCart shoppingCart = customer.getCart();
         Set<CartItem> cartItemList = shoppingCart.getCartItems();
         CartItem item = find(cartItemList, productDto.getId());
         cartItemList.remove(item);
-        cartItemRepository.deleteById(item.getId());
+        cartItemRepository.deleteById(item.getId());  // delete item from cart
+
+
         double totalPrice = totalPrice(cartItemList);
+
         int totalItem = totalItem(cartItemList);
+
         shoppingCart.setCartItems(cartItemList);
         shoppingCart.setTotalPrice(totalPrice);
         shoppingCart.setTotalItems(totalItem);
@@ -131,12 +181,34 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
         return shoppingCartRepository.save(shoppingCart);
     }
 
+    private double totalPrice(Set<CartItem> cartItemList)  // used in removeItemfromCart,updateCart,addItemToCart
+    {
+        double totalPrice = 0.0;
+        for (CartItem item : cartItemList) {
+            totalPrice += item.getUnitPrice() * item.getQuantity();
+        }
+        return totalPrice;
+    }
+
+    private int totalItem(Set<CartItem> cartItemList)             // used in removeItemfromCart,updateCart,addItemToCart
+    {
+        int totalItem = 0;
+        for (CartItem item : cartItemList) {
+            totalItem += item.getQuantity();
+        }
+        return totalItem;
+    }
+
     @Override
-    public ShoppingCart updateTotalPrice(Double newTotalPrice,String username) {
+    public ShoppingCart updateTotalPrice(Double newTotalPrice,String username)
+    {
         Customer customer = customerService.findByEmail(username);
+
         ShoppingCart shoppingCart = customer.getCart();
+
         shoppingCart.setTotalPrice(newTotalPrice);
         shoppingCartRepository.save(shoppingCart);
+
         return shoppingCart;
     }
 
@@ -144,9 +216,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
     @Override
     public void deleteCartById(long id) {
         ShoppingCart shoppingCart = shoppingCartRepository.getById(id);
-        for (CartItem cartItem : shoppingCart.getCartItems()) {
+
+        for (CartItem cartItem : shoppingCart.getCartItems())
+        {
             cartItem.setCart(null);
-            cartItemRepository.deleteById(cartItem.getId());
+            cartItemRepository.deleteById(cartItem.getId());              //delete item in the cartItem
         }
         shoppingCart.setCustomer(null);
         shoppingCart.getCartItems().clear();
@@ -158,25 +232,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
 
 
 
-       /* Used in ShoppingCartServiceImpl*/
 
 
-
-    private Product transfer(ProductDto productDto) {
-        Product product = new Product();
-        product.setId(productDto.getId());
-        product.setName(productDto.getName());
-        product.setCurrentQuantity(productDto.getCurrentQuantity());
-        product.setCostPrice(productDto.getCostPrice());
-        product.setSalePrice(productDto.getSalePrice());
-        product.setShortDescription(productDto.getShortDescription());
-        product.setLongDescription(productDto.getLongDescription());
-        product.setImage(productDto.getImage());
-        product.setBrand(productDto.getBrand());
-        product.set_activated(productDto.isActivated());
-        product.setCategory(productDto.getCategory());
-        return product;
-    }
 
 
 
@@ -207,19 +264,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
         return cartItem;
     }
 
-    private double totalPrice(Set<CartItem> cartItemList) {
-        double totalPrice = 0.0;
-        for (CartItem item : cartItemList) {
-            totalPrice += item.getUnitPrice() * item.getQuantity();
-        }
-        return totalPrice;
-    }
 
-    private int totalItem(Set<CartItem> cartItemList) {
-        int totalItem = 0;
-        for (CartItem item : cartItemList) {
-            totalItem += item.getQuantity();
-        }
-        return totalItem;
-    }
+
+
 }

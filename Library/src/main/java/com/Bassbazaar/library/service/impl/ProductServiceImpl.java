@@ -81,9 +81,13 @@ public class ProductServiceImpl implements ProductService
     @Override
     public Product save(List<MultipartFile> imageProducts, ProductDto productDto) {
         String productName = productDto.getName();
+
+//        check if the product is alreaday exist
+
         if (existsByName(productName)) {
             throw new ProductNameAlreadyExistsException("Product with the same name already exists");
         }
+
         Product product = new Product();
         try {
             product.setName(productDto.getName());
@@ -115,7 +119,8 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public ProductDto findById(long id) {
+    public ProductDto findById(long id)
+    {
         Product product = productRepository.findById(id);
         ProductDto productDto=new ProductDto();
         productDto.setId(product.getId());
@@ -134,9 +139,21 @@ public class ProductServiceImpl implements ProductService
 
     @Override
     public Product update(List<MultipartFile> imageProducts, ProductDto productDto) {
+
+
         try {
-            long id= productDto.getId();
+            long id= productDto.getId();        //extract the product id
+
             Product productUpdate = productRepository.findById(id);
+
+            /* Handle the product already exist exception */
+
+/*            String updatedProductName = productDto.getName();
+            if (!productUpdate.getName().equals(updatedProductName) && existsByName(updatedProductName)) {
+                throw new ProductNameAlreadyExistsException("Product with the same name already exists");
+            }*/
+            /* Handle the product already exist exception */
+
             productUpdate.setCategory(productDto.getCategory());
             productUpdate.setName(productDto.getName());
             productUpdate.setBrand(productUpdate.getBrand());
@@ -144,16 +161,23 @@ public class ProductServiceImpl implements ProductService
             productUpdate.setLongDescription(productDto.getLongDescription());
             productUpdate.setCostPrice(productDto.getCostPrice());
             productUpdate.setCurrentQuantity(productDto.getCurrentQuantity());
+
             productRepository.save(productUpdate);
+
+            //Handle image update
             if (imageProducts != null && !imageProducts.isEmpty() && imageProducts.size()!=1) {
                 List<Image> imagesList = new ArrayList<>();
-                List<Image> image = imageRepository.findImageBy(id);
+                List<Image> image = imageRepository.findImageBy(id); //get the images from the imges repository
+
+               //update the existing images
                 int i=0;
                 for (MultipartFile imageProduct : imageProducts) {
                     String imageName = imageUpload.storeFile(imageProduct);
+
                     image.get(i).setName(imageName);
                     image.get(i).setProduct(productUpdate);
                     imageRepository.save(image.get(i));
+
                     imagesList.add(image.get(i));
                     i++;
                 }
@@ -252,7 +276,7 @@ public class ProductServiceImpl implements ProductService
         Set<CartItem> cartItemSet=product.getCartItems();
         for(CartItem cartItem : cartItemSet){
             cartItem.setProduct(null);
-            cartItemRepository.save(cartItem);
+            cartItemRepository.save(cartItem);    // delete the cartitem from the customer when the admin delete the product
         }
         Wishlist wishlist=product.getWishlist();
         if(wishlist!=null) {

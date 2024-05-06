@@ -111,6 +111,14 @@
                             <div class="col-md-4">
                                 <input id="image" name="imageProduct" class="input-file" type="file" multiple required>
                             </div>
+
+                            <!-- Imges preview -->
+                            <div id="imagePreview" class="col-md-4"></div>
+
+                            <!-- Imges preview -->
+
+
+
                         </div>
                     </div>
                 </div>
@@ -174,8 +182,59 @@
             }
         });
     });
+
+/* Script for delete button in the product images*/
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+
+        imageInput.addEventListener('change', function(event) {
+            // Clear previous preview
+            imagePreview.innerHTML = '';
+
+            const selectedFiles = event.target.files;
+
+            // Iterate over selected files and create image previews
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+
+                    reader.onload = function() {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'image-container';
+
+                        const img = document.createElement('img');
+                        img.src = reader.result;
+                        img.style.maxWidth = '100px'; // Adjust width as needed
+                        img.style.maxHeight = '100px'; // Adjust height as needed
+                        imgContainer.appendChild(img);
+
+                        // Add delete button
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'btn btn-danger btn-sm delete-image';
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.onclick = function() {
+                            // Remove the image container when delete button is clicked
+                            imgContainer.remove();
+                            // Clear the file input to allow re-selection of the same image
+                            imageInput.value = '';
+                        };
+                        imgContainer.appendChild(deleteButton);
+
+                        imagePreview.appendChild(imgContainer);
+                    }
+
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    });
+</script>
 
 <script src="/admin/js/validation.js"></script>
 <script src="/admin/js/vendors/jquery-3.6.0.min.js"></script>

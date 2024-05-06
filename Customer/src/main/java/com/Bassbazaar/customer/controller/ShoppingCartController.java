@@ -33,18 +33,24 @@ public class ShoppingCartController
 
     /* Cart page*/
     @GetMapping("/cart")
-    public String getCart(Model model, Principal principal) {
+    public String getCart(Model model, Principal principal)
+    {
         if (principal == null) {
             return "redirect:/login";
-        } else {
+        }
+        else
+        {
             Customer customer = customerService.findByEmail(principal.getName());
+
             ShoppingCart cart = customer.getCart();
             if (cart==null) {
                 model.addAttribute("check","You don't have any items in your cart");
             }
-            if (cart != null) {
+            if (cart != null)
+            {
                 model.addAttribute("grandTotal", cart.getTotalPrice());
             }
+
             model.addAttribute("shoppingCart", cart);
             model.addAttribute("title", "Cart");
             return "cart";
@@ -63,14 +69,18 @@ public class ShoppingCartController
                                 Principal principal,
                                 HttpSession session) {
         ProductDto productDto = productService.findById(id);
-        if (principal == null) {
+        if (principal == null)
+        {
             return "redirect:/login";
-        } else {
+        }
+        else
+        {
             String username = principal.getName();
             ShoppingCart shoppingCart = shoppingCartService.addItemToCart(productDto, quantity, username, sizeId);
             session.setAttribute("totalItems", shoppingCart.getTotalItems());
             model.addAttribute("shoppingCart", shoppingCart);
-            if (buyNow) {
+            if (buyNow)
+            {
                 return "redirect:/cart";
             }
         }
@@ -90,6 +100,7 @@ public class ShoppingCartController
         } else {
             ProductDto productDto = productService.findById(id);
             String username = principal.getName();
+
             ShoppingCart shoppingCart = shoppingCartService.removeItemFromCart(productDto, username);
             model.addAttribute("shoppingCart", shoppingCart);
             return "redirect:/cart";
@@ -100,15 +111,6 @@ public class ShoppingCartController
 
 
 
-
-
-
-
-
-
-
-
-/*Update the cart [not needed ]*/
     @RequestMapping(value = "/update-cart", method = RequestMethod.POST, params = "action=update")
     public String updateCart(@RequestParam("id") Long id,
                              @RequestParam("cart_item_id")Long cart_item_id,
@@ -118,10 +120,14 @@ public class ShoppingCartController
                              Principal principal) {
         if (principal == null) {
             return "redirect:/login";
-        } else {
+        }
+        else
+        {
             System.out.println(sizeId);
             ProductDto productDto = productService.findById(id);
+
             String username = principal.getName();
+
             ShoppingCart shoppingCart = shoppingCartService.updateCart(productDto, quantity, username,cart_item_id,sizeId);
             model.addAttribute("shoppingCart", shoppingCart);
             return "redirect:/cart";

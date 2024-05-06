@@ -26,11 +26,16 @@
       <div class="col-12">
         <div class="table-responsive">
           <div th:if="${check}" style="display: flex; flex-direction: column; align-items: center;">
+
             <p class="text-center"  th:text="${check}"></p>
-            <a  th:href="@{/products-list}"><button class="btn btn-primary">Continue Shopping</button></a>
+
+            <a  th:href="@{/products-list}">
+              <button class="btn btn-primary">Continue Shopping</button>
+            </a>
+
           </div>
 
-          <table class="table shopping-summery text-center clean" th:if="${grandTotal}">
+          <table class="table shopping-summery text-center clean" th:if="${grandTotal}">  <!-- If totalprice is not empty it show the table -->
             <thead>
             <tr class="main-heading">
               <th scope="col">Image</th>
@@ -41,18 +46,21 @@
               <th scope="col">Remove</th>
             </tr>
             </thead>
+
             <tbody>
             <tr th:each="cartItem :  ${shoppingCart.cartItems}">
+
               <td >
                 <img class = "my-product-image" style="height: 40px; width: 40px;" alt="ProductImage"
                      th:src="@{'/imgs/images/' + ${cartItem.product.image[0].getName()}}" >
               </td>
               <td class="product-des product-name">
                 <a th:href="@{/product-full/{id}(id = ${cartItem.product.id})}">
+
                   <h3 class="product-name" th:text="${cartItem.product.name}"></h3>
                 </a>
-
               </td>
+
               <td class="price" data-title="Price">
                 <p th:unless="${cartItem.product.salePrice > 0}" th:text="${cartItem.product.costPrice}"></p>
                 <p th:if="${cartItem.product.salePrice > 0}" th:text="${cartItem.product.salePrice}"></p>
@@ -61,6 +69,7 @@
               <!-- Cart Update form -->
 
               <form th:action="@{/update-cart}" method="post">
+
                 <input type="hidden" name="id" th:value="${cartItem.product.id}">
 
                 <input type="hidden" name="cart_item_id" th:value="${cartItem.id}">
@@ -84,15 +93,15 @@
                   <!-- Checkout-->
 
                   <!--<a th:href="@{/check-out/{itemId}(itemId=${cartItem.id})}" class="btn btn-success btn-sm">Checkout</a>-->
+
                 </td>
               </form>
-
-
             </tr>
             </tbody>
           </table>
         </div>
       </div>
+
       <div class="row my-5" th:if = "${grandTotal}">
         <div class="col-lg-8 col-sm-12"></div>
         <div class="col-lg-4 col-sm-12">
@@ -103,6 +112,7 @@
               <h4>Shipping Cost :  </h4>
               <div class="ml-auto font-weight-bold"> Free</div>
             </div>
+
             <hr>
             <div class="d-flex gr-total">
               <h5>Grand Total :  </h5>

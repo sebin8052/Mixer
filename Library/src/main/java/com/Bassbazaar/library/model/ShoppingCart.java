@@ -18,16 +18,24 @@ public class ShoppingCart
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shopping_cart_id")
     private Long id;
+
     private double totalPrice;
 
     private int totalItems;
+
+
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "cart")
+    private Set<CartItem> cartItems;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="customer_id",referencedColumnName = "customer_id")
     private Customer customer;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "cart")
-    private Set<CartItem> cartItems;
-    public ShoppingCart() {
+
+
+    public ShoppingCart()   // used to initize the default value of the totalItem,totalPrice
+    {
         this.cartItems = new HashSet<>();
         this.totalItems = 0;
         this.totalPrice = 0.0;
