@@ -65,9 +65,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     List<Product> findAllByNameContainingIgnoreCase(String keyword);
 
     List<Product> findProductsByCategory(Category category);
+
     boolean existsByName(String name);
 
 
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Product p WHERE p.name = :name AND p.id <> :id")
+    boolean existsByNameAndIdNot(String name, Long id);
 
 
 

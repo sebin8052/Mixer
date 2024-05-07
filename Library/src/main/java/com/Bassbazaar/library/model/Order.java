@@ -23,7 +23,9 @@ public class Order
     private Long id;
     private Date orderDate;
     private Date deliveryDate;
+
     private String orderStatus;
+
     private double totalPrice;
     @Column(nullable = true)
     private Double discountPrice;
@@ -31,6 +33,8 @@ public class Order
     private String paymentMethod;
     private boolean isAccept;
     private String paymentStatus;
+
+    private String cancelReason;
 
 
 

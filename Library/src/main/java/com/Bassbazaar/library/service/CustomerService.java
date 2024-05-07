@@ -38,4 +38,7 @@ public interface CustomerService
     Optional<List<Customer>> getByReferalToken(String token);
     void updateReferalCodeToken(String token,String email);
 
+
+    boolean existsByFirstName(String firstName);
+
 }

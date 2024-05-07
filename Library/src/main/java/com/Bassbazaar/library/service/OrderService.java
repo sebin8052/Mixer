@@ -10,7 +10,8 @@ public interface OrderService
 {
     Order save(ShoppingCart cart, long address_id, String paymentMethod, Double oldTotalPrice);
 
-    void cancelOrder(long order_id);
+    /* Edited*/
+    void cancelOrder(long order_id,String cancelReason);
 
     List<Order> findAllOrders();
 
@@ -34,6 +35,8 @@ public interface OrderService
 
 
     void updatePayment(Order order,boolean status);
+
+           /* Order status */
 
     void updateOrderStatus(String status,long order_id);
 

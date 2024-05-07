@@ -140,19 +140,19 @@ public class ProductServiceImpl implements ProductService
     @Override
     public Product update(List<MultipartFile> imageProducts, ProductDto productDto) {
 
+        String productName = productDto.getName();
+
+        long id= productDto.getId();
+
+        if (existsByNameandId(productName,id)) {
+            throw new ProductNameAlreadyExistsException("Product with the same name already exists");
+        }
 
         try {
-            long id= productDto.getId();        //extract the product id
+           //extract the product id
 
             Product productUpdate = productRepository.findById(id);
 
-            /* Handle the product already exist exception */
-
-/*            String updatedProductName = productDto.getName();
-            if (!productUpdate.getName().equals(updatedProductName) && existsByName(updatedProductName)) {
-                throw new ProductNameAlreadyExistsException("Product with the same name already exists");
-            }*/
-            /* Handle the product already exist exception */
 
             productUpdate.setCategory(productDto.getCategory());
             productUpdate.setName(productDto.getName());
@@ -184,8 +184,10 @@ public class ProductServiceImpl implements ProductService
                 productUpdate.setImage(imagesList);
             }
             return productUpdate;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
+
             return null;
         }
     }
@@ -358,4 +360,12 @@ public class ProductServiceImpl implements ProductService
         return productDtos;
 
     }
+
+/* Checking for get the  product name and id for duplication check */
+    @Override
+    public boolean existsByNameandId(String name,Long id)
+    {
+        return productRepository.existsByNameAndIdNot(name,id);
+    }
+
 }

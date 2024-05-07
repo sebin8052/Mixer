@@ -1,5 +1,6 @@
 package com.Bassbazaar.customer.controller;
 
+import com.Bassbazaar.library.Exception.CustomerNameAlreadyExistsException;
 import com.Bassbazaar.library.dto.CustomerDto;
 import com.Bassbazaar.library.model.Customer;
 import com.Bassbazaar.library.repository.CustomerRepository;
@@ -85,7 +86,13 @@ public class LoginRegisterController {
                 return "verifyEmail";
             }
 
-        } catch (Exception e)
+        }catch(CustomerNameAlreadyExistsException e)
+        {
+            e.printStackTrace();
+            model.addAttribute("error", "The customer name is already registered!");
+            return "register";
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             model.addAttribute("error", "Server is error, try again later!");

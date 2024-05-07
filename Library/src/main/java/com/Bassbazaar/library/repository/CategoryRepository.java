@@ -19,6 +19,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long>
     Long countAllCategories();
 
     Category findById(long id);
+
+
+
+
 }
 
 

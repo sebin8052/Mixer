@@ -26,6 +26,43 @@
                 <div th:if="${success}" class="text-center alert-success alert">
                     <p th:text="${success}"></p>
                 </div>
+
+                <!-- Cancel modal -->
+
+                <!-- Cancel Order Modal -->
+
+
+<!--                    <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">-->
+<!--                        <div class="modal-dialog" role="document">-->
+<!--                            <div class="modal-content">-->
+<!--                                <div class="modal-header">-->
+<!--                                    <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>-->
+<!--                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                                </div>-->
+
+<!--                                <div class="modal-body">-->
+<!--                                    <form id="cancelOrderForm" th:action="@{/cancel-order/{id}}" method="post">-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label for="cancelReason" class="col-form-label">Reason for Cancellation:</label>-->
+<!--                                            <input type="text" class="form-control" id="cancelReason" name="cancelReason" required>-->
+<!--                                        </div>-->
+<!--                                        <input type="hidden" id="orderId" name="orderId" value="">-->
+<!--                                    </form>-->
+<!--                                </div>-->
+<!--                                <div class="modal-footer">-->
+<!--                                    <button type="submit" form="cancelOrderForm" class="btn btn-primary">Cancel Order</button>-->
+<!--                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+
+
+
+                <!-- Cancel modal end -->
+
                 <div class="table-main table-responsive">
                     <table class="table" id="orderTable">
                         <thead>
@@ -84,17 +121,67 @@
 
                             <td>
                                 <a th:href="@{/order-view/{id}(id = ${order.id})}" class="button-cancel" >View</a>
-                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/return-order/{id}(id = ${order.id})}" class="button-cancel" >Return</a>
-                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/replace-order/{id}(id = ${order.id})}" class="button-cancel" >Replace</a>
 
-                                <a  th:unless="${order.orderStatus=='Cancelled' or order.orderStatus == 'Delivered'}" th:href="@{/cancel-order/{id}(id = ${order.id})}" class="button-cancel"
-                                    onclick="if (!(confirm('Are you sure you want to Cancel this Order?'))) return false">Cancel</a>
+
+                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/return-order/{id}(id = ${order.id})}" class="button-cancel" >Return</a>
+
+<!--                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/replace-order/{id}(id = ${order.id})}" class="button-cancel" >Replace</a>-->
+
+
+
+                                <!--Cancel  the order[main] -->
+
+                                <a th:unless="${order.orderStatus=='Cancelled' or order.orderStatus == 'Delivered'}" href="#" class="button-cancel" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" th:data-order-id="${order.id}">
+                                    Cancel
+                                </a>
+
+<!--                               <a th:if="${order.orderStatus=='Cancelled' or order.orderStatus == 'Delivered'}" th:href="@{/cancel-order/{id}(id = ${order.id})}" lass="button-cancel" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" data-order-id="${order.id}"> Cancel</a>-->
+
+
                             </td>
                             </a>
                             </td>
                         </tr>
+
                         </tbody>
                     </table>
+
+
+
+
+                    <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+<!--                                    <form id="cancelOrderForm" th:action="@{/cancel-order/{id}}" method="post">
+                                        <div class="form-group">
+                                            <label for="cancelReason" class="col-form-label">Reason for Cancellation:</label>
+                                            <input type="text" class="form-control" id="cancelReason" name="cancelReason" required>
+                                        </div>
+                                        <input type="text" id="orderId" name="orderId" value="">
+                                    </form>-->
+
+                                    <form id="cancelOrderForm" action="" method="post">
+                                        <div class="form-group">
+                                            <label for="cancelReason" class="col-form-label">Reason for Cancellation:</label>
+                                            <input type="text" class="form-control" id="cancelReason" name="cancelReason" required>
+                                        </div>
+                                        <input type="text" id="orderId" name="orderId" value="">
+                                        <!--<button type="button" onclick="updateFormAction()">Submit</button>-->
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" onclick="updateFormAction()"  class="btn btn-primary">Cancel Order</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,6 +202,26 @@
             }
         );
     });
+
+
+    // Add event listener to the cancel link
+    // Add event listener to the cancel link
+    document.querySelectorAll('.button-cancel').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            var orderId = this.getAttribute('data-order-id'); // Get order ID from data attribute
+            document.getElementById('orderId').value = orderId; // Set order ID as value of hidden input field
+        });
+    });
+
+</script>
+
+<script>
+    function updateFormAction() {
+        var orderId = document.getElementById("orderId").value;
+        document.getElementById("cancelOrderForm").action = "/mixer/cancel-order/" + orderId;
+        document.getElementById("cancelOrderForm").submit();
+    }
 </script>
 
 </body>

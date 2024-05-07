@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -56,12 +57,17 @@ public class OrderController
         return "redirect:/orders";
     }
 
+    /* Cancel reason */
     @GetMapping("/cancel-order/{id}")
-    public String cancelOrder(@PathVariable("id")long order_id, RedirectAttributes attributes){
-        orderService.cancelOrder(order_id);
+    public String cancelOrder(@PathVariable("id")long order_id,String cancelReason, RedirectAttributes attributes){
+        orderService.cancelOrder(order_id,cancelReason);
         attributes.addFlashAttribute("success", "Order Cancelled successfully!");
         return "redirect:/orders";
     }
+
+
+
+
 
     @GetMapping("/order-view/{id}")
     public String orderView(@PathVariable("id")long order_id,Model model)

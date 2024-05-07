@@ -83,8 +83,9 @@ public class OrderServiceImpl implements OrderService
         return orderRepository.save(order);
     }
 
+    /* Edited */
     @Override
-    public void cancelOrder(long order_id) {
+    public void cancelOrder(long order_id ,String cancelReason) {
         Order order=orderRepository.getById(order_id);
         Customer customer=order.getCustomer();
 
@@ -98,7 +99,14 @@ public class OrderServiceImpl implements OrderService
             }
         }
         order.setOrderStatus("Cancelled");
+
+        /* Edited*/
+        order.setCancelReason(cancelReason);
+
         orderRepository.save(order);
+
+        //Handle refunds
+
         if(order.getPaymentMethod().equals("Wallet") || order.getPaymentMethod().equals("RazorPay")){
             walletService.returnCredit(order,customer);
         }
@@ -230,15 +238,37 @@ public class OrderServiceImpl implements OrderService
     /* Add the Order Status */
     @Override
     public void updateOrderStatus(String status, long order_id) {
-        if(order_id != 0) {
-            Order order = orderRepository.getReferenceById(order_id);
-            if(status.equals("Shipped")){
+        if(order_id != 0)
+        {
+            Order order = orderRepository.getReferenceById(order_id); // get the order from the repository
+            if(status.equals("Shipped"))
+            {
                 order.setOrderStatus(status);
+                if(order.getPaymentMethod().equals("COD"))
+                {
+                    order.setPaymentStatus("Pending");
+                } else if (order.getPaymentMethod().equals("Wallet")||order.getPaymentMethod().equals("RazorPay"))
+                {
+                 order.setPaymentStatus("Paid");
+                }
                 orderRepository.save(order);
-            }else if(status.equals("Delivered")){
+            }
+
+            else if(status.equals("Delivered"))
+            {
                 order.setOrderStatus(status);
-                if(order.getPaymentMethod().equals("COD")){
+                if(order.getPaymentMethod().equals("COD")||order.getPaymentMethod().equals("Wallet")||order.getPaymentMethod().equals("RazorPay"))
+                {
                     order.setPaymentStatus("Paid");
+                }
+                orderRepository.save(order);
+            }
+            else if(status.equals("Pending"))  //Pending
+            {
+                order.setOrderStatus(status);
+                if(order.getPaymentMethod().equals("COD"));
+                {
+                    order.setPaymentStatus("Pending");
                 }
                 orderRepository.save(order);
             }

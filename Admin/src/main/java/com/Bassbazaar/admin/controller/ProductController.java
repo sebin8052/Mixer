@@ -90,7 +90,11 @@ public class ProductController
         try {
             productService.save(imageProduct,product);
             redirectAttributes.addFlashAttribute("success", "Added new product successfully!");
-        } catch (Exception e) {
+        } catch (ProductNameAlreadyExistsException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Product with same name is already exist!");
+        }
+        catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Failed to add new product!");
         }
@@ -128,7 +132,11 @@ public class ProductController
 
             productService.update(imageProduct, productDto);
             redirectAttributes.addFlashAttribute("success", "Update successfully!");
-        } catch (Exception e) {
+        }catch (ProductNameAlreadyExistsException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Product with same name is already exist!");
+        }
+        catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error server, please try again!");
         }

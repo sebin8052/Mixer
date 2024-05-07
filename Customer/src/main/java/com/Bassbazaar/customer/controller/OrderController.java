@@ -284,11 +284,21 @@ public class OrderController {
         }
     }
 
-    /*         Cancel the Order[My Account]    */
-    @GetMapping("/cancel-order/{id}")
-    public String cancelOrder(@PathVariable("id")long order_id, RedirectAttributes attributes){
-        orderService.cancelOrder(order_id);
+    /*         Cancel the Order[My Account]   [edited] */
+/*    @GetMapping("/cancel-order/{id}")
+    public String cancelOrder(@PathVariable("id")long order_id,String cancelReason, RedirectAttributes attributes){
+        orderService.cancelOrder(order_id,cancelReason);
         attributes.addFlashAttribute("success", "Cancel order successfully!");
+        return "redirect:/dashboard?tab=orders";
+    }*/
+
+    /* Order page in Account page [Customer]*/
+    @PostMapping("/cancel-order/{id}")
+    public String cancelOrder(@PathVariable("id") long order_id,
+                              @RequestParam("cancelReason") String cancelReason,
+                              RedirectAttributes attributes) {
+        orderService.cancelOrder(order_id, cancelReason);
+        attributes.addFlashAttribute("success", "Order successfully canceled!");
         return "redirect:/dashboard?tab=orders";
     }
 

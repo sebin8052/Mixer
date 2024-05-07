@@ -1,6 +1,7 @@
 package com.Bassbazaar.library.service.impl;
 
 
+import com.Bassbazaar.library.Exception.CustomerNameAlreadyExistsException;
 import com.Bassbazaar.library.Exception.CustomerNotFoundException;
 import com.Bassbazaar.library.dto.CustomerDto;
 import com.Bassbazaar.library.model.Customer;
@@ -34,17 +35,34 @@ public class CustomerServiceImpl implements CustomerService
     @Override
     public Customer save(CustomerDto customerDto)
     {
-        Customer customer = new Customer();
+     String customername = customerDto.getFirstName();
 
-        customer.setFirstName(customerDto.getFirstName());
-        customer.setLastName(customerDto.getLastName());
-        customer.setMobileNumber(customerDto.getMobileNumber());
-        customer.setActivated(true);
-        customer.setPassword((customerDto.getPassword()));
-        customer.setEmail(customerDto.getEmail());
-        customer.setRoles("User");
-        return customerRepository.save(customer);
-    }
+     if(existsByFirstName(customername))
+     {
+         throw new CustomerNameAlreadyExistsException("The customer  name already registered!");
+     }
+        Customer customer = new Customer();
+     try
+     {
+
+
+         customer.setFirstName(customerDto.getFirstName());
+         customer.setLastName(customerDto.getLastName());
+         customer.setMobileNumber(customerDto.getMobileNumber());
+         customer.setActivated(true);
+         customer.setPassword((customerDto.getPassword()));
+         customer.setEmail(customerDto.getEmail());
+         customer.setRoles("User");
+         return customerRepository.save(customer);
+     }
+     catch (Exception e)
+     {
+    e.printStackTrace();
+     return null;
+     }
+     }
+
+
 
     @Override
     public List<Customer> findAll()
@@ -176,4 +194,10 @@ public class CustomerServiceImpl implements CustomerService
         return Optional.ofNullable(customerRepository.findByReferalToken(token));
     }
 
+/* Check for duplicate customer name */
+    @Override
+    public boolean existsByFirstName(String firstName)
+    {
+        return customerRepository.existsByFirstName(firstName);
+    }
 }

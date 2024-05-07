@@ -17,4 +17,12 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>
 
     /* Referal */
     List<Customer> findByReferalToken(String token);
+
+
+        /* Check for duplicate name */
+        boolean existsByFirstName(String firstName);
+
+
+
+
 }

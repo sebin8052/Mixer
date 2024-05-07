@@ -103,6 +103,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="image">PRODUCT IMAGE</label>
                     <div class="col-md-4" id="imageContainer">
+
                         <!-- Images and delete buttons will be dynamically added here -->
                         <div class="image-container">
                             <img class="my-product-image" style="height: 40px; width: 40px;" alt="product-image" th:field="*{image}" th:src="@{|/imgs/images/${productDto.image[0].getName()}|}">
@@ -116,39 +117,11 @@
                             <img class="my-product-image" style="height: 40px; width: 40px;" alt="product-image" th:field="*{image}" th:src="@{|/imgs/images/${productDto.image[2].getName()}|}">
                             <button type="button" class="btn btn-danger btn-sm delete-image">Delete</button>
                         </div>
-                        <div class="image-container">
-                            <img class="my-product-image" style="height: 40px; width: 40px;" alt="product-image" th:field="*{image}" th:src="@{|/imgs/images/${productDto.image[3].getName()}|}">
-                            <button type="button" class="btn btn-danger btn-sm delete-image">Delete</button>
-                        </div>
+
                     </div>
                     <!-- File input for adding new images -->
                     <input id="image" name="imageProduct" class="input-file" type="file" accept="image/png, image/jpeg, image/avif, image/webp" multiple>
                 </div>
-
-                <!-- Chatgpt  -->
-
-                <!--                <div class="form-group">
-                                    <div class="col-md-4">
-                                        &lt;!&ndash; File Button &ndash;&gt;
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label" for="image">PRODUCT IMAGE</label>
-                                            <div class="col-md-4">
-                                                &lt;!&ndash; Images  &ndash;&gt;
-                                                <img class = "my-product-image" style="height: 40px; width: 40px;" alt="product-image" th:field="*{image}"  th:src="@{|/imgs/images/${productDto.image[0].getName()}|}">
-
-                                                <img class = "my-product-image" style="height: 40px; width: 40px;" alt="product-image" th:field="*{image}"  th:src="@{|/imgs/images/${productDto.image[1].getName()}|}">
-
-                                                <img class ="my-product-image" style="height: 40px; width: 40px;" alt="product-image" th:field="*{image}"  th:src="@{|/imgs/images/${productDto.image[2].getName()}|}">
-
-                                                <img class ="my-product-image" style="height: 40px; width: 40px;" alt="product-image" th:field="*{image}"  th:src="@{|/imgs/images/${productDto.image[3].getName()}|}">
-                                                &lt;!&ndash; Imges&ndash;&gt;
-                                                <input id="image" name="imageProduct" class="input-file" type="file" accept="image/png, image/jpeg, image/avif, image/webp" multiple>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-
-
 
                 <button type="submit" class="btn btn-primary">Update</button>
             </fieldset>
@@ -177,7 +150,7 @@
 
         imageInput.addEventListener('change', function(event) {
             const selectedFiles = event.target.files;
-            const maxFiles = 4;
+            const maxFiles = 3;
 
             if (selectedFiles.length > maxFiles) {
                 alert(`You can only upload up to ${maxFiles} files.`);

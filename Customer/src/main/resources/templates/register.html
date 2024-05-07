@@ -38,12 +38,21 @@
                                 <div class="heading_s1">
                                     <h3 class="mb-30">Create an Account</h3>
                                 </div>
-                                <div th:if="${param['success']}">
+
+               <!--                 <div th:if="${param['success']}">
                                     <p class="alert alert-success" th:text="${param['success']}">Registration successful!</p>
                                 </div>
                                 <div th:if="${param['error']}">
                                     <p class="alert alert-danger" th:text="${param['error']}"> error</p>
+                                </div>-->
+
+                                <div th:if = "${success}" class = "text-center alert alert-success">
+                                    <p th:text = "${success}"></p>
                                 </div>
+                                <div th:if = "${error}" class="text-center alert alert-danger">
+                                    <p th:text = "${error}"></p>
+                                </div>
+
 
                                 <form id="signupForm" th:action = "@{/do-register}" method="POST" th:object = "${customerDto}">
                                     <div class="d-md-flex"style="column-gap: 20px" >
