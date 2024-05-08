@@ -69,16 +69,19 @@
                 </td>
 
                 <!-- Order status  in the admin module -->
-                <td class="price-pr">
-                    <select  th:unless="${order.orderStatus=='Cancelled' or order.orderStatus=='Delivered' or order.orderStatus=='Returned' or order.orderStatus=='Pending'}"  id="order-status" th:data-order-id="${order.id}"  onchange="submitSelection(this.getAttribute('data-order-id'))"  name="orderStatus" class="form-control">
-                        <option th:value = "null">-SELECT-</option>
-                        <option value = "Shipped">Shipped</option>
-                        <option value = "Delivered">Delivered</option>
-                        <option value ="Cancelled">Cancelled</option>
-                        <option value ="Out of Delivery">Out of Delivery</option>
-                    </select>
-                    <p th:text="${order.orderStatus}"></p>
-                </td>
+                    <td class="price-pr">
+                        <select  th:unless="${order.orderStatus=='Cancelled' or order.orderStatus=='Delivered' or order.orderStatus=='Returned' or order.orderStatus=='Pending' or order.orderStatus=='Processing' or order.orderStatus=='Out of Delivery'}"  id="order-status" th:data-order-id="${order.id}"  onchange="submitSelection(this.getAttribute('data-order-id'))"  name="orderStatus" class="form-control">
+                            <option th:value = "null">-SELECT-</option>
+                            <option value = "Shipped">Shipped</option>
+                            <option value = "Delivered">Delivered</option>
+                            <option value ="Cancelled">Cancelled</option>
+                            <option value ="Processing">Processing</option>
+
+                            <option value ="Out of Delivery"> Out of Delivery</option>
+
+                        </select>
+                        <p th:text="${order.orderStatus}"></p>
+                    </td>
 
                 <td class="total-pr">
                     <p style="color: red">₹ [(${order.totalPrice})]</p>

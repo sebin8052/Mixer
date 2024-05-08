@@ -27,41 +27,7 @@
                     <p th:text="${success}"></p>
                 </div>
 
-                <!-- Cancel modal -->
 
-                <!-- Cancel Order Modal -->
-
-
-<!--                    <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">-->
-<!--                        <div class="modal-dialog" role="document">-->
-<!--                            <div class="modal-content">-->
-<!--                                <div class="modal-header">-->
-<!--                                    <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>-->
-<!--                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                                </div>-->
-
-<!--                                <div class="modal-body">-->
-<!--                                    <form id="cancelOrderForm" th:action="@{/cancel-order/{id}}" method="post">-->
-<!--                                        <div class="form-group">-->
-<!--                                            <label for="cancelReason" class="col-form-label">Reason for Cancellation:</label>-->
-<!--                                            <input type="text" class="form-control" id="cancelReason" name="cancelReason" required>-->
-<!--                                        </div>-->
-<!--                                        <input type="hidden" id="orderId" name="orderId" value="">-->
-<!--                                    </form>-->
-<!--                                </div>-->
-<!--                                <div class="modal-footer">-->
-<!--                                    <button type="submit" form="cancelOrderForm" class="btn btn-primary">Cancel Order</button>-->
-<!--                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-
-
-
-
-                <!-- Cancel modal end -->
 
                 <div class="table-main table-responsive">
                     <table class="table" id="orderTable">
@@ -123,8 +89,9 @@
                                 <a th:href="@{/order-view/{id}(id = ${order.id})}" class="button-cancel" >View</a>
 
 
-                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/return-order/{id}(id = ${order.id})}" class="button-cancel" >Return</a>
 
+
+                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/return-order/{id}(id = ${order.id})}" class="button-cancel" >Return</a>
 <!--                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/replace-order/{id}(id = ${order.id})}" class="button-cancel" >Replace</a>-->
 
 
@@ -135,7 +102,7 @@
                                     Cancel
                                 </a>
 
-<!--                               <a th:if="${order.orderStatus=='Cancelled' or order.orderStatus == 'Delivered'}" th:href="@{/cancel-order/{id}(id = ${order.id})}" lass="button-cancel" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" data-order-id="${order.id}"> Cancel</a>-->
+
 
 
                             </td>
