@@ -62,12 +62,17 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     @Query(value = "SELECT * FROM products WHERE is_activated = true ORDER BY CASE WHEN :sort = 'lowToHigh' THEN cost_price END ASC, CASE WHEN :sort = 'highToLow' THEN cost_price END DESC", nativeQuery = true)
     List<Product> findAllByActivatedTrueAndSortBy(@Param("sort") String sort);
 
+
     List<Product> findAllByNameContainingIgnoreCase(String keyword);
 
     List<Product> findProductsByCategory(Category category);
 
     boolean existsByName(String name);
 
+/*    List<Product> searchProductsByCategoryAndKeyword(long id, String  keyword);*/
+
+/*    *//* repository method to get the product by category Id *//*
+    List<Product> findProductsByCategoryId(long categoryId);*/
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Product p WHERE p.name = :name AND p.id <> :id")
     boolean existsByNameAndIdNot(String name, Long id);

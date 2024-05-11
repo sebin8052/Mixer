@@ -26,6 +26,8 @@ public class CustomerDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Thread obj = new Thread();
+        obj.start();
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer != null) {

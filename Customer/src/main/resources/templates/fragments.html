@@ -181,10 +181,14 @@
                 <div class="single-mobile-header-info mt-30">
                     <a  th:href="@{/contact}"> Our location </a>
                 </div>
+
+                     <!--          To get the customer information      -->
+
                 <div class="single-mobile-header-info">
                     <li th:if = "${session.username == null}"><i class="fi-rs-user"></i><a th:href="@{/login}">Log In</a></li>
                     <li th:unless = "${session.username == null}"><i class="fi-rs-user"></i><a th:href="@{/logout}">Log out</a></li>
                     <li th:if = "${session.username == null}"><i class="fi-rs-user"></i><a th:href="@{/register}">Sign Up</a></li>
+
                 </div>
                 <div class="single-mobile-header-info">
                     <a href="#">(+01) - 2345 - 6789 </a>

@@ -81,6 +81,8 @@
                                     <a aria-label="Add To Wishlist" class="action-btn hover-up" th:href="@{/add-wishlist}" th:data-product-id="${product.id}"><i class="fi-rs-heart"></i></a>
                                 </div>
                             </div>
+
+                            <!-- Product info-->
                             <div class="product-content-wrap">
                                 <div class="product-category">
                                     <a th:text = "${product.category.name}"></a>
@@ -104,6 +106,9 @@
                         </div>
                     </div>
                 </div>
+
+                             <!-- Category based selection in the shop.html -->
+
                 <div class="col-lg-3 primary-sidebar sticky-sidebar">
                     <div class="widget-category mb-30">
                         <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>

@@ -12,7 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-/*import org.apache.commons.io.FileUtils;*/
+import org.apache.commons.io.FileUtils;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,13 +79,7 @@ public class DashBoardController
                     startDate = Date.from(startDateTime.atZone(zone).toInstant());
                     endDate = Date.from(endDateTime.atZone(zone).toInstant());
                 }
-                case "year" -> {
-                    period="year";
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.DAY_OF_YEAR, 1);
-                    startDate = calendar.getTime();
-                    endDate = new Date();
-                }
+
                 default -> {
                     period="";
                     filter="";
@@ -114,9 +108,9 @@ public class DashBoardController
         }
     }
 
-/* Generate sales report*/
+// Generate sales report
 
-   /* @PostMapping("/generateReport")
+    @PostMapping("/generateReport")
     @ResponseBody
     public ResponseEntity<ByteArrayResource> salesReportGenerator(@RequestBody Map<String, Object> requestData ) throws ParseException, IOException, DocumentException {
         String type = (String) requestData.get("type");
@@ -142,7 +136,7 @@ public class DashBoardController
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(resource);
-    }*/
+    }
 
     @GetMapping("/chart")
     @ResponseBody

@@ -33,8 +33,17 @@ public interface ProductService
     List<Object[]> getProductsStatsBetweenDates(Date startDate, Date endDate);
 
     Product findBYId(long id);
+
+
+    Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo, String keyword, long id);
+
     List<Product> findProductsByCategory(long id);
+
+
+
     Page<ProductDto> searchProducts(int pageNo,String keyword);
+
+
 
     void disableCategoryAndProductsById(Long id);
     boolean existsByName(String name);
@@ -42,4 +51,5 @@ public interface ProductService
     boolean existsByNameandId(String name,Long id);
 
 
+    /* Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo,long id,String keyword);*/
 }

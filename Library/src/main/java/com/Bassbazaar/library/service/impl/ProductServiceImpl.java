@@ -8,7 +8,6 @@ import com.Bassbazaar.library.service.ProductService;
 import com.Bassbazaar.library.utils.ImageUpload;
 import jakarta.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -315,20 +314,7 @@ public class ProductServiceImpl implements ProductService
         return productRepository.findById(id);
     }
 
-    @Override
-    public List<Product> findProductsByCategory(long id) {
-        return productRepository.findAllByCategoryId(id);
-    }
 
-    /* ProductController [Customer]*/
-    @Override
-    public Page<ProductDto> searchProducts(int pageNo, String keyword) {
-        List<Product> products = productRepository.findAllByNameContainingIgnoreCase(keyword);
-        List<ProductDto> productDtoList = transferData(products);
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
-        return dtoPage;
-    }
 
 
     @Override
@@ -368,4 +354,40 @@ public class ProductServiceImpl implements ProductService
         return productRepository.existsByNameAndIdNot(name,id);
     }
 
+
+
+    /* ProductController [Customer]*/
+
+    @Override
+    public Page<ProductDto> searchProducts(int pageNo, String keyword) {
+        List<Product> products = productRepository.findAllByNameContainingIgnoreCase(keyword);
+        List<ProductDto> productDtoList = transferData(products);
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
+        return dtoPage;
+    }
+
+/*    @Override
+    public Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo, String keyword, long id)
+    {
+        List<Product> products =productRepository.searchProductsByCategoryAndKeyword(,keyword,id);
+        List<ProductDto> productDtoList = transferData(products);
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
+        return dtoPage;
+    }*/
+
+
+    @Override
+    public Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo, String keyword, long id) {
+        return null;
+    }
+
+
+
+    /* Get  the product based on categoryId*/
+    @Override
+    public List<Product> findProductsByCategory(long id) {
+        return productRepository.findAllByCategoryId(id);
+    }
 }
