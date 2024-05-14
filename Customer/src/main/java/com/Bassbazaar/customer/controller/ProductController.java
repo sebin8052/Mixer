@@ -86,7 +86,8 @@ public class ProductController
                                 @RequestParam(name = "keyword") String keyword,
                                 Model model
     ) {
-        Page<ProductDto> products = productService.searchProducts(pageNo, keyword);
+
+        Page<ProductDto> products = productService.searchProducts(pageNo,keyword);
         long totalProducts = products.getTotalElements();
         model.addAttribute("totalProducts", totalProducts);
         model.addAttribute("products", products);
@@ -94,39 +95,7 @@ public class ProductController
         model.addAttribute("totalPages", products.getTotalPages());
         return "shop";
     }
-/*    @GetMapping("/search-products/{pageNo}")
-    public String searchProduct(@PathVariable("pageNo") int pageNo,@PathVariable("id")long id,
-                                @RequestParam(name = "keyword",required = false) String keyword,
 
-                                @RequestParam(name = "categoryId",required = false)String categoryId,
-
-                                Model model)
-    {
-
-
-        Page<ProductDto> products = null;
-        long totalProducts = 0;
-
-        else if (categoryId != null) {
-            // Only category is provided
-            products = productService.searchProductsByCategory(pageNo, categoryId);
-            totalProducts = productService.getTotalProductsByCategory(categoryId);
-        }
-        else if (keyword != null && !keyword.isEmpty())   // Only keyword is provided
-        {
-
-            products = productService.searchProducts(pageNo, keyword);
-            totalProducts = products.getTotalElements();
-        }
-
-
-        model.addAttribute("totalProducts", totalProducts);
-        model.addAttribute("products", products);
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", products.getTotalPages());
-        return "shop";
-
-    }*/
 
 
     @GetMapping("/product-full/{id}")

@@ -25,8 +25,8 @@ public class CustomerSecurityConfig
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
+    {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/css/**", "/imgs/**", "/js/**", "/fonts/**", "/register/**", "/do-register/**", "/**", "/address").permitAll()
@@ -56,3 +56,11 @@ public class CustomerSecurityConfig
     }
 
 }
+
+    /*     .oauth2Login(oauth -> oauth
+        .loginPage("/login") // Reuse existing login page
+                .failureUrl("/login?error")
+                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(oAuth2UserService))
+        .successHandler(oAuth2LoginHandler))
+
+        .logout(LogoutConfigurer::permitAll)*/

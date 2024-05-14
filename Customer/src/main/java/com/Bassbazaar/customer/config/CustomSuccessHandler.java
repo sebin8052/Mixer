@@ -19,6 +19,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler
         HttpSession session= request.getSession();
         session.setAttribute("userLoginID",true);
         String redirectUrl="/";
+
         new DefaultRedirectStrategy().sendRedirect(request,response,redirectUrl);
     }
 

@@ -228,16 +228,19 @@
                     <div class="panel-collapse collapse coupon_form" id="coupon">
                         <div class="panel-body">
                             <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
+
                             <form method="post" th:action="@{/check-out/apply-coupon}">
                                 <div class="form-group">
                                     <input type="text" th:value="${param.couponCode}" placeholder="Enter Coupon Code..." name="couponCode">
                                 </div>
+
                                 <div class="form-group">
                                     <button class="btn  btn-md" type="submit" name="action" th:value="${param.couponCode == null ? 'apply' : 'remove'}" th:text="${param.couponCode == null ? 'Apply Coupon' : 'Remove Coupon'}"></button>
                                 </div>
                             </form>
                         </div>
                     </div>
+
                     <div class="mt-25" th:each="coupon : ${coupons}" style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
                         <p th:text="${coupon.description}"></p>
                         <p>Code: <strong th:text="${coupon.code}"></strong></p>

@@ -40,7 +40,8 @@ public class OrderController {
     /* Check out the cart one by one [Not needed ]*/
 
     @GetMapping("/check-out/{itemId}")
-    public String checkOutItem(@PathVariable Long itemId, Principal principal, Model model) {
+    public String checkOutItem(@PathVariable Long itemId, Principal principal, Model model)
+    {
         if (principal == null) {
             return "redirect:/login";
         } else {

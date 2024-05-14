@@ -66,6 +66,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="product-list mb-50">
                         <div class="product-cart-wrap" th:each = "product : ${products}">
                             <div class="product-img-action-wrap">
@@ -77,9 +78,12 @@
                                         </a>
                                     </div>
                                 </div>
+                                <!-- Hower wishlist button -->
+
                                 <div class="product-action-1">
-                                    <a aria-label="Add To Wishlist" class="action-btn hover-up" th:href="@{/add-wishlist}" th:data-product-id="${product.id}"><i class="fi-rs-heart"></i></a>
+                                    <a aria-label="Add To Wishlist" class="action-btn wish-btn hover-up" th:href="@{/add-wishlist}" th:data-product-id="${product.id}"><i class="fi-rs-heart"></i></a>
                                 </div>
+
                             </div>
 
                             <!-- Product info-->
@@ -105,6 +109,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                              <!-- Category based selection in the shop.html -->
@@ -113,7 +118,7 @@
                     <div class="widget-category mb-30">
                         <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
                         <ul th:each="category : ${categories}" class="categories">
-                            <a th:href="@{/products-list(id=${category.id})}"><li  th:text="${category.name}"></li></a>
+                            <a th:href="@{/products-list(id=${category.id})}" onclick="selectCategory(${category.id})"><li  th:text="${category.name}"></li></a>
                         </ul>
                     </div>
                 </div>
@@ -158,9 +163,46 @@
 
 <div th:replace = "~{fragments::script}"></div>
 <script th:src="@{/js/plugins/jquery.elevatezoom.js}"></script>
+
+
+
 <!-- Template  JS -->
 <script th:src="@{/js/shop.js?v=3.4}"></script>
 
+
+<script>
+    function submitForm(productId) {
+        console.log("clicked")
+        console.log(productId)
+        const formId = 'form_' + productId;
+        const form = document.getElementById(formId);
+        form.submit();
+    }
+    $(document).ready(function () {
+        $(".wish-btn").click(function (event) {
+            event.preventDefault();
+            const productId = $(this).data("product-id");
+            console.log(productId);
+            $.ajax({
+                url: "/mixer/add-wishlist",
+                type: "POST",
+                data: { productId: productId },
+                success: function (response) {
+                    alert("Added to wishlist successfully");
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 409) {
+                        alert("Product already exists in wishlist");
+                    }else if(xhr.status === 401){
+                        alert("User not logged in , Please Log in")
+                    } else {
+                        alert("Error adding to wishlist. Please try again later.");
+                    }
+                },
+            });
+        });
+    });
+</script>
 
 
 
