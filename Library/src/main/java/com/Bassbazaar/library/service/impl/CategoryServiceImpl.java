@@ -1,6 +1,7 @@
 package com.Bassbazaar.library.service.impl;
 
 
+import com.Bassbazaar.library.Exception.CategoryNameAlreadyExistsException;
 import com.Bassbazaar.library.dto.CategoryDto;
 import com.Bassbazaar.library.model.Category;
 import com.Bassbazaar.library.repository.CategoryRepository;
@@ -8,6 +9,7 @@ import com.Bassbazaar.library.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.Name;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,12 +29,31 @@ public class CategoryServiceImpl implements CategoryService
     //used to save the category
     @Override
     public Category save(CategoryDto categoryDto) {
-        Category category=new Category();
-        category.setName(categoryDto.getName());
-        category.setDeleted(false);
-        category.setActivated(true);
-        category.setDescription(categoryDto.getDescription());
-        return categoryRepository.save(category);
+
+        String  name = categoryDto.getName();
+
+        Long id = categoryDto.getId();
+
+        if(existByName(name,id))
+        {
+            throw new CategoryNameAlreadyExistsException("The category is already Exist!");
+        }
+
+         try
+         {
+             Category category=new Category();
+             category.setName(categoryDto.getName());
+             category.setDeleted(false);
+             category.setActivated(true);
+             category.setDescription(categoryDto.getDescription());
+             return categoryRepository.save(category);
+         }
+         catch(Exception e)
+         {
+             e.printStackTrace();
+             return null;
+         }
+
     }
 
 
@@ -46,11 +67,32 @@ public class CategoryServiceImpl implements CategoryService
 
     //Update the category
     @Override
-    public Category update(Category category) {
-        Category categoryUpdate = categoryRepository.getById(category.getId());
-        categoryUpdate.setName(category.getName());
-        categoryUpdate.setDescription(category.getDescription());
-        return categoryRepository.save(categoryUpdate);
+    public Category update(Category category)
+    {
+
+        String name =category.getName();
+
+        long id =category.getId();
+
+        if(existByName(name,id))
+        {
+            throw new CategoryNameAlreadyExistsException("Category name already exist!");
+        }
+        try
+        {
+            Category categoryUpdate = categoryRepository.getById(category.getId());
+            categoryUpdate.setName(category.getName());
+            categoryUpdate.setDescription(category.getDescription());
+            return categoryRepository.save(categoryUpdate);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+
+
     }
 
     // find category by Id [find / not find ]
@@ -103,6 +145,14 @@ public class CategoryServiceImpl implements CategoryService
         Category category = categoryRepository.getById(id);
         category.disableCategoryAndProducts();
         categoryRepository.save(category);
+    }
+
+
+    /* Duplicate category */
+    @Override
+    public boolean existByName(String name,Long id)
+    {
+        return categoryRepository.existsByNameAndIdNot(name,id);
     }
 }
 

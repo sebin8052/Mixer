@@ -1,6 +1,7 @@
 package com.Bassbazaar.library.service;
 
 import com.Bassbazaar.library.dto.ProductDto;
+import com.Bassbazaar.library.model.Product;
 import com.Bassbazaar.library.model.ShoppingCart;
 
 public interface ShoppingCartService
@@ -13,4 +14,9 @@ public interface ShoppingCartService
 
     void deleteCartById(long id);  // delete when order the product from the cart
 
+
+   void increment(Long cartId,Long cartItemId);
+
+
+  void decrement(Long cartId,Long cartItemId);
 }

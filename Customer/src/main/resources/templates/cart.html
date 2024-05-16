@@ -35,7 +35,9 @@
 
           </div>
 
-          <table class="table shopping-summery text-center clean" th:if="${grandTotal}">  <!-- If totalprice is not empty it show the table -->
+
+          <table class="table shopping-summery text-center clean" th:if="${grandTotal}">       <!-- If totalprice is not empty it show the table -->
+
             <thead>
             <tr class="main-heading">
               <th scope="col">Image</th>
@@ -54,6 +56,7 @@
                 <img class = "my-product-image" style="height: 40px; width: 40px;" alt="ProductImage"
                      th:src="@{'/imgs/images/' + ${cartItem.product.image[0].getName()}}" >
               </td>
+
               <td class="product-des product-name">
                 <a th:href="@{/product-full/{id}(id = ${cartItem.product.id})}">
 
@@ -61,11 +64,24 @@
                 </a>
               </td>
 
+
               <td class="price" data-title="Price">
                 <p th:unless="${cartItem.product.salePrice > 0}" th:text="${cartItem.product.costPrice}"></p>
                 <p th:if="${cartItem.product.salePrice > 0}" th:text="${cartItem.product.salePrice}"></p>
               </td>
 
+
+
+              <!-- Custom-->
+
+              <td class="text-center" data-title="Stock">
+                <a th:href="@{/decrementQuantity(id=${cartItem.cart.id}, cart_item_id=${cartItem.id})}">-</a>
+                <span th:text="${cartItem.quantity}"></span>
+                <a th:href="@{/incrementQuantity(id=${cartItem.cart.id}, cart_item_id=${cartItem.id})}">+</a>
+              </td>
+
+
+                <!-- Custom -->
               <!-- Cart Update form -->
 
               <form th:action="@{/update-cart}" method="post">
@@ -73,18 +89,20 @@
                 <input type="hidden" name="id" th:value="${cartItem.product.id}">
 
                 <input type="hidden" name="cart_item_id" th:value="${cartItem.id}">
-                <td class="quantity-box">
-                  <input type="number" name="quantity" th:value="${cartItem.quantity}" size="4" value="1" min="1" step="1"
-                         class="c-input-text qty text">
-                </td>
+
+
+
+
+
+
                 <td class="total-pr">
                   <p th:text="'₹' + ${cartItem.unitPrice * cartItem.quantity}"></p>
                 </td>
+
+
                 <td class="action" data-title="Remove">
 
-                   <button type="submit" name="action" value="update" title="Update" class="btn btn-primary btn-sm">
-                    Update
-                  </button>
+
 
                   <button type="submit" name="action" value="delete" title="Delete" class="btn btn-danger btn-sm">
                     Delete
@@ -96,9 +114,14 @@
 
                 </td>
               </form>
+
+
             </tr>
             </tbody>
           </table>
+
+
+
         </div>
       </div>
 
@@ -137,6 +160,8 @@
 <div th:replace = "~{fragments::script}"></div>
 <script th:src="@{/js/plugins/jquery.elevatezoom.js}"></script>
 <script th:src="@{/js/shop.js?v=3.4}"></script>
+
+
 </body>
 </html>
 

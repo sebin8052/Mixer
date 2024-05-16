@@ -110,7 +110,7 @@ public class ShoppingCartController
 
 
 
-
+/* update the quantity of the product*/
     @RequestMapping(value = "/update-cart", method = RequestMethod.POST, params = "action=update")
     public String updateCart(@RequestParam("id") Long id,
                              @RequestParam("cart_item_id")Long cart_item_id,
@@ -133,4 +133,33 @@ public class ShoppingCartController
             return "redirect:/cart";
         }
     }
+
+
+
+
+/*
+    @GetMapping("/incrementQuantity")
+    public String showQuantityIncrement(@RequestParam("id")Long cartId,@RequestParam("cart_item_id") Long cartItemId)
+    {
+
+        shoppingCartService.increment(cartId,cartItemId)
+        return "redirect:/cart";
+    }
+*/
+
+
+    @GetMapping("/incrementQuantity")
+    public String showQuantityIncrement(@RequestParam("id") Long cartId, @RequestParam("cart_item_id") Long cartItemId) {
+        shoppingCartService.increment(cartId, cartItemId);
+        return "redirect:/cart";
+    }
+
+
+    @GetMapping("/decrementQuantity")
+    public String showQuantityDecrement(@RequestParam("id") Long cartId ,@RequestParam("cart_item_id")Long cartItemId)
+    {
+        shoppingCartService.decrement(cartId,cartItemId);
+        return "redirect:/cart";
+    }
+
 }

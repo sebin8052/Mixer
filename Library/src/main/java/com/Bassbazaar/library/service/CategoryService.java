@@ -27,4 +27,7 @@ public interface  CategoryService
     Category findById(long id);
 
     void disableCategoryAndProductsById(Long id);
+
+
+    boolean existByName(String name,Long id);
 }

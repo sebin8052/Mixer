@@ -8,9 +8,11 @@ import com.Bassbazaar.library.model.ShoppingCart;
 import com.Bassbazaar.library.repository.CartItemRepository;
 import com.Bassbazaar.library.repository.ShoppingCartRepository;
 import com.Bassbazaar.library.service.CustomerService;
+import com.Bassbazaar.library.service.ProductService;
 import com.Bassbazaar.library.service.ShoppingCartService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,10 +24,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
     private CartItemRepository cartItemRepository;
     private CustomerService customerService;
 
-    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, CartItemRepository cartItemRepository, CustomerService customerService) {
+
+    private ProductService productService;
+
+
+    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, CartItemRepository cartItemRepository, CustomerService customerService, ProductService productService) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.cartItemRepository = cartItemRepository;
         this.customerService = customerService;
+        this.productService = productService;
     }
 
     /*
@@ -142,6 +149,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
         ShoppingCart shoppingCart = customer.getCart(); // the item in the cart -> the shoppingcart
 
         Set<CartItem> cartItemList = shoppingCart.getCartItems();
+
         CartItem item = find(cartItemList, productDto.getId(),cart_Item_Id);
         int itemQuantity = quantity;
         item.setQuantity(itemQuantity);
@@ -264,7 +272,92 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
         return cartItem;
     }
 
+/*
+@Override
+public void increment(Long cartId,Long cartItemId)
+{
+    ShoppingCart shoppingCart =shoppingCartRepository.getReferenceById(cartId);
 
+    CartItem cartItem = findCartItemById(shoppingCart.getCartItems(), cartItemId);
+
+    if (cartItem != null) {
+        Product product = cartItem.getProduct();
+        if (product.getCurrentQuantity() > cartItem.getQuantity()) {
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
+            cartItemRepository.save(cartItem);
+
+            shoppingCartRepository.save(shoppingCart);
+        }
+    }
+}
+
+
+    private CartItem findCartItemById(Set<CartItem> cartItems, Long cartItemId) {
+        for (CartItem item : cartItems) {
+            if (item.getId().equals(cartItemId)) {
+                return item;
+            }
+        }
+        return null;
+    }
+*/
+
+
+    @Override
+    public void increment(Long cartId, Long cartItemId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.getReferenceById(cartId);
+        CartItem cartItem = findCartItemById(shoppingCart.getCartItems(), cartItemId);
+
+        if (cartItem != null) {
+            Product product = cartItem.getProduct();
+            if (product.getCurrentQuantity() > cartItem.getQuantity()) {
+                cartItem.setQuantity(cartItem.getQuantity() + 1);
+                cartItemRepository.save(cartItem);
+
+                // Update the shopping cart totals
+                updateShoppingCartTotals(shoppingCart);
+                shoppingCartRepository.save(shoppingCart);
+            }
+        }
+    }
+
+    private void updateShoppingCartTotals(ShoppingCart shoppingCart) {
+        double totalPrice = totalPrice(shoppingCart.getCartItems());
+        int totalItem = totalItem(shoppingCart.getCartItems());
+        shoppingCart.setTotalPrice(totalPrice);
+        shoppingCart.setTotalItems(totalItem);
+    }
+
+    private CartItem findCartItemById(Set<CartItem> cartItems, Long cartItemId) {
+        for (CartItem item : cartItems) {
+            if (item.getId().equals(cartItemId)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public void decrement(Long cartId, Long cartItemId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.getReferenceById(cartId);
+        CartItem cartItem = findCartItemById(shoppingCart.getCartItems(), cartItemId);
+
+        if (cartItem != null) {
+            if (cartItem.getQuantity() > 1) {
+                cartItem.setQuantity(cartItem.getQuantity() - 1);
+                cartItemRepository.save(cartItem);
+            } else {
+                // Remove the item if quantity is 1 or less
+                shoppingCart.getCartItems().remove(cartItem);
+                cartItemRepository.delete(cartItem);
+            }
+
+            // Update the shopping cart totals
+            updateShoppingCartTotals(shoppingCart);
+            shoppingCartRepository.save(shoppingCart);
+        }
+    }
 
 
 }
