@@ -1,5 +1,6 @@
 package com.Bassbazaar.library.service.impl;
 
+import com.Bassbazaar.library.Exception.InsufficientProductQuantityException;
 import com.Bassbazaar.library.dto.ProductDto;
 import com.Bassbazaar.library.model.CartItem;
 import com.Bassbazaar.library.model.Customer;
@@ -11,6 +12,7 @@ import com.Bassbazaar.library.service.CustomerService;
 import com.Bassbazaar.library.service.ProductService;
 import com.Bassbazaar.library.service.ShoppingCartService;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -272,39 +274,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService
         return cartItem;
     }
 
-/*
-@Override
-public void increment(Long cartId,Long cartItemId)
-{
-    ShoppingCart shoppingCart =shoppingCartRepository.getReferenceById(cartId);
-
-    CartItem cartItem = findCartItemById(shoppingCart.getCartItems(), cartItemId);
-
-    if (cartItem != null) {
-        Product product = cartItem.getProduct();
-        if (product.getCurrentQuantity() > cartItem.getQuantity()) {
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-            cartItemRepository.save(cartItem);
-
-            shoppingCartRepository.save(shoppingCart);
-        }
-    }
-}
-
-
-    private CartItem findCartItemById(Set<CartItem> cartItems, Long cartItemId) {
-        for (CartItem item : cartItems) {
-            if (item.getId().equals(cartItemId)) {
-                return item;
-            }
-        }
-        return null;
-    }
-*/
 
 
     @Override
-    public void increment(Long cartId, Long cartItemId) {
+    public void increment(Long cartId, Long cartItemId)
+    {
+
         ShoppingCart shoppingCart = shoppingCartRepository.getReferenceById(cartId);
         CartItem cartItem = findCartItemById(shoppingCart.getCartItems(), cartItemId);
 
@@ -314,11 +289,18 @@ public void increment(Long cartId,Long cartItemId)
                 cartItem.setQuantity(cartItem.getQuantity() + 1);
                 cartItemRepository.save(cartItem);
 
-                // Update the shopping cart totals
+
                 updateShoppingCartTotals(shoppingCart);
                 shoppingCartRepository.save(shoppingCart);
             }
+
+            else
+            {
+                throw new InsufficientProductQuantityException("Insufficient product quantity for product ID:" + product.getId());
+            }
         }
+
+
     }
 
     private void updateShoppingCartTotals(ShoppingCart shoppingCart) {
@@ -358,6 +340,5 @@ public void increment(Long cartId,Long cartItemId)
             shoppingCartRepository.save(shoppingCart);
         }
     }
-
 
 }

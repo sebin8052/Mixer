@@ -2,6 +2,7 @@ package com.Bassbazaar.library.service;
 
 import com.Bassbazaar.library.Exception.CustomerNotFoundException;
 import com.Bassbazaar.library.dto.CustomerDto;
+import com.Bassbazaar.library.enums.AuthenticationType;
 import com.Bassbazaar.library.model.Customer;
 
 
@@ -41,4 +42,8 @@ public interface CustomerService
 
     boolean existsByFirstName(String firstName);
 
+
+    void updateAuthenticationType(Customer customer ,AuthenticationType type);
+
+    void addNewCustomerUponOAuthLogin(String name, String email);
 }

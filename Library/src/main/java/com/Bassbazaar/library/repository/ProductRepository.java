@@ -57,6 +57,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     List<Object[]> getProductsStatsForConfirmedOrdersBetweenDates(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 
+    /* get the product based on the category id*/
     List<Product> findAllByCategoryId(long id);
 
     @Query(value = "SELECT * FROM products WHERE is_activated = true ORDER BY CASE WHEN :sort = 'lowToHigh' THEN cost_price END ASC, CASE WHEN :sort = 'highToLow' THEN cost_price END DESC", nativeQuery = true)
@@ -64,6 +65,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>
 
 
     List<Product> findAllByNameContainingIgnoreCase(String keyword);
+
+
+
+
 
     List<Product> findProductsByCategory(Category category);
 
@@ -94,4 +99,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     @Modifying
     @Query(value = "delete from products where product_id = :id",nativeQuery = true)
     void deleteProduct(@Param("id") long id);
+
+
+
+
+    /* get the product based on category id and keyword*/
+/*    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId AND LOWER(p.name) LIKE %:keyword%")
+    List<Product> findByCategoryIdAndNameContainingIgnoreCaseCustomQuery(@Param("categoryId") long categoryId, @Param("keyword") String keyword);*/
+
+
+
 }

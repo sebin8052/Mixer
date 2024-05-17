@@ -117,10 +117,15 @@ public class OrderController {
     @RequestMapping(value = "/check-out/apply-coupon", method = RequestMethod.POST, params = "action=apply")
     public String applyCoupon(@RequestParam("couponCode")String couponCode,Principal principal,
                               RedirectAttributes attributes,HttpSession session){
-        if(couponService.findByCouponCode(couponCode.toUpperCase())) {
+
+        if(couponService.findByCouponCode(couponCode.toUpperCase()))
+
+        {
             Coupon coupon = couponService.findByCode(couponCode.toUpperCase());
             ShoppingCart cart = customerService.findByEmail(principal.getName()).getCart();
+
             Double totalPrice = cart.getTotalPrice();
+
             session.setAttribute("totalPrice",totalPrice);
             Double newTotalPrice = couponService.applyCoupon(couponCode.toUpperCase(), totalPrice);
             shoppingCartService.updateTotalPrice(newTotalPrice, principal.getName());
@@ -135,7 +140,7 @@ public class OrderController {
 
     }
 
-    /*         Remove Couopon  [Week 10]  */
+
     @RequestMapping(value = "/check-out/apply-coupon", method = RequestMethod.POST, params = "action=remove")
     public String removeCoupon(Principal principal,RedirectAttributes attributes,
                                HttpSession session){
@@ -150,12 +155,14 @@ public class OrderController {
 
 
 
-    /* Razar pay */
+
+
 
     @RequestMapping(value = "/add-order",method = RequestMethod.POST)
     @ResponseBody
-    public String createOrder(@RequestBody Map<String,Object> data, Principal principal, HttpSession session, Model model) throws RazorpayException
+    public String createOrder(@RequestBody Map<String,Object> data, Principal principal, HttpSession session, Model model,RedirectAttributes redirectAttributes) throws RazorpayException
     {
+
 
         String paymentMethod = data.get("payment_Method").toString();
 
@@ -164,52 +171,68 @@ public class OrderController {
         Customer customer = customerService.findByEmail(principal.getName());
         ShoppingCart cart = customer.getCart();
 
-        if(paymentMethod.equals("COD")) {
-            Order order = orderService.save(cart, address_id, paymentMethod, oldTotalPrice);
-            session.removeAttribute("totalItems");
-            session.removeAttribute("totalPrice");
-            session.setAttribute("orderId", order.getId());
-            model.addAttribute("order", order);
-            model.addAttribute("page", "Order Detail");
-            model.addAttribute("success", "Order Added Successfully");
-            JSONObject options = new JSONObject();
-            options.put("status", "Cash");
-            return options.toString();
-        }
-        else if(paymentMethod.equals("Wallet")){
-            walletService.debit(customer.getWallet(),cart.getTotalPrice());
-            Order order = orderService.save(cart,address_id,paymentMethod,oldTotalPrice);
-            session.removeAttribute("totalItems");
-            session.removeAttribute("totalPrice");
-            session.setAttribute("orderId",order.getId());
-            model.addAttribute("order", order);
-            model.addAttribute("page", "Order Detail");
-            model.addAttribute("success", "Order Added Successfully");
-            JSONObject options = new JSONObject();
-            options.put("status","Wallet");
-            return options.toString();
-        }
-        else
+
+        if (cart.getTotalPrice() > 1000 && paymentMethod.equals("COD")) // check product price >1000 && payment = COD
         {
-            Order order = orderService.save(cart,address_id,paymentMethod,oldTotalPrice);
-            String orderId=order.getId().toString();
-            session.removeAttribute("totalItems");
-            session.removeAttribute("totalPrice");
-            session.setAttribute("orderId",order.getId());
-            model.addAttribute("order", order);
-            model.addAttribute("page", "Order Detail");
-            model.addAttribute("success", "Order Added Successfully");
-            RazorpayClient razorpayClient=new RazorpayClient("rzp_test_UNiTzy90sRVBuq","pflwkWXI3z4x4oLU9fcyzNl5");
-            JSONObject options = new JSONObject();
-            options.put("amount",order.getTotalPrice()*100);
-            options.put("currency","INR");
-            options.put("receipt",orderId);
-            com.razorpay.Order orderRazorPay = razorpayClient.orders.create(options);
-            return orderRazorPay.toString();
+
+            redirectAttributes.addFlashAttribute("error", "COD payment method is not available for orders above 1000.");
+            return "redirect:/check-out/all" ;
         }
+
+
+
+            if (paymentMethod.equals("COD")) {
+                Order order = orderService.save(cart, address_id, paymentMethod, oldTotalPrice);
+
+                session.removeAttribute("totalItems");  // remove information from the session
+                session.removeAttribute("totalPrice");
+                session.setAttribute("orderId", order.getId());
+                model.addAttribute("order", order);
+                model.addAttribute("page", "Order Detail");
+                model.addAttribute("success", "Order Added Successfully");
+
+                JSONObject options = new JSONObject();
+                options.put("status", "Cash");
+                return options.toString();
+            } else if (paymentMethod.equals("Wallet")) {
+                walletService.debit(customer.getWallet(), cart.getTotalPrice());
+
+                Order order = orderService.save(cart, address_id, paymentMethod, oldTotalPrice);
+                session.removeAttribute("totalItems");
+                session.removeAttribute("totalPrice");
+                session.setAttribute("orderId", order.getId());
+                model.addAttribute("order", order);
+                model.addAttribute("page", "Order Detail");
+                model.addAttribute("success", "Order Added Successfully");
+                JSONObject options = new JSONObject();
+                options.put("status", "Wallet");
+                return options.toString();
+            } else {
+                Order order = orderService.save(cart, address_id, paymentMethod, oldTotalPrice);
+                String orderId = order.getId().toString();
+                session.removeAttribute("totalItems");
+                session.removeAttribute("totalPrice");
+                session.setAttribute("orderId", order.getId());
+                model.addAttribute("order", order);
+                model.addAttribute("page", "Order Detail");
+                model.addAttribute("success", "Order Added Successfully");
+                RazorpayClient razorpayClient = new RazorpayClient("rzp_test_UNiTzy90sRVBuq", "pflwkWXI3z4x4oLU9fcyzNl5");
+                JSONObject options = new JSONObject();
+                options.put("amount", order.getTotalPrice() * 100);
+                options.put("currency", "INR");
+                options.put("receipt", orderId);
+                com.razorpay.Order orderRazorPay = razorpayClient.orders.create(options);
+                return orderRazorPay.toString();
+            }
+
+
+
+
     }
 
-/* Verify payment */
+
+
+    /* Verify payment */
     @RequestMapping(value = "/verify-payment",method = RequestMethod.POST)
     @ResponseBody
     public String verifyPayment(@RequestBody Map<String,Object> data,HttpSession session,Principal principal) throws RazorpayException {
@@ -285,13 +308,9 @@ public class OrderController {
         }
     }
 
-    /*         Cancel the Order[My Account]   [edited] */
-/*    @GetMapping("/cancel-order/{id}")
-    public String cancelOrder(@PathVariable("id")long order_id,String cancelReason, RedirectAttributes attributes){
-        orderService.cancelOrder(order_id,cancelReason);
-        attributes.addFlashAttribute("success", "Cancel order successfully!");
-        return "redirect:/dashboard?tab=orders";
-    }*/
+
+
+
 
     /* Order page in Account page [Customer]*/
     @PostMapping("/cancel-order/{id}")

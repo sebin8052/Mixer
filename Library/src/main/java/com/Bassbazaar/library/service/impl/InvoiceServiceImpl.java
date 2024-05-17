@@ -76,7 +76,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     contentStream.newLineAtOffset(0, -15);
                     contentStream.newLineAtOffset(0, -15);
                     contentStream.newLineAtOffset(0, -15);
-                    contentStream.showText("Thank You, For Shopping With GlamGaze E-commerce");
+                    contentStream.showText("Thank You, For Shopping With Bassbazaar E-commerce");
                     contentStream.newLineAtOffset(0, -15);
                     contentStream.endText();
                 }

@@ -35,13 +35,15 @@ public interface ProductService
     Product findBYId(long id);
 
 
-    Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo, String keyword, long id);
+
 
     List<Product> findProductsByCategory(long id);
 
 
-
+/* Search product based on pageNo and keyword[olready  created method ]*/
     Page<ProductDto> searchProducts(int pageNo,String keyword);
+
+
 
 
 
@@ -51,5 +53,10 @@ public interface ProductService
     boolean existsByNameandId(String name,Long id);
 
 
-    /* Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo,long id,String keyword);*/
+
+
+
+
+    /* new created method */
+    /*Page<ProductDto> searchProducts(int pageNo,Long categoryId,String keyword);*/
 }

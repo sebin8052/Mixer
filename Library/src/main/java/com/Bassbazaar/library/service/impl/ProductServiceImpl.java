@@ -358,6 +358,7 @@ public class ProductServiceImpl implements ProductService
 
     /* ProductController [Customer]*/
 
+/*     already created method */
     @Override
     public Page<ProductDto> searchProducts(int pageNo, String keyword) {
         List<Product> products = productRepository.findAllByNameContainingIgnoreCase(keyword);
@@ -367,10 +368,28 @@ public class ProductServiceImpl implements ProductService
         return dtoPage;
     }
 
+
+/* Created method for get the prodcut based on category id and keyword */
 /*    @Override
+    public  Page<ProductDto> searchProducts(int pageNo,Long categoryId,String keyword)
+    {
+        List<Product> products =productRepository.findByCategoryIdAndNameContainingIgnoreCaseCustomQuery(categoryId,keyword);
+        List<ProductDto> productDtoList =transferData(products);
+        Pageable pageable =PageRequest.of(pageNo,5);
+        Page<ProductDto> dtoPage =toPage(productDtoList,pageable);
+        return dtoPage;
+    }*/
+
+
+
+
+
+    /*  It is working */
+
+    /*    @Override
     public Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo, String keyword, long id)
     {
-        List<Product> products =productRepository.searchProductsByCategoryAndKeyword(,keyword,id);
+        List<Product> products =productRepository.searchProductsByCategoryAndKeyword(keyword,id);
         List<ProductDto> productDtoList = transferData(products);
         Pageable pageable = PageRequest.of(pageNo, 5);
         Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
@@ -378,10 +397,7 @@ public class ProductServiceImpl implements ProductService
     }*/
 
 
-    @Override
-    public Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo, String keyword, long id) {
-        return null;
-    }
+
 
 
 

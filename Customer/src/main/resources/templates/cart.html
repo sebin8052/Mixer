@@ -25,6 +25,7 @@
     <div class="row">
       <div class="col-12">
         <div class="table-responsive">
+
           <div th:if="${check}" style="display: flex; flex-direction: column; align-items: center;">
 
             <p class="text-center"  th:text="${check}"></p>
@@ -33,6 +34,10 @@
               <button class="btn btn-primary">Continue Shopping</button>
             </a>
 
+          </div>
+
+          <div th:if = "${error}" class="text-center alert alert-danger">
+            <p th:text = "${error}"></p>
           </div>
 
 

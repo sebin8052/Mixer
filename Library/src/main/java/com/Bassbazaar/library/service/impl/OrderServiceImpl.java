@@ -41,6 +41,8 @@ public class OrderServiceImpl implements OrderService
         this.walletService = walletService;
     }
 
+    /* Order details save  */
+
     @Override
     public Order save(ShoppingCart cart, long address_id, String paymentMethod, Double oldTotalPrice) {
         Order order = new Order();
@@ -61,7 +63,8 @@ public class OrderServiceImpl implements OrderService
         for(CartItem item : cart.getCartItems()){
             Product product=item.getProduct();
             int requestedQuantity = item.getQuantity();
-            if (requestedQuantity > product.getCurrentQuantity()) {
+            if (requestedQuantity > product.getCurrentQuantity())
+            {
                 throw new IllegalArgumentException("Requested quantity exceeds available quantity for product: " + product.getName());
             }
             int newQuantity = product.getCurrentQuantity() - requestedQuantity;

@@ -27,6 +27,11 @@ public interface CategoryRepository extends JpaRepository<Category, Long>
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Category c WHERE c.name = :name AND c.id <> :id")
     boolean existsByNameAndIdNot(String name, Long id);
 
+/*    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Category c WHERE UPPER(c.name) = UPPER(:name) AND c.id <> :id")
+    boolean existsByNameAndIdNot(String name, Long id);*/
+
+
+
 
 }
 

@@ -4,6 +4,7 @@ package com.Bassbazaar.library.service.impl;
 import com.Bassbazaar.library.Exception.CustomerNameAlreadyExistsException;
 import com.Bassbazaar.library.Exception.CustomerNotFoundException;
 import com.Bassbazaar.library.dto.CustomerDto;
+import com.Bassbazaar.library.enums.AuthenticationType;
 import com.Bassbazaar.library.model.Customer;
 import com.Bassbazaar.library.repository.CustomerRepository;
 import com.Bassbazaar.library.service.CustomerService;
@@ -18,6 +19,7 @@ public class CustomerServiceImpl implements CustomerService
 {
     @Autowired
     private CustomerRepository customerRepository;
+
 
     public CustomerServiceImpl(CustomerRepository customerRepository)
     {
@@ -200,4 +202,49 @@ public class CustomerServiceImpl implements CustomerService
     {
         return customerRepository.existsByFirstName(firstName);
     }
+
+
+
+    /* Google method */
+    @Override
+    public void updateAuthenticationType(Customer customer, AuthenticationType type)
+    {
+        if(!customer.getAuthenticationType().equals(type))
+        {
+            customerRepository.updateAuthenticationType(customer.getId(),type);
+        }
+    }
+
+    /* Method to crete a new customer in the database */
+
+    @Override
+    public void addNewCustomerUponOAuthLogin(String name, String email)
+    {
+        Customer customer = new Customer();
+        customer.setEmail(email);
+        setName(name,customer);
+
+        customer.setActivated(true);
+        customer.setAuthenticationType(AuthenticationType.GOOGLE);
+        customer.setMobileNumber("");
+        customer.setPassword("");
+        customerRepository.save(customer);
+    }
+
+
+
+    private void setName(String name, Customer customer) {
+        String[] nameArray = name.split(" ");
+        if (nameArray.length < 2) {
+            customer.setFirstName(name);
+            customer.setLastName("");
+        } else {
+            String firstName = nameArray[0];
+            customer.setFirstName(firstName);
+
+            String lastName = name.replaceFirst(firstName, "");
+            customer.setLastName(lastName);
+        }
+    }
+
 }

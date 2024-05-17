@@ -35,12 +35,22 @@
 <main class="main" >
     <section class="mt-50 mb-50" >
         <div class="container">
-            <div th:if = "${success}" class = "text-center alert alert-success">
-                <p th:text = "${success}"></p>
+
+            <div th:if="${success}" class="text-center alert alert-success">
+                <p th:text="${success}"></p>
             </div>
-            <div th:if = "${error}" class = "text-center alert alert-danger">
-                <p th:text = "${error}"></p>
+            <div th:if="${error}" class="text-center alert alert-danger">
+                <p th:text="${error}"></p>
             </div>
+            <div th:if="${message}" class="text-center alert alert-danger">
+                <p th:text="${message}"></p>
+            </div>
+            <div th:if="${limit}" class="text-center alert alert-danger">
+                <p th:text="${limit}"></p>
+            </div>
+
+
+
 
             <!-- Address option in the Left of the checkout page -->
             <div class="row mt-25">

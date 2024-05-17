@@ -1,5 +1,7 @@
 package com.Bassbazaar.library.model;
 
+import com.Bassbazaar.library.enums.AuthenticationType;
+import com.twilio.rest.pricing.v1.voice.Country;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -65,6 +67,20 @@ public class Customer implements Serializable
 
     @Column(name="referalToken", unique = true)
     private String referalToken;
+
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "authentication_type", length = 10)
+    private AuthenticationType authenticationType;
+
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    private Country country;
+
 }
 
 

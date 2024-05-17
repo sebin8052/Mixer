@@ -65,14 +65,17 @@
                                 <tr>
                                     <td colspan="4">
                                         <article class="float-end">
+
                                             <dl class="dlist" th:if="${order.discountPrice != null}">
                                                 <dt>Total Price :</dt>
                                                 <dd th:with="totalPrice=(${order.totalPrice} + ${order.discountPrice})" th:text="${#numbers.formatDecimal(totalPrice,0,'COMMA', 2,'POINT')}"></dd>
                                             </dl>
+
                                             <dl class="dlist">
                                                 <dt>Shipping cost:</dt>
                                                 <dd>Free</dd>
                                             </dl>
+
                                             <dl class="dlist" th:if="${order.discountPrice != null}">
                                                 <dt>Discount</dt>
                                                 <dd  th:text="${order.discountPrice}"></dd>

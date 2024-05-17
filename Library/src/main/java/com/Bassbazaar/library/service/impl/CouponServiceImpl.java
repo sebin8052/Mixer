@@ -42,13 +42,15 @@ public class CouponServiceImpl implements CouponService {
 
     /*     OrderController   */
     @Override
-    public double applyCoupon(String couponCode, double totalPrice) {
+    public double applyCoupon(String couponCode, double totalPrice)
+    {
         Coupon coupon= couponRepository.findCouponByCode(couponCode);
         double discountPrice = totalPrice * (coupon.getOffPercentage() / 100.0);
-        if(discountPrice > coupon.getMaxOff()){
+        if(discountPrice > coupon.getMaxOff())
+        {
             discountPrice = coupon.getMaxOff();
         }
-        coupon.setCount(coupon.getCount()-1);
+        coupon.setCount(coupon.getCount()-1);  //decrimented the coupon ,if use
         couponRepository.save(coupon);
         double updatedTotalPrice = totalPrice-discountPrice;
         String formattedTotalPrice = String.format("%.2f", updatedTotalPrice);

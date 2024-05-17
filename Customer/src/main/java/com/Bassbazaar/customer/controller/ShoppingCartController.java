@@ -1,5 +1,6 @@
 package com.Bassbazaar.customer.controller;
 
+import com.Bassbazaar.library.Exception.InsufficientProductQuantityException;
 import com.Bassbazaar.library.dto.ProductDto;
 import com.Bassbazaar.library.model.Customer;
 import com.Bassbazaar.library.model.ShoppingCart;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -149,8 +151,17 @@ public class ShoppingCartController
 
 
     @GetMapping("/incrementQuantity")
-    public String showQuantityIncrement(@RequestParam("id") Long cartId, @RequestParam("cart_item_id") Long cartItemId) {
-        shoppingCartService.increment(cartId, cartItemId);
+    public String showQuantityIncrement(@RequestParam("id") Long cartId, @RequestParam("cart_item_id") Long cartItemId, RedirectAttributes redirectAttributes) {
+       try
+       {
+           shoppingCartService.increment(cartId, cartItemId);
+       }
+       catch(InsufficientProductQuantityException e)
+       {
+           e.printStackTrace();
+           redirectAttributes.addFlashAttribute("error","Insufficient product quantity ");
+       }
+
         return "redirect:/cart";
     }
 
