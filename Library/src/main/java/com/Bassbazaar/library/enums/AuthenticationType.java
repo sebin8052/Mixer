@@ -1,2 +1,7 @@
-package com.Bassbazaar.library.enums;public class AuthenticationType {
+package com.Bassbazaar.library.enums;
+
+public enum AuthenticationType
+{
+    GOOGLE,FACEBOOK
+
 }
