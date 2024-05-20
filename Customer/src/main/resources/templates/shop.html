@@ -78,7 +78,7 @@
                                         <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
-                                        <span th:text="${sort=='' ? 'Featured' : (#strings.equals(sort, 'lowToHigh') ? 'Low-to-High': (#strings.equals(sort, 'highToLow') ? 'High-to-Low': sort)) }"><i class="fi-rs-angle-small-down"></i></span>
+                                        <span th:text="${sort == '' ? 'Featured' : (sort == 'lowToHigh' ? 'Low-to-High' : (sort == 'highToLow' ? 'High-to-Low' : sort))}"><i class="fi-rs-angle-small-down"></i></span>
                                     </div>
                                 </div>
 
@@ -88,11 +88,11 @@
                                         <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">Featured</a></li>
                                         <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">Popularity</a></li>
                                         <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">Average ratings</a></li>
-                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">New arrivals </a></li>
-                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">aA - zZ  </a></li>
-                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">zZ - aA </a></li>
-                                        <li><a th:classappend="${#strings.equals(sort, 'lowToHigh') ? 'active' : ''}" class="" th:href="@{/products-list(sort='lowToHigh')}">Price: Low to High</a></li>
-                                        <li><a th:classappend="${#strings.equals(sort, 'highToLow') ? 'active' : ''}" class="" th:href="@{/products-list(sort='highToLow')}">Price: High to Low</a></li>
+                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">New arrivals</a></li>
+                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">aA - zZ</a></li>
+                                        <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">zZ - aA</a></li>
+                                        <li><a th:classappend="${sort == 'lowToHigh' ? 'active' : ''}" class="" th:href="@{/products-list(sort='lowToHigh')}">Price: Low to High</a></li>
+                                        <li><a th:classappend="${sort == 'highToLow' ? 'active' : ''}" class="" th:href="@{/products-list(sort='highToLow')}">Price: High to Low</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -110,13 +110,13 @@
                                         </a>
                                     </div>
                                 </div>
-                                <!-- Hower wishlist button -->
+                                <!-- Hover wishlist button -->
                                 <div class="product-action-1">
                                     <a aria-label="Add To Wishlist" class="action-btn wish-btn hover-up" th:href="@{/add-wishlist}" th:data-product-id="${product.id}"><i class="fi-rs-heart"></i></a>
                                 </div>
                             </div>
 
-                            <!-- Product info-->
+                            <!-- Product info -->
                             <div class="product-content-wrap">
                                 <div class="product-category">
                                     <a th:text="${product.category.name}"></a>
@@ -145,21 +145,17 @@
                     <div class="widget-category mb-30">
                         <h5 class="section-title style-1 mb-30 wow fadeIn animated">Search & Category</h5>
 
-
-
                         <!-- Search Box -->
                         <div class="search-box">
                             <form th:action="@{/search-products/0}" method="get">
-                                <input type="text" name="keyword" placeholder="Search products..." />
+                                <input type="text" name="keyword" placeholder="Search products..." th:value="${keyword}" />
                                 <select name="categoryId">
                                     <option value="">All Categories</option>
-                                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == selectedCategoryId}"></option>
                                 </select>
                                 <button type="submit">Search</button>
                             </form>
                         </div>
-
-
 
 
                     </div>
@@ -173,15 +169,13 @@
             <nav aria-label="...">
                 <ul class="pagination">
                     <li th:if="${currentPage != 0}" class="page-item">
-                        <a th:href="@{/products-list(pageNo=${currentPage - 1})}" class="page-link me-4">Previous</a>
+                        <a th:href="@{/products-list(pageNo=${currentPage - 1}, keyword=${keyword}, categoryId=${selectedCategoryId})}" class="page-link me-4">Previous</a>
                     </li>
                     <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                        <a th:href="@{/products-list(pageNo=${i - 1})}" class="page-link">
-                            <span th:text="${i}"></span>
-                        </a>
+                        <a th:href="@{/products-list(pageNo=${i - 1}, keyword=${keyword}, categoryId=${selectedCategoryId})}" class="page-link" th:text="${i}"></a>
                     </li>
-                    <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                        <a th:href="@{/products-list(pageNo=${currentPage + 1})}" class="page-link">Next</a>
+                    <li th:if="${currentPage != totalPages - 1}" class="page-item">
+                        <a th:href="@{/products-list(pageNo=${currentPage + 1}, keyword=${keyword}, categoryId=${selectedCategoryId})}" class="page-link ms-4">Next</a>
                     </li>
                 </ul>
             </nav>
@@ -189,45 +183,54 @@
     </div>
 </main>
 
-<footer th:replace="~{fragments::downbar}"></footer>
-<div th:replace="~{fragments::script}"></div>
+<footer class="main">
+    <section class="newsletter p-30 text-white wow fadeIn animated">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="row align-items-center">
+                        <div class="col flex-horizontal-center">
+                            <img class="icon-email" src="assets/imgs/theme/icons/icon-email.svg" alt="">
+                            <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
+                        </div>
+                        <div class="col my-4 my-md-0 des">
+                            <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>₹25 coupon for first shopping.</strong></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <form class="form-subcriber d-flex wow fadeIn animated">
+                        <input type="email" placeholder="Enter your email">
+                        <button class="btn" type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</footer>
+
+<!-- Vendor JS-->
+<script th:src="@{/js/vendor/modernizr-3.6.0.min.js}"></script>
+<script th:src="@{/js/vendor/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/vendor/jquery-migrate-3.3.0.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/plugins/slick.js}"></script>
+<script th:src="@{/js/plugins/jquery.syotimer.min.js}"></script>
+<script th:src="@{/js/plugins/wow.js}"></script>
+<script th:src="@{/js/plugins/perfect-scrollbar.js}"></script>
+<script th:src="@{/js/plugins/magnific-popup.js}"></script>
+<script th:src="@{/js/plugins/select2.min.js}"></script>
+<script th:src="@{/js/plugins/waypoints.js}"></script>
+<script th:src="@{/js/plugins/counterup.js}"></script>
+<script th:src="@{/js/plugins/jquery.countdown.min.js}"></script>
+<script th:src="@{/js/plugins/images-loaded.js}"></script>
+<script th:src="@{/js/plugins/isotope.js}"></script>
+<script th:src="@{/js/plugins/scrollup.js}"></script>
+<script th:src="@{/js/plugins/jquery.vticker-min.js}"></script>
+<script th:src="@{/js/plugins/jquery.theia.sticky.js}"></script>
 <script th:src="@{/js/plugins/jquery.elevatezoom.js}"></script>
 <!-- Template  JS -->
+<script th:src="@{/js/main.js?v=3.4}"></script>
 <script th:src="@{/js/shop.js?v=3.4}"></script>
-
-<script>
-    function submitForm(productId) {
-        console.log("clicked")
-        console.log(productId)
-        const formId = 'form_' + productId;
-        const form = document.getElementById(formId);
-        form.submit();
-    }
-
-    $(document).ready(function () {
-        $(".wish-btn").click(function (event) {
-            event.preventDefault();
-            const productId = $(this).data("product-id");
-            console.log(productId);
-            $.ajax({
-                url: "/mixer/add-wishlist",
-                type: "POST",
-                data: { productId: productId },
-                success: function (response) {
-                    alert("Added to wishlist successfully");
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.status === 409) {
-                        alert("Product already exists in wishlist");
-                    } else if (xhr.status === 401) {
-                        alert("User not logged in, Please Log in")
-                    } else {
-                        alert("Error adding to wishlist. Please try again later.");
-                    }
-                },
-            });
-        });
-    });
-</script>
 </body>
 </html>
