@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,11 +10,9 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <title>Orders</title>
-
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/imgs/theme/mixer.jpg}">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css}" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 </head>
 <body>
 
@@ -26,9 +23,6 @@
                 <div th:if="${success}" class="text-center alert-success alert">
                     <p th:text="${success}"></p>
                 </div>
-
-
-
                 <div class="table-main table-responsive">
                     <table class="table" id="orderTable">
                         <thead>
@@ -37,84 +31,41 @@
                             <th class="order-date">Order Date</th>
                             <th>Delivery Date</th>
                             <th class="price-pr">Order Status</th>
-
                             <th>Total Price</th>
                             <th class="total-pr">Payment Method</th>
                             <th>Payment Status</th>
-
-
-
                             <th>Action</th>
                         </tr>
                         </thead>
 
                         <tbody>
                         <tr th:each="order : ${orders}">
-                            <td>
-                                <span><b>[(${order.id})]</b></span>
+                            <td><span><b>[(${order.id})]</b></span></td>
+                            <td class="order-date"><span><b>[(${order.orderDate})]</b></span></td>
+                            <td class="name-pr">
+                                <a th:if="${order.accept == true}" href="#">[(${order.deliveryDate})]</a>
                             </td>
-                            <td class="order-date">
-                                <span><b>[(${order.orderDate})]</b></span>
-                            </td>
-                            <td class="name-pr" >
-                                <a th:if = "${order.accept ==true}" href="#">
-                                    [(${order.deliveryDate})]
-                                </a>
-                            </td>
-                            <td class="price-pr">
-                                <p th:text="${order.orderStatus}"></p>
-                            </td>
-                            <td class="total-pr">
-                                <p style="color: red">₹ [(${order.totalPrice})]</p>
-                            </td>
-                            <td class="total-pr" style="color: black">
-                                <span>[(${order.paymentMethod})]</span>
-                            </td>
-
-                       <!--    Order Status   -->
+                            <td class="price-pr"><p th:text="${order.orderStatus}"></p></td>
+                            <td class="total-pr"><p style="color: red">₹ [(${order.totalPrice})]</p></td>
+                            <td class="total-pr" style="color: black"><span>[(${order.paymentMethod})]</span></td>
                             <td>
                                 <span th:unless="${#strings.equals(order.orderStatus, 'Cancelled')}">[(${order.paymentStatus})]</span>
                                 <span th:if="${#strings.equals(order.orderStatus, 'Cancelled')}">[(${order.orderStatus})]</span>
                             </td>
-
-                            <!-- Track my Order-->
-
-<!--                            <td>
-                                <a th:href="@{/order-tracking/{id}(id = ${order.id})}">Track My Order</a>
-                            </td>-->
-
-                            <!-- Track my Order -->
-
                             <td>
-                                <a th:href="@{/order-view/{id}(id = ${order.id})}" class="button-cancel" >View</a>
+                                <a th:href="@{/order-view/{id}(id = ${order.id})}" class="button-view">View</a>
+                                <a th:if="${order.orderStatus == 'Delivered'}" th:href="@{/return-order/{id}(id = ${order.id})}" class="button-cancel">Return</a>
+                                <a th:unless="${order.orderStatus == 'Cancelled' or order.orderStatus == 'Delivered'}" href="#" class="button-cancel" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" th:data-order-id="${order.id}">Cancel</a>
 
+                                <!-- continue -->
 
-
-
-                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/return-order/{id}(id = ${order.id})}" class="button-cancel" >Return</a>
-<!--                                <a th:if="${order.orderStatus=='Delivered'}" th:href="@{/replace-order/{id}(id = ${order.id})}" class="button-cancel" >Replace</a>-->
-
-
-
-                                <!--Cancel  the order[main] -->
-
-                                <a th:unless="${order.orderStatus=='Cancelled' or order.orderStatus == 'Delivered'}" href="#" class="button-cancel" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" th:data-order-id="${order.id}">
-                                    Cancel
-                                </a>
-
-
-
-
+                              <!--  <a th:if="${order.paymentStatus == 'Pending'}" th:href="@{/continue-payment/{id}(id =${order.id})}" class="button-continue" th:data-order-id="${order.id}">Continue</a>-->
                             </td>
-                            </a>
-                            </td>
+
+
                         </tr>
-
                         </tbody>
                     </table>
-
-
-
 
                     <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -124,26 +75,16 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-
-<!--                                    <form id="cancelOrderForm" th:action="@{/cancel-order/{id}}" method="post">
-                                        <div class="form-group">
-                                            <label for="cancelReason" class="col-form-label">Reason for Cancellation:</label>
-                                            <input type="text" class="form-control" id="cancelReason" name="cancelReason" required>
-                                        </div>
-                                        <input type="text" id="orderId" name="orderId" value="">
-                                    </form>-->
-
                                     <form id="cancelOrderForm" action="" method="post">
                                         <div class="form-group">
                                             <label for="cancelReason" class="col-form-label">Reason for Cancellation:</label>
                                             <input type="text" class="form-control" id="cancelReason" name="cancelReason" required>
                                         </div>
                                         <input type="text" id="orderId" name="orderId" value="">
-                                        <!--<button type="button" onclick="updateFormAction()">Submit</button>-->
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" onclick="updateFormAction()"  class="btn btn-primary">Cancel Order</button>
+                                    <button type="button" onclick="updateFormAction()" class="btn btn-primary">Cancel Order</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
@@ -159,36 +100,39 @@
 <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js}" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
-        $('#orderTable').DataTable(
-            {
-                order: [
-                    [
-                        0, 'desc'
-                    ]
-                ]
-            }
-        );
-    });
-
-
-    // Add event listener to the cancel link
-    // Add event listener to the cancel link
-    document.querySelectorAll('.button-cancel').forEach(function(link) {
-        link.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default link behavior
-            var orderId = this.getAttribute('data-order-id'); // Get order ID from data attribute
-            document.getElementById('orderId').value = orderId; // Set order ID as value of hidden input field
+        $('#orderTable').DataTable({
+            order: [
+                [0, 'desc']
+            ]
         });
     });
 
-</script>
+    // Add event listener to the cancel link
+    document.querySelectorAll('.button-cancel').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            if (this.getAttribute('data-bs-target') === '#cancelOrderModal') {
+                event.preventDefault(); // Prevent default link behavior if it's a cancel button
+                var orderId = this.getAttribute('data-order-id'); // Get order ID from data attribute
+                document.getElementById('orderId').value = orderId; // Set order ID as value of hidden input field
+            }
+        });
+    });
 
-<script>
     function updateFormAction() {
         var orderId = document.getElementById("orderId").value;
         document.getElementById("cancelOrderForm").action = "/mixer/cancel-order/" + orderId;
         document.getElementById("cancelOrderForm").submit();
     }
+
+    /* continue javascript */
+    document.querySelectorAll('.button-continue').forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            var orderId = this.getAttribute('data-order-id'); // Get order ID from data attribute
+            window.location.href = '/continue-payment/' + orderId; // Redirect to continue payment
+        });
+    });
+
 </script>
 
 </body>

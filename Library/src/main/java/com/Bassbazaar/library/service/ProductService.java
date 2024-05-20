@@ -40,10 +40,9 @@ public interface ProductService
     List<Product> findProductsByCategory(long id);
 
 
-/* Search product based on pageNo and keyword[olready  created method ]*/
-    Page<ProductDto> searchProducts(int pageNo,String keyword);
 
 
+    Page<ProductDto> searchProducts(int pageNo,String Keyword,Long categoryId);
 
 
 
@@ -57,6 +56,5 @@ public interface ProductService
 
 
 
-    /* new created method */
-    /*Page<ProductDto> searchProducts(int pageNo,Long categoryId,String keyword);*/
+
 }

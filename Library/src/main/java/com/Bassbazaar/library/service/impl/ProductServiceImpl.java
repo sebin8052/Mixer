@@ -356,49 +356,35 @@ public class ProductServiceImpl implements ProductService
 
 
 
-    /* ProductController [Customer]*/
 
-/*     already created method */
-    @Override
+/*     already exist method */
+/*    @Override
     public Page<ProductDto> searchProducts(int pageNo, String keyword) {
         List<Product> products = productRepository.findAllByNameContainingIgnoreCase(keyword);
         List<ProductDto> productDtoList = transferData(products);
         Pageable pageable = PageRequest.of(pageNo, 5);
         Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
         return dtoPage;
+    }*/
+
+
+
+/* created  method */
+@Override
+public Page<ProductDto> searchProducts(int pageNo, String keyword, Long categoryId) {
+    List<Product> products;
+    if (categoryId != null) {
+        products = productRepository.findAllByNameContainingIgnoreCaseAndCategoryId(keyword, categoryId);
+    } else {
+        products = productRepository.findAllByNameContainingIgnoreCase(keyword);
     }
 
+    List<ProductDto> productDtoList = transferData(products);
 
-/* Created method for get the prodcut based on category id and keyword */
-/*    @Override
-    public  Page<ProductDto> searchProducts(int pageNo,Long categoryId,String keyword)
-    {
-        List<Product> products =productRepository.findByCategoryIdAndNameContainingIgnoreCaseCustomQuery(categoryId,keyword);
-        List<ProductDto> productDtoList =transferData(products);
-        Pageable pageable =PageRequest.of(pageNo,5);
-        Page<ProductDto> dtoPage =toPage(productDtoList,pageable);
-        return dtoPage;
-    }*/
-
-
-
-
-
-    /*  It is working */
-
-    /*    @Override
-    public Page<ProductDto> searchProductsByCategoryAndKeyword(int pageNo, String keyword, long id)
-    {
-        List<Product> products =productRepository.searchProductsByCategoryAndKeyword(keyword,id);
-        List<ProductDto> productDtoList = transferData(products);
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
-        return dtoPage;
-    }*/
-
-
-
-
+    Pageable pageable = PageRequest.of(pageNo, 5);
+    Page<ProductDto> dtoPage = toPage(productDtoList, pageable);
+    return dtoPage;
+}
 
 
     /* Get  the product based on categoryId*/

@@ -55,39 +55,55 @@ public class ProductController
         return "index";
     }
 
+
+
+
     @GetMapping("/products-list")
-    public String getShopPage(@RequestParam(name = "id",required = false,defaultValue = "0") long id, Model model,
-                              @RequestParam(name = "pageNo",required = false,defaultValue = "0")int pageNo,
-                              @RequestParam(name = "sort",required = false,defaultValue = "")String sort){
+    public String getShopPage(@RequestParam(name = "id", required = false, defaultValue = "0") long categoryId,
+                              @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
+                              @RequestParam(name = "pageNo", required = false, defaultValue = "0") int pageNo,
+                              @RequestParam(name = "sort", required = false, defaultValue = "") String sort,
+                              Model model) {
         List<Category> categories = categoryService.findAllByActivatedTrue();
 
         Page<ProductDto> products;
-        if(id==0) {
-            products = productService.findAllByActivated(pageNo,sort);
-            model.addAttribute("sort",sort);
-        }else{
-            products = productService.findAllByActivated(id,pageNo);
+        if (keyword.isEmpty() && categoryId == 0) {
+            products = productService.findAllByActivated(pageNo, sort);
+        } else {
+            products = productService.searchProducts(pageNo, keyword, categoryId == 0 ? null : categoryId);
         }
+
         long totalProducts = products.getTotalElements();
 
         model.addAttribute("totalProducts", totalProducts);
-        model.addAttribute("products",products);
+        model.addAttribute("products", products);
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", products.getTotalPages());
-        model.addAttribute("size",products.getSize());
-        model.addAttribute("categories",categories);
-
+        model.addAttribute("size", products.getSize());
+        model.addAttribute("categories", categories);
+        model.addAttribute("sort", sort);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedCategoryId", categoryId);
 
         return "shop";
     }
 
+
+
+
+
+
+
+
+
+
     @GetMapping("/search-products/{pageNo}")
     public String searchProduct(@PathVariable("pageNo") int pageNo,
-                                @RequestParam(name = "keyword") String keyword,
-                                Model model
-    ) {
-
-        Page<ProductDto> products = productService.searchProducts(pageNo,keyword);
+                                @RequestParam(name="keyword") String keyword,
+                                @RequestParam(name="categoryId",required = false)Long categoryId
+                                ,Model model)
+    {
+        Page<ProductDto> products = productService.searchProducts(pageNo,keyword,categoryId);
         long totalProducts = products.getTotalElements();
         model.addAttribute("totalProducts", totalProducts);
         model.addAttribute("products", products);
@@ -95,6 +111,7 @@ public class ProductController
         model.addAttribute("totalPages", products.getTotalPages());
         return "shop";
     }
+
 
 
 

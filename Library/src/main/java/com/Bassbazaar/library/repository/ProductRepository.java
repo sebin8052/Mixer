@@ -74,10 +74,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>
 
     boolean existsByName(String name);
 
-/*    List<Product> searchProductsByCategoryAndKeyword(long id, String  keyword);*/
 
-/*    *//* repository method to get the product by category Id *//*
-    List<Product> findProductsByCategoryId(long categoryId);*/
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Product p WHERE p.name = :name AND p.id <> :id")
     boolean existsByNameAndIdNot(String name, Long id);
@@ -103,10 +100,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>
 
 
 
-    /* get the product based on category id and keyword*/
-/*    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId AND LOWER(p.name) LIKE %:keyword%")
-    List<Product> findByCategoryIdAndNameContainingIgnoreCaseCustomQuery(@Param("categoryId") long categoryId, @Param("keyword") String keyword);*/
 
 
+
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) AND p.category.id = :categoryId")
+    List<Product> findAllByNameContainingIgnoreCaseAndCategoryId(@Param("keyword") String keyword, @Param("categoryId") Long categoryId);
 
 }

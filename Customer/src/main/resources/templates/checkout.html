@@ -162,7 +162,7 @@
                                     <thead>
                                     <tr>
                                         <th colspan="2">Product</th>
-                                        <th>Total</th>
+                                        <th>Product price</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -172,18 +172,20 @@
                                         </td>
                                         <td>
                                             <h3 class="product-name" th:text="${cartItem.product.name}"></h3>
-                                            <!--                                            <h5 th:text="'Size : ' + ${cartItem.size}"></h5>-->
+                                        <!--                                                <h5 th:text="'Size : ' + ${cartItem.size}"></h5>-->
                                             <span th:text="'Quantity : ' + ${cartItem.quantity}" class="product-qty"></span>
                                         </td>
                                         <td th:text="'₹' + ${cartItem.unitPrice}"></td>
+
                                     </tr>
+
                                     <tr>
                                         <th>Shipping</th>
                                         <td colspan="2"><em>Free Shipping</em></td>
                                     </tr>
                                     <tr th:if="${param.couponCode}">
                                         <th>Discount</th>
-                                        <td th:text="${param.couponOff} + '%'"></td>
+                                        <td th:text="${param.couponOff} + '% Off'"></td>
                                     </tr>
                                     <tr>
                                         <th>Total</th>

@@ -36,7 +36,7 @@ public interface OrderService
 
     void updatePayment(Order order,boolean status);
 
-           /* Order status */
+
 
     void updateOrderStatus(String status,long order_id);
 
