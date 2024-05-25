@@ -189,7 +189,8 @@
                                     </tr>
                                     <tr>
                                         <th>Total</th>
-                                        <td colspan="2" class="product-subtotal"><span th:text="'₹' + ${shoppingCart.totalPrice}" id="amount" class="font-xl text-brand fw-900"></span></td>
+                                        <td colspan="2" class="product-subtotal">
+                                            <span th:text="'₹' + ${shoppingCart.totalPrice}" id="totalPrice" class="font-xl text-brand fw-900"></span></td>
                                     </tr>
 
 
@@ -391,6 +392,24 @@
         });
     }
 
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function checkCODOption() {
+            var totalPriceElement = document.getElementById('totalPrice');
+            var codOption = document.getElementById('exampleRadios3');
+            var totalPrice = parseFloat(totalPriceElement.textContent.replace('₹', ''));
+
+            if (totalPrice < 1000) {
+                codOption.parentElement.style.display = 'none';
+            } else {
+                codOption.parentElement.style.display = 'block';
+            }
+        }
+
+        checkCODOption();
+    });
 </script>
 <!-- Template  JS -->
 <script th:src="@{/js/shop.js?v=3.4}"></script>
