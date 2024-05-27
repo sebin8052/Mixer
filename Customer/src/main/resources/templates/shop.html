@@ -110,10 +110,13 @@
                                         </a>
                                     </div>
                                 </div>
+
                                 <!-- Hover wishlist button -->
                                 <div class="product-action-1">
                                     <a aria-label="Add To Wishlist" class="action-btn wish-btn hover-up" th:href="@{/add-wishlist}" th:data-product-id="${product.id}"><i class="fi-rs-heart"></i></a>
                                 </div>
+
+
                             </div>
 
                             <!-- Product info -->
@@ -230,6 +233,41 @@
 <script th:src="@{/js/plugins/jquery.theia.sticky.js}"></script>
 <script th:src="@{/js/plugins/jquery.elevatezoom.js}"></script>
 <!-- Template  JS -->
+
+
+<script>
+    function submitForm(productId) {
+        console.log("clicked")
+        console.log(productId)
+        const formId = 'form_' + productId;
+        const form = document.getElementById(formId);
+        form.submit();
+    }
+    $(document).ready(function () {
+        $(".wish-btn").click(function (event) {
+            event.preventDefault();
+            const productId = $(this).data("product-id");
+            console.log(productId);
+            $.ajax({
+                url: "/mixer/add-wishlist",
+                type: "POST",
+                data: { productId: productId },
+                success: function (response) {
+                    alert("Added to wishlist successfully");
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 409) {
+                        alert("Product already exists in wishlist");
+                    }else if(xhr.status === 401){
+                        alert("User not logged in , Please Log in")
+                    } else {
+                        alert("Error adding to wishlist. Please try again later.");
+                    }
+                },
+            });
+        });
+    });
+</script>
 <script th:src="@{/js/main.js?v=3.4}"></script>
 <script th:src="@{/js/shop.js?v=3.4}"></script>
 </body>

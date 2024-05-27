@@ -57,9 +57,6 @@
                                 <a th:if="${order.orderStatus == 'Delivered'}" th:href="@{/return-order/{id}(id = ${order.id})}" class="button-cancel">Return</a>
                                 <a th:unless="${order.orderStatus == 'Cancelled' or order.orderStatus == 'Delivered'}" href="#" class="button-cancel" data-bs-toggle="modal" data-bs-target="#cancelOrderModal" th:data-order-id="${order.id}">Cancel</a>
 
-                                <!-- continue -->
-
-                              <!--  <a th:if="${order.paymentStatus == 'Pending'}" th:href="@{/continue-payment/{id}(id =${order.id})}" class="button-continue" th:data-order-id="${order.id}">Continue</a>-->
                             </td>
 
 
@@ -120,7 +117,7 @@
 
     function updateFormAction() {
         var orderId = document.getElementById("orderId").value;
-        document.getElementById("cancelOrderForm").action = "/mixer/cancel-order/" + orderId;
+        document.getElementById("cancelOrderForm").action = "/mixer/cancl-order/" + orderId;
         document.getElementById("cancelOrderForm").submit();
     }
 

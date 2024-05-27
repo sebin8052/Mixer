@@ -9,6 +9,9 @@ public interface CouponService {
     Coupon save(CouponDto couponDto);
     List<CouponDto> getAllCoupons();
     double applyCoupon(String couponCode,double totalPrice);
+
+
+
     boolean findByCouponCode(String couponCode);
     Coupon findByCode(String couponCode);
     CouponDto findById(long id);

@@ -44,12 +44,25 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public double applyCoupon(String couponCode, double totalPrice)
     {
+
         Coupon coupon= couponRepository.findCouponByCode(couponCode);
+        if(coupon == null)
+        {
+            throw new IllegalArgumentException("Coupon not found");
+        }
+        if(coupon.getCount() <=0)
+        {
+            throw new IllegalArgumentException("Coupon has no remaining uses");
+        }
+
         double discountPrice = totalPrice * (coupon.getOffPercentage() / 100.0);
-        if(discountPrice > coupon.getMaxOff())
+
+
+/*        if(discountPrice > coupon.getMaxOff())
         {
             discountPrice = coupon.getMaxOff();
-        }
+        }*/
+
         coupon.setCount(coupon.getCount()-1);  //decrimented the coupon ,if use
         couponRepository.save(coupon);
         double updatedTotalPrice = totalPrice-discountPrice;

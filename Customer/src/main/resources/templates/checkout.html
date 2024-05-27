@@ -208,8 +208,9 @@
 
                                     <!-- COD -->
                                     <div class="custome-radio">
-                                        <input class="form-check-input payment_option" required="" type="radio" name="payment_option" value="COD" id="exampleRadios3" checked >
+                                        <input class="form-check-input payment_option" required="" type="radio" name="payment_option" value="COD" id="exampleRadios3">
                                         <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#cod" aria-controls="cod">Cash on Delivery</label>
+                                        <p id="codMessage" class="text-danger" style="display:none;">COD is not available for orders less than ₹1000.</p>
                                     </div>
                                     <div class="custome-radio">
                                         <input class="form-check-input payment_option" required="" type="radio" value="RazorPay" name="payment_option" id="exampleRadios5">
@@ -276,7 +277,7 @@
 <script th:src="@{/js/address.js}"></script>
 <script>
 
-           <!--Coupon in the URL extract    -->
+           <!--Coupon in the URL: extract    -->
 
            const urlParams = new URLSearchParams(window.location.search);
            const couponCode = urlParams.get("couponCode");
@@ -309,7 +310,7 @@
         console.log(payment_Method);
         $.ajax(
             {
-                                                                /* editing required */
+
                 url:'/mixer/add-order',
                 data:JSON.stringify({addressId:addressId,
                     payment_Method:payment_Method}),
@@ -394,17 +395,21 @@
 
 </script>
 
+<!-- check if the total price is  less than 1000-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         function checkCODOption() {
             var totalPriceElement = document.getElementById('totalPrice');
             var codOption = document.getElementById('exampleRadios3');
+            var codMessage = document.getElementById('codMessage');
             var totalPrice = parseFloat(totalPriceElement.textContent.replace('₹', ''));
 
             if (totalPrice < 1000) {
-                codOption.parentElement.style.display = 'none';
+                codOption.disabled = true;
+                codMessage.style.display = 'block';
             } else {
-                codOption.parentElement.style.display = 'block';
+                codOption.disabled = false;
+                codMessage.style.display = 'none';
             }
         }
 

@@ -42,104 +42,10 @@ public class OtpController
         return "verifyEmail";
     }
 
-/*
-    @GetMapping("/OtpValidation")                                                                               // ----------->(6)
-    public String showotpvalidationPage(Model model, HttpSession session)
-    {
-        String email = (String) model.asMap().get("email");
-        UserOtp userOTP = new UserOtp();
-        userOTP.setEmail(email);
-        session.setAttribute("email",email);
-        model.addAttribute("userOTP",userOTP);
-        return "OtpValidation";
-    }
-*/
 
 
-/*    @PostMapping("/sendVerificationEmailOtp")                                                                     // ------> (5)
-    public String sendVerificationEmailOtp  (
-            @RequestParam("email")String email,
-             HttpSession session,
-            RedirectAttributes redirectAttributes) throws Exception
-    {
-        if(userOTPService.findByEmail(email)==null)
-        {
-            String otp = otpService.generateOTP();
-            if(!userOTPService.existsByEmail(email))
-            {
-                UserOtp userOTP =new UserOtp();
-                userOTP.setEmail(email);
-                userOTP.setOneTimePassword(passwordEncoder.encode(otp));
-                userOTP.setCreatedAt(new Date());
-                userOTP.setOtpRequestedTime(new Date());
-                userOTP.setUpdateOn(new Date());
-                try{
-                    userOTPService.saveOrUpdate(userOTP);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                    throw new Exception("Couldn't finish OTP verification process"+ HttpStatus.BAD_REQUEST);
-                }
-            }else
-            {
-                UserOtp userOTP=userOTPService.findByEmail(email);              //exist un database
-                userOTP.setOneTimePassword(passwordEncoder.encode(otp));
-                userOTP.setOtpRequestedTime(new Date());
-                userOTP.setUpdateOn(new Date());
-                try{
-                    userOTPService.saveOrUpdate(userOTP);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                    throw new Exception("Couldn't finish OTP verification process");
-                }
-            }
-
-            //email sending [sucess]
-            String status = emailService.sendSimpleMail(email,otp);
-            if(status.equals("success")){
-                session.setAttribute("message","otpsent");
-                redirectAttributes.addFlashAttribute("email",email);
-                return "redirect:/OtpValidation";
-
-            }
-            else
-            {
-                return "redirect:/verifyEmail?error";
-            }
-        }
 
 
-        else{
-            return "redirect:/verifyEmail?existUser";
-        }
-    }*/
-
-
-    /* Main otp method */
-
-
-/*
-    @PostMapping("/validateOTP")
-    public String validateOTP(@ModelAttribute("userOTP") UserOtp userOTPRequest, HttpSession session,
-                              RedirectAttributes redirectAttributes)
-    {
-        String email=session.getAttribute("email").toString();
-        UserOtp userOTP = userOTPService.findByEmail(userOTPRequest.getEmail());
-        if(passwordEncoder.matches(userOTPRequest.getOneTimePassword(),userOTP.getOneTimePassword()))
-        {
-            //navigate to signup page
-            redirectAttributes.addFlashAttribute("email",userOTP.getEmail());
-            return "/index";
-        }
-        else
-        {
-            return "redirect:/OtpValidation?error";
-        }
-    }
-*/
 
 
 
@@ -155,19 +61,32 @@ public class OtpController
         return "OtpValidation";
     }
 
+
+
     @PostMapping("/validateOTP")
     public String validateOTP(@ModelAttribute("userOTP") UserOtp userOTPRequest, HttpSession session,
                               RedirectAttributes redirectAttributes) {
         String email = (String) session.getAttribute("email");
-        if (email == null) {
+        String sessionOtp = (String) session.getAttribute("mobileOtp");
+
+        if (email == null || sessionOtp == null) {
             return "redirect:/register";
         }
 
+
         UserOtp userOTP = userOTPService.findByEmail(email);
-        if (userOTP != null && passwordEncoder.matches(userOTPRequest.getOneTimePassword(), userOTP.getOneTimePassword())) {
-            session.removeAttribute("email"); // Clear the session attribute
+        boolean isEmailOtpValid = userOTP != null && passwordEncoder.matches(userOTPRequest.getOneTimePassword(), userOTP.getOneTimePassword());
+
+
+        boolean isMobileOtpValid = userOTPRequest.getOneTimePassword().equals(sessionOtp);
+
+        if (isEmailOtpValid || isMobileOtpValid) {
+
+            session.removeAttribute("email");
+            session.removeAttribute("mobileOtp");
+
             redirectAttributes.addFlashAttribute("success", "Registration successful!");
-            return "/index";
+            return "redirect:/index";
         } else {
             redirectAttributes.addFlashAttribute("error", "Invalid OTP, please try again.");
             return "redirect:/OtpValidation";
