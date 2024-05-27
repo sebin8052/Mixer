@@ -42,6 +42,7 @@ public class OtpController
         return "verifyEmail";
     }
 
+/*
     @GetMapping("/OtpValidation")                                                                               // ----------->(6)
     public String showotpvalidationPage(Model model, HttpSession session)
     {
@@ -52,9 +53,10 @@ public class OtpController
         model.addAttribute("userOTP",userOTP);
         return "OtpValidation";
     }
+*/
 
 
-    @PostMapping("/sendVerificationEmailOtp")                                                                     // ------> (5)
+/*    @PostMapping("/sendVerificationEmailOtp")                                                                     // ------> (5)
     public String sendVerificationEmailOtp  (
             @RequestParam("email")String email,
              HttpSession session,
@@ -113,12 +115,13 @@ public class OtpController
         else{
             return "redirect:/verifyEmail?existUser";
         }
-    }
+    }*/
 
 
     /* Main otp method */
 
 
+/*
     @PostMapping("/validateOTP")
     public String validateOTP(@ModelAttribute("userOTP") UserOtp userOTPRequest, HttpSession session,
                               RedirectAttributes redirectAttributes)
@@ -136,143 +139,39 @@ public class OtpController
             return "redirect:/OtpValidation?error";
         }
     }
+*/
 
 
 
-    /*Resent otp controller */
+    @GetMapping("/OtpValidation")
+    public String showOtpValidationPage(Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return "redirect:/register";
+        }
+        UserOtp userOTP = new UserOtp();
+        userOTP.setEmail(email);
+        model.addAttribute("userOTP", userOTP);
+        return "OtpValidation";
+    }
 
-/*    @PostMapping("/resendVerificationEmailOtp")
-    public String resendVerificationEmailOtp(@RequestParam("email")String email,
-                                             HttpSession session,
-                                             RedirectAttributes redirectAttributes)   throws Exception
-    {
-
-
-    }*/
-
-
-/* chatgtp prompt */
-
-/*    @PostMapping("/validateOTP")
+    @PostMapping("/validateOTP")
     public String validateOTP(@ModelAttribute("userOTP") UserOtp userOTPRequest, HttpSession session,
                               RedirectAttributes redirectAttributes) {
-        String email = session.getAttribute("email").toString();
-
-        UserOtp userOTP = userOTPService.findByEmail(userOTPRequest.getEmail());
-        long intervalInSeconds = 5 * 60;
-
-        // Check if userOTP is null to avoid NullPointerException
-        if (userOTP == null) {
-            // Handle case where userOTP is not found
-            return "redirect:/OtpValidation?error=notfound";
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return "redirect:/register";
         }
 
-        // Convert Date to Instant
-        Instant instant = userOTP.getOtpRequestedTime().toInstant();
-
-        LocalTime otpRequestedTime = instant.atZone(ZoneId.systemDefault()).toLocalTime();
-
-        LocalTime currentTime = LocalTime.now();
-
-        LocalTime otpExpirationTime = otpRequestedTime.plusSeconds(intervalInSeconds);
-        if (currentTime.isAfter(otpExpirationTime)) {
-            // Handle case where OTP has expired
-            return "redirect:/OtpValidation?error=expired";
-        }
-
-        if (passwordEncoder.matches(userOTPRequest.getOneTimePassword(), userOTP.getOneTimePassword())) {
-            // Navigate to signup page
-            redirectAttributes.addFlashAttribute("email", userOTP.getEmail());
-            return "redirect:/index";
-        } else {
-            // Handle case where OTP is incorrect
-            return "redirect:/OtpValidation?error=incorrect";
-        }
-    }*/
-
-
-
-/*    testing method  for validate otp */
-
-/*    @PostMapping("/validateOTP")
-    public String validateOTP(@ModelAttribute("userOTP") UserOtp userOTPRequest, HttpSession session,
-                              RedirectAttributes redirectAttributes){
-        String email=session.getAttribute("email").toString();
-
-        UserOtp userOTP = userOTPService.findByEmail(userOTPRequest.getEmail());
-        long intervalInSeconds = 5 * 60;
-
-// Convert Date to Instant
-        Instant instant = userOTP.getOtpRequestedTime().toInstant();
-
-        LocalTime otpRequestedTime = instant.atZone(ZoneId.systemDefault()).toLocalTime();
-
-        LocalTime currentTime = LocalTime.now();
-
-        LocalTime otpExpirationTime = otpRequestedTime.plusSeconds(intervalInSeconds);
-        if (currentTime.isAfter(otpExpirationTime))
-        {
-
-
-        }
-        if(passwordEncoder.matches(userOTPRequest.getOneTimePassword(),userOTP.getOneTimePassword())){
-            //navigate to signup page
-            redirectAttributes.addFlashAttribute("email",userOTP.getEmail());
+        UserOtp userOTP = userOTPService.findByEmail(email);
+        if (userOTP != null && passwordEncoder.matches(userOTPRequest.getOneTimePassword(), userOTP.getOneTimePassword())) {
+            session.removeAttribute("email"); // Clear the session attribute
+            redirectAttributes.addFlashAttribute("success", "Registration successful!");
             return "/index";
-        }else{
-
-            return "redirect:/OtpValidation?error";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Invalid OTP, please try again.");
+            return "redirect:/OtpValidation";
         }
-    }*/
+    }
 
-
-
-
-
-
-
-
-
- /*
- //     Reset the password with the help of email link
-    @PostMapping("/sendEmailOTPLogin")
-    public String sendEmailOTPLogin(
-            @RequestParam("email")String email
-            , HttpSession session,
-            RedirectAttributes redirectAttributes) throws Exception {
-        if(usersSevice.findByEmail(email)!=null){
-            String otp = otpService.generateOTP();
-            UserOtp userOTP = userOTPService.findByEmail(email);
-            if(userOTP!=null){
-                userOTP.setOneTimePassword(passwordEncoder.encode(otp));
-                userOTP.setOtpRequestedTime(new Date());
-                userOTP.setUpdateOn(new Date());
-            }else{
-                userOTP = new UserOtp();
-                userOTP.setEmail(email);
-                userOTP.setOneTimePassword(passwordEncoder.encode(otp));
-                userOTP.setCreatedAt(new Date());
-                userOTP.setOtpRequestedTime(new Date());
-                userOTP.setUpdateOn(new Date());
-            }
-            try{
-                userOTPService.saveOrUpdate(userOTP);
-            }catch(Exception e){
-                e.printStackTrace();
-                throw new Exception("Send OTP.Please try after some time...");
-            }
-            String status = emailService.sendSimpleMail(email,otp);
-            if(status.equals("success")){
-                session.setAttribute("message","otpsent");
-                redirectAttributes.addFlashAttribute("email",email);
-                redirectAttributes.addAttribute("message","We have send a reset password link to your email. Please check your email");
-                return "redirect:/forgotPasswordOTPLogin";
-
-            }else{
-                return "redirect:/forgot_password?error";
-            }
-        }else{
-            return "redirect:/forgot_password?error";
-        }
-    }*/
 }
