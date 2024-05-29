@@ -20,7 +20,7 @@
 
 <div th:replace="~{fragments::mobiletop}"></div>
 
-                           <!-- Breadcrumb-->
+
 <main class="main">
     <div class="page-header breadcrumb-wrap">
         <div class="container">
@@ -50,7 +50,7 @@
                                         </th:block>
 
                                     </div>
-                                    <!-- THUMBNAILS -->
+
                                     <div class="slider-nav-thumbnails pl-15 pr-15">
                                         <th:block th:each="image : ${productDto.image}">
                                             <div><img th:src="@{|/imgs/images/${image.getName()}|}" alt="product image"></div>
@@ -58,7 +58,6 @@
                                     </div>
                                 </div>
 
-                                <!-- End Gallery -->
                                 <div class="social-icons single-share">
                                     <ul class="text-grey-5 d-inline-block">
                                         <li><strong class="mr-10">Share this:</strong></li>
@@ -70,7 +69,6 @@
                                 </div>
                             </div>
 
-                            <!-- Product name [Thumbnail right]-->
 
                             <div class="col-md-6 col-sm-12 col-xs-12">
                                 <div class="detail-info">
@@ -91,7 +89,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Product Price -->
 
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
@@ -102,7 +99,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Product Short Descrition -->
 
                                     <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                     <div class="short-desc mb-30">
@@ -123,7 +119,7 @@
                                     <ul class="product-meta font-xs color-grey mt-50">
                                         <li>Availability:<span th:text="${productDto.currentQuantity}" class="in-stock text-success ml-5"></span></li>
                                     </ul>
-                                    <!-- Add to cart and Buy Now [Form] -->
+
 
                                     <form id="addToCart" th:action="@{/add-to-cart}" method="post">
                                         <input type="hidden" name="productId" th:value="${productDto.id}" />
@@ -136,7 +132,7 @@
                             </div>
                         </div>
 
-                        <!--  DESCRIPTION -->
+
                         <div class="tab-style3">
                             <ul class="nav nav-tabs text-uppercase">
                                 <li class="nav-item">
@@ -175,7 +171,6 @@
                                     </div>
                                 </div>
 
-                                <!--ADDITIONAL INFO -->
                                 <div class="tab-pane fade" id="Additional-info">
                                     <table class="font-md">
                                         <tbody>
@@ -266,7 +261,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                                           <!-- Customer Review -->
+
 
                                 <div class="tab-pane fade" id="Reviews">
                                     <!--Comments-->
@@ -297,7 +292,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!--single-comment -->
+
                                                     <div class="single-comment justify-content-between d-flex">
                                                         <div class="user justify-content-between d-flex">
                                                             <div class="thumb text-center">
@@ -320,7 +315,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!--single-comment -->
+
                                                     <div class="single-comment justify-content-between d-flex">
                                                         <div class="user justify-content-between d-flex">
                                                             <div class="thumb text-center">
@@ -343,7 +338,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!--single-comment -->
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
@@ -379,7 +373,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--comment form-->
                                     <div class="comment-form">
                                         <h4 class="mb-15">Add a review</h4>
                                         <div class="product-rate d-inline-block mb-30">
@@ -421,7 +414,6 @@
                             </div>
                         </div>
 
-                                                <!--         Related products    -->
 
                         <div class="row mt-60">
                             <div class="col-12">

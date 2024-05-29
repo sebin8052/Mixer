@@ -80,14 +80,15 @@
                             <ul>
                                 <li><a class="active"  th:href="@{index.html}" style="color: white">Home </a>
                                 </li>
-                                <li>
-                                    <a th:href="@{/about}" style="color: white">About</a>
-                                </li>
+
                                 <li><a th:href="@{/products-list}" style="color: white">Shop</a>
                                 </li>
                                 <li><a th:href="@{/dashboard}" style="color: white">My Account</a>
                                 </li>
                                 <li><a th:href="@{/wallets}" style="color: white">Wallet</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/about}" style="color: white">About</a>
                                 </li>
                                 <li>
                                     <a th:href="@{/contact}">Contact</a>
@@ -150,16 +151,21 @@
 
             <div class="mobile-menu-wrap mobile-header-border">
                 <div class="main-categori-wrap mobile-header-border">
-                    <a class="categori-button-active-2" href="#">
+                    <a class="categori-button-active-2" href="#" style="display: inline-block;">
                         <span class="fi-rs-apps"></span> Browse Categories
                     </a>
-                    <div class="categori-dropdown-wrap categori-dropdown-active-small">
-                        <ul th:each="category : ${categories}">
-                            <a th:href="@{/products-list(id=${category.id})}"><li  th:text="${category.name}"></li></a>
+                    <div class="categori-dropdown-wrap categori-dropdown-active-small" style="background-color: rgba(255, 255, 255, 0.7); border: none; box-shadow: none;">
+                        <ul th:each="category : ${categories}" style="list-style-type: none; padding: 0;">
+                            <a th:href="@{/products-list(id=${category.id})}" style="text-decoration: none;">
+                                <li style="color: #ff6600; font-family: 'Arial', sans-serif; font-weight: bold; padding: 10px; transition: color 0.3s ease;"
+                                    onmouseover="this.style.color='#ff4500';"
+                                    onmouseout="this.style.color='#ff6600';"
+                                    th:text="${category.name}"></li>
+                            </a>
                         </ul>
                     </div>
                 </div>
-                <!-- mobile menu start -->
+
                 <nav>
                     <ul class="mobile-menu">
 
@@ -179,14 +185,13 @@
                         </li>
                     </ul>
                 </nav>
-                <!-- mobile menu end -->
             </div>
             <div class="mobile-header-info-wrap mobile-header-border">
                 <div class="single-mobile-header-info mt-30">
                     <a  th:href="@{/contact}"> Our location </a>
                 </div>
 
-                     <!--          To get the customer information      -->
+
 
                 <div class="single-mobile-header-info">
                     <li th:if = "${session.username == null}"><i class="fi-rs-user"></i><a th:href="@{/login}">Log In</a></li>
@@ -298,12 +303,11 @@
                     </div>
                 </div>
                 <div class="col-lg-5">
-                    <!-- Subscribe Form -->
+
                     <form class="form-subcriber d-flex wow fadeIn animated">
                         <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                         <button class="btn bg-dark text-white" type="submit">Subscribe</button>
                     </form>
-                    <!-- End Subscribe Form -->
                 </div>
             </div>
         </div>
@@ -375,23 +379,7 @@
         </div>
     </section>
 
-<!--   footer evara permissio  -->
 
-<!--    <div class="container pb-20 wow fadeIn animated">
-        <div class="row">
-            <div class="col-12 mb-20">
-                <div class="footer-bottom"></div>
-            </div>
-            <div class="col-lg-6">
-                <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
-            </div>
-            <div class="col-lg-6">
-                <p class="text-lg-end text-start font-sm text-muted mb-0">
-                    Designed by <a th:href="@{/}"  target="_blank">Magnolia Trendz</a>. All rights reserved
-                </p>
-            </div>
-        </div>
-    </div>-->
 
 </footer>
 

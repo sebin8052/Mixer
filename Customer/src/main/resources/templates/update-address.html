@@ -27,7 +27,6 @@
         <p class = "alert alert-danger" th:text = "${error}"></p>
     </div>
 
-    <!-- Address update form -->
     <form id="addressForm" method="post"  th:object="${addressDto}"  th:action="@{/update-address/{id}(id = ${addressDto.id})}">
         <div class="row">
             <div class="form-group col-md-6">

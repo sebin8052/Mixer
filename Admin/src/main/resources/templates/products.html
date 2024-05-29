@@ -26,7 +26,17 @@
 
     <div class="container">
         <a th:href="@{/add-product}" class = "btn btn-warning-light" style="background-color: blue; color: white;">Add Product</a>
-<!--        <p th:if="${size == 0} ">No Products</p>-->
+        <!--        <p th:if="${size == 0} ">No Products</p>-->
+
+        <div class="search-box">
+            <form th:action="@{/products}" method="get">
+                <select name="categoryId">
+                    <option value="">All Categories</option>
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == selectedCategoryId}"></option>
+                </select>
+                <button type="submit">Filter</button>
+            </form>
+        </div>
 
         <div th:if = "${success}" class = "text-center alert alert-success">
             <p th:text = "${success}"></p>
@@ -34,6 +44,7 @@
         <div th:if = "${error}" class="text-center alert alert-danger">
             <p th:text = "${error}"></p>
         </div>
+
         <table id="dataTable" class="table table-bordered" >
             <thead>
             <tr>

@@ -27,7 +27,6 @@
             <p class = "alert alert-danger" th:text = "${error}"></p>
         </div>
 
-        <!-- add address to the addressDto [form] -->
         <form id="addressForm" method="post"  th:object="${addressDto}"  th:action="@{/add-address}">
             <div class="row">
                 <div class="form-group col-md-6">
@@ -61,10 +60,10 @@
             </div>
         </form>
     </div>
-    <!--  User is not added the address -->
+
 
     <p th:if="${size==0}">No Address</p>
-    <!-- if the user add address-->
+
 
     <table id="dataTable" class="table table-bordered" th:if = "${size > 0}">
         <thead>
@@ -79,28 +78,19 @@
         </tr>
         </thead>
         <tbody>
-        <!-- get address from address table -->
+
         <tr th:each = "address : ${addressList}">
             <td th:text = "${address.address_line_1}"></td>
             <td th:text = "${address.address_line_2}"></td>
             <td th:text = "${address.city}"></td>
             <td th:text = "${address.country}"></td>
             <td th:text = "${address.pincode}"></td>
-            <!-- used for update -->
             <td><a th:href="@{/update-address/{id}(id= ${address.id})}" class="btn btn-primary">Update</a></td>
 
-            <!-- Enable / Disable/ Delete -->
+
             <td>
 
 
-                <!--<a th:if="${address.is_default()} == true" th:href="@{/disable-address/{id}(id = ${address.id})}"
-                   onclick="if (!(confirm('Are you sure you want to Disable this Address?'))) return false">Disable</a>
-                <a th:if="${address.is_default()} == false"  th:href="@{/enable-address/{id}(id = ${address.id})}"
-                   onclick="if (!(confirm('Are you sure you want to Enable this Address?'))) return false">Enable</a>
-               -->
-
-
-                <!-- Delete Button -->
 
                 <a th:href="@{/delete-address/{id}(id = ${address.id})}"
                    onclick="if (!(confirm('Are you sure you want to Delete this Address?'))) return false">

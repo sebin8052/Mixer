@@ -8,7 +8,7 @@
         <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.Bassbazaar</groupId>
+    <groupId>com.Mixer</groupId>
     <artifactId>Admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Admin</name>
@@ -19,6 +19,15 @@
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
     <dependencies>
+
+
+        <dependency>
+            <groupId>com.Mixer</groupId>
+            <artifactId>Library</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -80,11 +89,7 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.Bassbazaar</groupId>
-            <artifactId>Library</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -97,6 +102,13 @@
             <version>2.15.1</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>                                 <!-- image processing -->
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

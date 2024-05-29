@@ -22,7 +22,7 @@
 
 <main class="main-wrap mt-50">
 
-    <!-- Add New category = click redirect to new modal -->
+
 
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddCategoryModal"
             data-whatever="@mdo" style="background-color: blue;">Add new category
@@ -82,7 +82,7 @@
     </div>
 
 
-   <!-- Category modal -->
+
 
     <div class="modal fade" id="AddCategoryModal" tabindex="-1" role="dialog"
          aria-labelledby="exampleAddCategoryModalLabel"
@@ -95,7 +95,7 @@
 
                 <div class="modal-body">
 
-                    <!-- Save new Category -->
+
 
                     <form th:action="@{/save-category}" method="post">
 
@@ -121,7 +121,7 @@
         </div>
     </div>
 
-      <!--     Category modal end -->
+
 
 
 
@@ -133,7 +133,7 @@
                     <h5 class="modal-title" id="exampleModalLabel">Edit category</h5>
                 </div>
 
-                <!-- Update Category -->
+
 
                 <div class="modal-body">
                     <form th:action="@{/update-category}" method="post">

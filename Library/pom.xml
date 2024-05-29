@@ -8,7 +8,7 @@
         <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.Bassbazaar</groupId>
+    <groupId>com.Mixer</groupId>
     <artifactId>Library</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Library</name>
@@ -119,6 +119,12 @@
             <groupId>org.apache.pdfbox</groupId>  <!-- Pdf-->
             <artifactId>pdfbox</artifactId>
             <version>3.0.0-RC1</version> <!-- Use the latest version -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
         </dependency>
 
         <dependency>

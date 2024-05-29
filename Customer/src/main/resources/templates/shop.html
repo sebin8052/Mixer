@@ -57,7 +57,7 @@
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
-                <a th:href="@{index.html}" rel="nofollow">Home</a>
+                <a th:href="@{/}" rel="nofollow">Home</a>
                 <span></span> Shop
             </div>
         </div>
@@ -82,7 +82,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Sort by customer requirement -->
                                 <div class="sort-by-dropdown">
                                     <ul>
                                         <li><a th:classappend="${sort == '' ? 'active' : ''}" class="" th:href="@{/products-list(sort='')}">Featured</a></li>
@@ -111,7 +110,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Hover wishlist button -->
                                 <div class="product-action-1">
                                     <a aria-label="Add To Wishlist" class="action-btn wish-btn hover-up" th:href="@{/add-wishlist}" th:data-product-id="${product.id}"><i class="fi-rs-heart"></i></a>
                                 </div>
@@ -119,7 +117,6 @@
 
                             </div>
 
-                            <!-- Product info -->
                             <div class="product-content-wrap">
                                 <div class="product-category">
                                     <a th:text="${product.category.name}"></a>
@@ -143,15 +140,15 @@
                     </div>
                 </div>
 
-                <!-- Sidebar with search and categories -->
+
                 <div class="col-lg-3 primary-sidebar sticky-sidebar">
                     <div class="widget-category mb-30">
-                        <h5 class="section-title style-1 mb-30 wow fadeIn animated">Search & Category</h5>
+                        <h5 class="section-title style-1 mb-30 wow fadeIn animated">Search</h5>
 
-                        <!-- Search Box -->
+
                         <div class="search-box">
                             <form th:action="@{/search-products/0}" method="get">
-                                <input type="text" name="keyword" placeholder="Search products..." th:value="${keyword}" />
+                                <input type="text" name="keyword" placeholder="Select category & search" th:value="${keyword}" />
                                 <select name="categoryId">
                                     <option value="">All Categories</option>
                                     <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == selectedCategoryId}"></option>

@@ -26,32 +26,32 @@
             <p th:text="${success}"></p>
         </div>
 
-                <!--    update customer form      -->
+
 
         <form method="post" th:action="@{/update-account}" th:object="${customer}" id="accountForm">
             <div class="row">
 
-                <!-- First Name -->
+
                 <div class="form-group">
                     <label class="inputLabel" for="firstName">First Name *</label>
                     <input type="text" id="firstName"  name="firstName" placeholder="FirstName" th:field="*{firstName}">
                     <div class="error text-danger ms-2"></div>
                 </div>
-                <!-- Last Name -->
+
                 <div class="form-group">
                     <label class="inputLabel" for="lastName">Last Name *</label>
                     <input type="text" id="lastName"  name="lastName" placeholder="LastName" th:field="*{lastName}">
                     <div class="error text-danger ms-2"></div>
                 </div>
 
-                <!-- Mobile Number-->
+
                 <div class="form-group">
                     <label class="inputLabel" for="mobileNumber">Mobile Number*</label>
                     <input type="text" id="mobileNumber"  name="mobileNumber" placeholder="MobileNumber"  th:field="*{mobileNumber}">
                     <div class="error text-danger ms-2"></div>
                 </div>
 
-                <!-- Email-->
+
                 <div class="form-group">
                     <label class="inputLabel" for="mobileNumber">Email</label>
                     <input type="text" id="email"  name="email" placeholder="Email"  th:field="*{email}">
@@ -68,8 +68,6 @@
 
 
         <div class="card-body">
-
-            <!-- Change password of the user account [change- password]-->
 
             <form th:action="@{/change-password}" method="post" name="passwordForm" id="passswordForm">
                 <h5 class="formTitle">
@@ -116,7 +114,6 @@
 <div th:replace = "~{fragments::script}"></div>
 
 
-<!-- Script for checking new password and repeatNewPassword-->
 
 <script>
     const newPasswordInput = document.getElementById('newpassword');

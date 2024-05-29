@@ -16,6 +16,10 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="/admin/css/main.css">
 
+    <!-- Cropper.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+
 </head>
 <body>
 <div class="screen-overlay"></div>
@@ -28,9 +32,9 @@
         <form id="addProduct" class="form-horizontal" th:action="@{/save-product}" method="post" th:object = "${productDto}"
               enctype="multipart/form-data">
             <fieldset>
-                <!-- Form Name -->
+
                 <legend style="color: red;margin-bottom: 50px" >ADD NEW PRODUCT</legend>
-                <!-- Text input-->
+
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>
                     <div class="col-md-4">
@@ -40,7 +44,7 @@
 
                 </div>
 
-                <!-- Text input-->
+
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="brand">Brand Name</label>
                     <div class="col-md-4">
@@ -50,7 +54,7 @@
 
                 </div>
 
-                <!-- Select Basic -->
+
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="product_categories">PRODUCT CATEGORY</label>
                     <div class="col-md-4">
@@ -65,7 +69,7 @@
                 </div>
 
 
-                <!-- Text input-->
+
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="shortDescription">Product Short Description</label>
                     <div class="col-md-4">
@@ -74,7 +78,7 @@
                     </div>
                 </div>
 
-                <!-- Text input-->
+
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="longDescription">Product Long Description</label>
                     <div class="col-md-4">
@@ -83,7 +87,7 @@
                     </div>
                 </div>
 
-                <!-- Text input-->
+
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="available_quantity">AVAILABLE QUANTITY</label>
                     <div class="col-md-4">
@@ -93,7 +97,7 @@
 
                 </div>
 
-                <!-- Text input-->
+
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="price">PRICE</label>
                     <div class="col-md-4">
@@ -102,10 +106,10 @@
                     </div>
 
                 </div>
-                <!-- Text input-->
+
                 <div class="form-group" style="margin-top: 10px">
                     <div class="col-md-4">
-                        <!-- File Button -->
+
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="image">PRODUCT IMAGE</label>
                             <div class="col-md-4">
@@ -115,9 +119,14 @@
                             <!-- Imges preview -->
                             <div id="imagePreview" class="col-md-4"></div>
 
+                            <div id="uploadedImagesPreview" class="col-md-4"></div>
                             <!-- Imges preview -->
 
-
+                            <!-- Hidden input fields for cropping coordinates -->
+                            <input type="hidden" id="cropX" name="cropX">
+                            <input type="hidden" id="cropY" name="cropY">
+                            <input type="hidden" id="cropWidth" name="cropWidth">
+                            <input type="hidden" id="cropHeight" name="cropHeight">
 
                         </div>
                     </div>
@@ -158,9 +167,74 @@
 
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<!-- JavaScript to handle image cropping and coordinate updates -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+        const uploadedImagesPreview = document.getElementById('uploadedImagesPreview');
+        let cropper;
+
+        imageInput.addEventListener('change', function(event) {
+            // Clear previous preview
+            imagePreview.innerHTML = '';
+
+            const selectedFiles = event.target.files;
+
+            // Check if the selected file is an image
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+
+                    reader.onload = function() {
+                        // Create image element for preview
+                        const img = document.createElement('img');
+                        img.src = reader.result;
+                        img.style.maxWidth = '100px'; // Adjust width as needed
+                        img.style.maxHeight = '100px'; // Adjust height as needed
+
+                        // Append image to preview container
+                        imagePreview.appendChild(img);
+
+                        // Initialize Cropper on image element
+                        cropper = new Cropper(img, {
+                            aspectRatio: 16 / 9, // Set aspect ratio for cropping (horizontal)
+                            viewMode: 1, // Set view mode for cropping
+                            crop: function(event) {
+                                // Update hidden input fields with crop data, converting to integers
+                                document.getElementById('cropX').value = Math.round(event.detail.x);
+                                document.getElementById('cropY').value = Math.round(event.detail.y);
+                                document.getElementById('cropWidth').value = Math.round(event.detail.width);
+                                document.getElementById('cropHeight').value = Math.round(event.detail.height);
+                            }
+                        });
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        // Display uploaded images if available
+        const uploadedImageUrls = /*[[${imageUrls}]]*/ [];
+        if (uploadedImageUrls && uploadedImageUrls.length > 0) {
+            uploadedImageUrls.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url; // Update to full URL if necessary
+                img.style.maxWidth = '100px'; // Adjust width as needed
+                img.style.maxHeight = '100px'; // Adjust height as needed
+                uploadedImagesPreview.appendChild(img);
+            });
+        }
+    });
+</script>
 
 
-               <!-- localhost says 4 images upload -->
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -183,7 +257,7 @@
         });
     });
 
-/* Script for delete button in the product images*/
+
 </script>
 
 <script>
@@ -235,6 +309,27 @@
         });
     });
 </script>
+
+
+
+<!-- Error Handling Script -->
+<script>
+    document.getElementById('addProduct').addEventListener('submit', function(event) {
+        const imageInput = document.getElementById('image');
+        const selectedFiles = imageInput.files;
+        const minFiles = 3;
+        const maxFiles = 3;
+
+        if (selectedFiles.length < minFiles) {
+            alert(`Please select at least ${minFiles} file.`);
+            event.preventDefault(); // Prevent form submission
+        } else if (selectedFiles.length > maxFiles) {
+            alert(`You can only upload up to ${maxFiles} file.`);
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
+
 
 <script src="/admin/js/validation.js"></script>
 <script src="/admin/js/vendors/jquery-3.6.0.min.js"></script>

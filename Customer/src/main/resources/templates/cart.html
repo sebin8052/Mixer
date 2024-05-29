@@ -77,7 +77,6 @@
 
 
 
-              <!-- Custom-->
 
               <td class="text-center" data-title="Stock">
                 <a th:href="@{/decrementQuantity(id=${cartItem.cart.id}, cart_item_id=${cartItem.id})}">-</a>
@@ -86,8 +85,6 @@
               </td>
 
 
-                <!-- Custom -->
-              <!-- Cart Update form -->
 
               <form th:action="@{/update-cart}" method="post">
 
@@ -113,9 +110,6 @@
                     Delete
                   </button>
 
-                  <!-- Checkout-->
-
-                  <!--<a th:href="@{/check-out/{itemId}(itemId=${cartItem.id})}" class="btn btn-success btn-sm">Checkout</a>-->
 
                 </td>
               </form>

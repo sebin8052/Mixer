@@ -27,7 +27,7 @@
         </p>
     </div>
 
-    <!--      -->
+
 
     <div class="table-main table-responsive">
         <table class="table" id="tableOrder">
@@ -47,7 +47,7 @@
             </thead>
             <tbody>
 
-            <!--  -->
+
             <tr th:each="order : ${orders}">
 
                 <td>
@@ -68,7 +68,7 @@
                     <span th:text="${order.customer.firstName} + ' ' +  ${order.customer.lastName}"></span>
                 </td>
 
-                <!-- Order status  in the admin module -->
+
                     <td class="price-pr">
                         <select  th:unless="${order.orderStatus=='Cancelled' or order.orderStatus=='Delivered' or order.orderStatus=='Returned' or order.orderStatus=='Pending' or order.orderStatus=='Processing' or order.orderStatus=='Out of Delivery'}"  id="order-status" th:data-order-id="${order.id}"  onchange="submitSelection(this.getAttribute('data-order-id'))"  name="orderStatus" class="form-control">
                             <option th:value = "null">-SELECT-</option>
@@ -91,7 +91,7 @@
                     <span></span>[(${order.paymentMethod})]</span>
                 </td>
 
-                <!-- Action in order page-->
+
                 <td>
 
 
