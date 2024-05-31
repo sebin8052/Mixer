@@ -36,6 +36,7 @@ public class Order
 
     private String cancelReason;
 
+    private Double deliveryFee;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -48,6 +49,7 @@ public class Order
 
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL )
     private List<OrderDetail> orderDetails;
+
     @Override
     public String toString() {
         return "Order{" +
@@ -56,9 +58,18 @@ public class Order
                 ", deliveryDate=" + deliveryDate +
                 ", orderStatus='" + orderStatus + '\'' +
                 ", totalPrice=" + totalPrice +
+                ", discountPrice=" + discountPrice +
                 ", quantity=" + quantity +
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ", isAccept=" + isAccept +
+                ", paymentStatus='" + paymentStatus + '\'' +
+                ", cancelReason='" + cancelReason + '\'' +
+                ", deliveryFee='" + deliveryFee + '\'' +
+                ", shippingAddress=" + shippingAddress +
+                ", customer=" + customer +
+                ", orderDetails=" + orderDetails +
                 '}';
     }
+
+
 }

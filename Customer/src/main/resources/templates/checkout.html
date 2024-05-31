@@ -305,93 +305,109 @@
            }
 
 
-    const paymentStart = (addressId,payment_Method) => {
-        console.log(addressId);
-        console.log(payment_Method);
-        $.ajax(
-            {
+           const paymentStart = (addressId, payment_Method) => {
+               console.log(addressId);
+               console.log(payment_Method);
+               $.ajax({
+                   url: '/mixer/add-order',
+                   data: JSON.stringify({
+                       addressId: addressId,
+                       payment_Method: payment_Method
+                   }),
+                   contentType: 'application/json',
+                   type: 'POST',
+                   dataType: 'json',
+                   success: function(response) {
+                       console.log(response)
+                       if (response.status == "created") {
+                           let options = {
+                               key: 'rzp_test_UNiTzy90sRVBuq',
+                               amount: response.amount,
+                               currency: 'INR',
+                               name: 'mixer',
+                               description: 'Order Payment',
+                               image: '/imgs/theme/mixer.jpg',
+                               order_id: response.id,
+                               handler: function(response) {
+                                   console.log(response.razorpay_payment_id);
+                                   console.log(response.razorpay_order_id);
+                                   console.log(response.razorpay_signature);
+                                   verifyPayment(response, true); // Send success status
+                               },
+                               prefill: {
+                                   name: "",
+                                   email: "",
+                                   contact: ""
+                               },
+                               notes: {
+                                   address: "mixer"
+                               },
+                               theme: {
+                                   color: "#3399cc"
+                               }
+                           };
+                           let rzp = new Razorpay(options);
+                           rzp.open();
+                           rzp.on('payment.failed', function(response) {
+                               console.log(response.error.code);
+                               console.log(response.error.description);
+                               console.log(response.error.source);
+                               console.log(response.error.step);
+                               console.log(response.error.reason);
+                               console.log(response.error.metadata.order_id);
+                               console.log(response.error.metadata.payment_id);
 
-                url:'/mixer/add-order',
-                data:JSON.stringify({addressId:addressId,
-                    payment_Method:payment_Method}),
-                contentType: 'application/json',
-                type:'POST',
-                dataType:'json',
-                success:function(response){
-                    console.log(response)
-                    if(response.status == "created")
-                    {
-                        let options ={
-                            key:'rzp_test_UNiTzy90sRVBuq',
-                            amount: response.amount,
-                            currency:'INR',
-                            name:'mixer',
-                            description:'Order Payment',
-                            image:'/imgs/theme/mixer.jpg',
-                            order_id:response.id,
-                            handler:function(response){
-                                console.log(response.razorpay_payment_id);
-                                console.log(response.razorpay_order_id);
-                                console.log(response.razorpay_signature);
-                                verifyPayment(response);
-                            },
-                            prefill: {
-                                name:"",
-                                email:"",
-                                contact:""
-                            },
-                            notes:{
-                                address:"mixer"
-                            },
-                            theme:{
-                                color: "#3399cc"
-                            }
-                        };
-                        let rzp = new Razorpay(options);
-                        rzp.on('payment.failed', function (response){
-                            console.log(response.error.code);
-                            console.log(response.error.description);
-                            console.log(response.error.source);
-                            console.log(response.error.step);
-                            console.log(response.error.reason);
-                            console.log(response.error.metadata.order_id);
-                            console.log(response.error.metadata.payment_id);
-                        });
-                        rzp.open();
-                    }else if(response.status=="Cash"){
-                        location.href='/mixer/order-confirmation';
+                               // Call verifyPayment with failure status
+                               verifyPayment({
+                                   razorpay_order_id: response.error.metadata.order_id,
+                                   razorpay_payment_id: response.error.metadata.payment_id,
+                                   error: response.error
+                               }, false);  // Pass failure status
+                           });
 
-                    }else if(response.status=="Wallet"){
-                        location.href='/mixer/order-confirmation';
+                       } else if (response.status == "Cash") {
+                           location.href = '/mixer/order-confirmation';
 
-                    }
-                },
-                error:function(error){
-                    console.log(error)
-                    alert("something went wrong")
-                }
-            }
-        )
-    };
+                       } else if (response.status == "Wallet") {
+                           location.href = '/mixer/order-confirmation';
 
-    /* Verify Payment*/
-    function verifyPayment(payment){
-        $.ajax({
-            url:'/mixer/verify-payment',
-            method: 'post',
-            data:JSON.stringify(payment),
-            contentType: 'application/json',
-            dataType:'json',
-            success:(response)=>{
-                if(response.status){
-                    alert("congrats!! Payment successful");
-                    location.href='/mixer/order-confirmation'
-                } else{
-                    alert("Payment failed!")
-                }
-            }
-        });
-    }
+                       }
+                   },
+                   error: function(error) {
+                       console.log(error)
+                       alert("something went wrong")
+                   }
+               })
+           };
+
+           function verifyPayment(payment, status) {
+               const payload = {
+                   ...payment,
+                   status: status
+               };
+
+               $.ajax({
+                   url: '/mixer/verify-payment',
+                   method: 'post',
+                   data: JSON.stringify(payload),
+                   contentType: 'application/json',
+                   dataType: 'json',
+                   success: (response) => {
+                       console.log(response)
+                       if (response.status) {
+                           alert("Congrats! Payment successful");
+                           location.href = '/mixer/order-confirmation'
+                       } else {
+                           alert("Payment failed!")
+                       }
+                   },
+                   error: (error) => {
+                       console.log("Error occurred during payment verification:", error);
+                       alert("Error occurred during payment verification. Please try again later.");
+                   }
+               });
+           }
+
 
 </script>
 

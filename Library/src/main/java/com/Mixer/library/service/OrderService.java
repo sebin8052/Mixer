@@ -1,5 +1,6 @@
 package com.Mixer.library.service;
 
+import com.Mixer.library.model.Address;
 import com.Mixer.library.model.Customer;
 import com.Mixer.library.model.Order;
 import com.Mixer.library.model.ShoppingCart;
@@ -43,4 +44,6 @@ public interface OrderService
     void returnOrder(long id, Customer customer);
 
     void replaceOrderCustomer(long id, Customer customer);
+
+    double calculateDeliveryFee(Address address);
 }

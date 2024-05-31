@@ -32,6 +32,7 @@ public class OrderServiceImpl implements OrderService
 
     private WalletService walletService;
 
+
     public OrderServiceImpl(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ShoppingCartService shoppingCartService, ProductRepository productRepository, AddressService addressService, WalletService walletService) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
@@ -44,16 +45,29 @@ public class OrderServiceImpl implements OrderService
 
 
     @Override
-    public Order save(ShoppingCart cart, long address_id, String paymentMethod, Double oldTotalPrice) {
+    public Order save(ShoppingCart cart, long address_id, String paymentMethod, Double oldTotalPrice)  {
         Order order = new Order();
         order.setOrderDate(new Date());
         order.setCustomer(cart.getCustomer());
         order.setTotalPrice(cart.getTotalPrice());
         order.setQuantity(cart.getTotalItems());
         order.setPaymentMethod(paymentMethod);
-        order.setShippingAddress(addressService.findByIdOrder(address_id));
+
+        Address shippingAddress=addressService.findByIdOrder(address_id);
+        order.setShippingAddress(shippingAddress);
         order.setAccept(false);
         order.setOrderStatus("Pending");
+
+
+
+       double deliveryFee= calculateDeliveryFee(shippingAddress);
+       order.setDeliveryFee(deliveryFee);
+
+
+      double totalPrice =cart.getTotalPrice() + deliveryFee;
+      order.setTotalPrice(totalPrice);
+
+
         if(oldTotalPrice != null){
             Double discount= oldTotalPrice - cart.getTotalPrice();
             String formattedDiscount = String.format("%.2f", discount);
@@ -313,6 +327,20 @@ public class OrderServiceImpl implements OrderService
                 orderRepository.save(order);
             }
         }
+    }
+
+
+    public double calculateDeliveryFee(Address address)
+    {
+        String city =address.getCity();
+         if("Bangalore".equalsIgnoreCase(city))
+         {
+             return 50.0;
+         } else if ("Ernakulam".equalsIgnoreCase(city))
+         {
+           return 80.0;
+         }
+         return 0.0;
     }
 
 }

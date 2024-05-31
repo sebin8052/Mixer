@@ -177,6 +177,10 @@
                                                     <span th:if="${#strings.equals(order.orderStatus, 'Cancelled')}" class="badge rounded-pill alert-success text-success" >[(${order.orderStatus})]</span>
 
                                                 </dd>
+
+                                                <div th:if="${#strings.equals(order.paymentStatus, 'Failed')}">
+                                                    <a th:href="@{/check-out/all}">Continue</a>
+                                                </div>
                                             </dl>
                                         </article>
                                     </td>

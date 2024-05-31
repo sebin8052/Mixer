@@ -167,20 +167,12 @@ public class OrderController {
         ShoppingCart cart = customer.getCart();
 
 
-        if (cart.getTotalPrice() < 1000 && paymentMethod.equals("COD")) // check product price <1000 && payment = COD
-        {
-
-
-            redirectAttributes.addFlashAttribute("error", "COD payment method is not available for orders above 1000.");
-            return "redirect:/check-out/all" ;
-        }
-
 
 
             if (paymentMethod.equals("COD")) {
                 Order order = orderService.save(cart, address_id, paymentMethod, oldTotalPrice);
 
-                session.removeAttribute("totalItems");  // remove information from the session
+                session.removeAttribute("totalItems");
                 session.removeAttribute("totalPrice");
                 session.setAttribute("orderId", order.getId());
                 model.addAttribute("order", order);
@@ -222,118 +214,43 @@ public class OrderController {
             }
     }
 
-/* Failed ,continue in user account  */
 
-/*
-    @RequestMapping(value = "/add-order", method = RequestMethod.POST)
+
+
+
+
+    @RequestMapping(value = "/verify-payment", method = RequestMethod.POST)
     @ResponseBody
-    public String createOrder(@RequestBody Map<String, Object> data, Principal principal, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws RazorpayException {
+    public String verifyPayment(@RequestBody Map<String, Object> data, HttpSession session, Principal principal) throws RazorpayException {
+        String secret = "pflwkWXI3z4x4oLU9fcyzNl5";
+        String order_id = data.get("razorpay_order_id").toString();
+        String payment_id = data.get("razorpay_payment_id").toString();
+        String signature = data.containsKey("razorpay_signature") ? data.get("razorpay_signature").toString() : null;
+        boolean status = false;
 
-        String paymentMethod = data.get("payment_Method").toString();
-        Long address_id = Long.parseLong(data.get("addressId").toString());
-        Double oldTotalPrice = (Double) session.getAttribute("totalPrice");
-        Customer customer = customerService.findByEmail(principal.getName());
-        ShoppingCart cart = customer.getCart();
-
-        if (cart.getTotalPrice() > 1000 && paymentMethod.equals("COD")) {
-            redirectAttributes.addFlashAttribute("error", "COD payment method is not available for orders above 1000.");
-            return "redirect:/check-out/all";
+        if (signature != null) {
+            JSONObject options = new JSONObject();
+            options.put("razorpay_order_id", order_id);
+            options.put("razorpay_payment_id", payment_id);
+            options.put("razorpay_signature", signature);
+            status = Utils.verifyPaymentSignature(options, secret);
         }
 
-        Order order = orderService.save(cart, address_id, paymentMethod, oldTotalPrice);
-        session.removeAttribute("totalItems");
-        session.removeAttribute("totalPrice");
-        session.setAttribute("orderId", order.getId());
-        model.addAttribute("order", order);
-        model.addAttribute("page", "Order Detail");
-
-        if (paymentMethod.equals("COD")) {
-            model.addAttribute("success", "Order Added Successfully");
-            return "Order Added Successfully";
-        } else if (paymentMethod.equals("Wallet")) {
-            walletService.debit(customer.getWallet(), cart.getTotalPrice());
-            model.addAttribute("success", "Order Added Successfully");
-            return "Order Added Successfully";
-        } else {
-            try {
-                RazorpayClient razorpayClient = new RazorpayClient("rzp_test_UNiTzy90sRVBuq", "pflwkWXI3z4x4oLU9fcyzNl5");
-                JSONObject options = new JSONObject();
-                options.put("amount", order.getTotalPrice() * 100);
-                options.put("currency", "INR");
-                options.put("receipt", order.getId().toString());
-                com.razorpay.Order orderRazorPay = razorpayClient.orders.create(options);
-                return orderRazorPay.toString();
-            } catch (Exception e) {
-                // Handle payment failure
-                order.setOrderStatus("Payment Failed");
-                orderService.update(order);
-                session.setAttribute("failedOrderId", order.getId());
-                return "{\"status\":\"Payment Failed\"}";
-            }
-        }
-    }
-*/
-
-
-    /* if failed - continue */
-
-    @RequestMapping(value = "/continue-payment/{orderId}", method = RequestMethod.GET)
-    public String continuePayment(@PathVariable Long orderId, HttpSession session, Model model) throws RazorpayException {
-        Order order = orderService.findOrderById(orderId); // Fetch the existing order
-        if (order == null) {
-            // Handle order not found case
-            return "redirect:/orders";
-        }
-
-        // Proceed with payment initiation for the existing order
-        RazorpayClient razorpayClient = new RazorpayClient("rzp_test_UNiTzy90sRVBuq", "pflwkWXI3z4x4oLU9fcyzNl5");
-        JSONObject options = new JSONObject();
-        options.put("amount", order.getTotalPrice() * 100);
-        options.put("currency", "INR");
-        options.put("receipt", order.getId().toString());
-        com.razorpay.Order orderRazorPay = razorpayClient.orders.create(options);
-
-        // Update session and model attributes as needed
-        session.setAttribute("orderId", order.getId());
-        model.addAttribute("order", order);
-        model.addAttribute("page", "Order Detail");
-        model.addAttribute("success", "Order Payment Retried Successfully");
-
-        return "redirect:/payment-page"; // Redirect to the payment page with necessary details
-    }
-
-
-    /* if failed - continue */
-
-
-    @RequestMapping(value = "/verify-payment",method = RequestMethod.POST)
-    @ResponseBody
-    public String verifyPayment(@RequestBody Map<String,Object> data,HttpSession session,Principal principal) throws RazorpayException {
-        String secret= "pflwkWXI3z4x4oLU9fcyzNl5";
-        String order_id= data.get("razorpay_order_id").toString();
-        String payment_id=data.get("razorpay_payment_id").toString();
-        String signature=data.get("razorpay_signature").toString();
-
-
-        org.json.JSONObject options = new org.json.JSONObject();
-        options.put("razorpay_order_id", order_id);
-        options.put("razorpay_payment_id", payment_id);
-        options.put("razorpay_signature", signature);
-        boolean status =  Utils.verifyPaymentSignature(options, secret);
-        System.out.println(status);
-        Order order=orderService.findOrderById((Long)session.getAttribute("orderId"));
-        if(status){
-            orderService.updatePayment(order,status);
-            Customer customer=customerService.findByEmail(principal.getName());
+        Order order = orderService.findOrderById((Long) session.getAttribute("orderId"));
+        if (status) {
+            orderService.updatePayment(order, true);
+            Customer customer = customerService.findByEmail(principal.getName());
             ShoppingCart cart = customer.getCart();
             shoppingCartService.deleteCartById(cart.getId());
-        }else {
-            orderService.updatePayment(order, status);
+        } else {
+            orderService.updatePayment(order, false);
         }
-        org.json.JSONObject response = new org.json.JSONObject();
-        response.put("status",status);
+
+        JSONObject response = new JSONObject();
+        response.put("status", status);
         return response.toString();
     }
+
 
 
 
