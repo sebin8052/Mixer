@@ -182,7 +182,7 @@ public Product save(List<MultipartFile> imageProducts, ProductDto productDto, in
         return productDto;
     }
 
-    @Override
+/*    @Override
     public Product update(List<MultipartFile> imageProducts, ProductDto productDto) {
 
         String productName = productDto.getName();
@@ -233,6 +233,60 @@ public Product save(List<MultipartFile> imageProducts, ProductDto productDto, in
         catch (Exception e) {
             e.printStackTrace();
 
+            return null;
+        }
+    }*/
+
+    @Override
+    public Product update(List<MultipartFile> imageProducts, ProductDto productDto, int x, int y, int width, int height) {
+        String productName = productDto.getName();
+        long id = productDto.getId();
+
+        if (existsByNameandId(productName,id)) {
+            throw new ProductNameAlreadyExistsException("Product with the same name already exists");
+        }
+
+        try {
+            Product productUpdate = productRepository.findById(id);
+
+            productUpdate.setCategory(productDto.getCategory());
+            productUpdate.setName(productDto.getName());
+            productUpdate.setBrand(productDto.getBrand());
+            productUpdate.setShortDescription(productDto.getShortDescription());
+            productUpdate.setLongDescription(productDto.getLongDescription());
+            productUpdate.setCostPrice(productDto.getCostPrice());
+            productUpdate.setCurrentQuantity(productDto.getCurrentQuantity());
+
+            productRepository.save(productUpdate);
+
+            if (imageProducts != null && !imageProducts.isEmpty()) {
+                List<Image> imagesList = new ArrayList<>();
+                List<Image> existingImages = imageRepository.findImageBy(id);
+
+                int i = 0;
+                for (MultipartFile imageProduct : imageProducts) {
+                    byte[] croppedImage = imageUpload.cropImage(imageProduct, x, y, width, height);
+                    String imageName = imageUpload.storeCroppedFile(croppedImage, imageProduct.getOriginalFilename());
+
+                    if (i < existingImages.size()) {
+                        Image image = existingImages.get(i);
+                        image.setName(imageName);
+                        imageRepository.save(image);
+                        imagesList.add(image);
+                    } else {
+                        Image image = new Image();
+                        image.setName(imageName);
+                        image.setProduct(productUpdate);
+                        imageRepository.save(image);
+                        imagesList.add(image);
+                    }
+                    i++;
+                }
+                productUpdate.setImage(imagesList);
+            }
+            return productUpdate;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

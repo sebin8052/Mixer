@@ -86,6 +86,7 @@ public class ProductController
 
     }
 
+    /* without cropping */
 /*
     @PostMapping("/save-product")
     public String saveProduct(@ModelAttribute("productDto") ProductDto product,
@@ -158,6 +159,9 @@ public class ProductController
         return "update-product";
     }
 
+
+    /*without cropping*/
+/*
     @PostMapping("/update-product/{id}")
     public String updateProduct(@ModelAttribute("productDto") ProductDto productDto,
                                 @RequestParam("imageProduct") List<MultipartFile> imageProduct,
@@ -177,6 +181,30 @@ public class ProductController
         }
         return "redirect:/products";
     }
+*/
+
+
+    @PostMapping("/update-product/{id}")
+    public String updateProduct(@ModelAttribute("productDto") ProductDto productDto,
+                                @RequestParam("imageProduct") List<MultipartFile> imageProduct,
+                                @RequestParam(value = "cropX", required = false, defaultValue = "0") int x,
+                                @RequestParam(value = "cropY", required = false, defaultValue = "0") int y,
+                                @RequestParam(value = "cropWidth", required = false, defaultValue = "0") int width,
+                                @RequestParam(value = "cropHeight", required = false, defaultValue = "0") int height,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            productService.update(imageProduct, productDto, x, y, width, height);
+            redirectAttributes.addFlashAttribute("success", "Updated successfully!");
+        } catch (ProductNameAlreadyExistsException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Product with the same name already exists!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Server error, please try again!");
+        }
+        return "redirect:/products";
+    }
+
 
     @GetMapping("/disable-product/{id}")
     public String disable(@PathVariable("id")long id,RedirectAttributes redirectAttributes){

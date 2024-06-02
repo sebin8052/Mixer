@@ -11,4 +11,7 @@ public interface WishlistService
     boolean findByProductId(long id,Customer customer);
     Wishlist save(long productId,Customer customer);
     void deleteWishlist(long id);
+
+    int getWishlistCountByCustomer(Customer customer);
+
 }

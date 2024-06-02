@@ -57,10 +57,4 @@ public class CustomerSecurityConfig
 
 }
 
-    /*     .oauth2Login(oauth -> oauth
-        .loginPage("/login") // Reuse existing login page
-                .failureUrl("/login?error")
-                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(oAuth2UserService))
-        .successHandler(oAuth2LoginHandler))
 
-        .logout(LogoutConfigurer::permitAll)*/

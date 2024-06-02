@@ -57,15 +57,18 @@
                         <div class="header-action-2">
 
                             <div class="header-action-icon-2">
+
+                                <!-- Other header elements -->
                                 <a th:href="@{/wishlist}">
                                     <img class="svgInject" alt="Evara" th:src="@{/imgs/theme/icons/icon-heart.svg}">
-                                                                        <span class="pro-count blue">4</span>
+                                    <span class="pro-count blue" th:text="${wishlistCount}">0</span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
+
                                 <a class="mini-cart-icon" th:href="@{/cart}">
                                     <img alt="Evara" style="color: whitesmoke" th:src="@{/imgs/theme/icons/icon-cart.svg}">
-                                    <span class="pro-count blue">2</span>
+                                    <span class="pro-count blue">3</span>
                                 </a>
                             </div>
                         </div>
@@ -106,9 +109,6 @@
                             <ul style="color: white">
                                 <li><a class="active" th:href="@{/}" style="color: red">Home </a>
                                 </li>
-                                <li>
-                                    <a th:href="@{/about}" style="color: red">About</a>
-                                </li>
                                 <li><a th:href="@{/products-list}" style="color: red">Shop</a>
                                 </li>
                                 <li><a th:href="@{/dashboard}" style="color: red">My Account</a>
@@ -117,6 +117,9 @@
                                 </li>
                                 <li>
                                     <a th:href="@{/contact}" style="color: red">Contact</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/about}" style="color: red">About</a>
                                 </li>
                             </ul>
                         </nav>

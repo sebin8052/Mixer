@@ -4,9 +4,7 @@ import com.Mixer.library.dto.ProductDto;
 import com.Mixer.library.model.Category;
 import com.Mixer.library.model.Customer;
 import com.Mixer.library.model.Product;
-import com.Mixer.library.service.CategoryService;
-import com.Mixer.library.service.CustomerService;
-import com.Mixer.library.service.ProductService;
+import com.Mixer.library.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -27,13 +25,18 @@ public class ProductController
 
     private final CustomerService customerService;
 
+    private  final WishlistService wishlistService;
+
+    private final ShoppingCartService shoppingCartService;
 
 
     public ProductController(CategoryService categoryService, ProductService productService,
-                             CustomerService customerService) {
+                             CustomerService customerService, WishlistService wishlistService, ShoppingCartService shoppingCartService) {
         this.customerService=customerService;
         this.categoryService = categoryService;
         this.productService = productService;
+        this.wishlistService = wishlistService;
+        this.shoppingCartService = shoppingCartService;
     }
 
     @GetMapping("/")
@@ -44,9 +47,14 @@ public class ProductController
             Customer customer = customerService.findByEmail(principal.getName());
             session.setAttribute("userLoggedIn",true);
             session.setAttribute("username", customer.getFirstName() + " " + customer.getLastName());
+            int wishlistCount = wishlistService.getWishlistCountByCustomer(customer);
+            model.addAttribute("wishlistCount", wishlistCount);
+
         }
         List<Category> categories = categoryService.findAllByActivatedTrue();
         List<ProductDto> products=productService.findAllProducts();
+
+
 
         model.addAttribute("categories",categories);
         model.addAttribute("products",products);

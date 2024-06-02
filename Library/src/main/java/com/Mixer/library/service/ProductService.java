@@ -16,10 +16,12 @@ public interface ProductService
 
 /*    Product save(List<MultipartFile> imageProduct, ProductDto product);*/
 
-/* New */
     Product save(List<MultipartFile> imageProduct, ProductDto product, int x, int y, int width, int height);
     ProductDto findById(long id);
-    Product update(List<MultipartFile> imageProduct,ProductDto productDto);
+
+
+  /*  Product update(List<MultipartFile> imageProduct,ProductDto productDto);*/
+    Product update(List<MultipartFile> imageProduct,ProductDto productDto, int x, int y, int width, int height);
     void disable(long id);
     void enable(long id);
     Page<ProductDto> findAllByActivated(long id, int pageNo);

@@ -50,4 +50,9 @@ public class WishlistServiceImpl implements WishlistService
         Wishlist wishlist=wishlistRepository.findById(id);
         wishlistRepository.delete(wishlist);
     }
+
+    public int getWishlistCountByCustomer(Customer customer)
+    {
+        return wishlistRepository.countByCustomerId(customer.getId());
+    }
 }

@@ -15,5 +15,10 @@ public interface WishlistRepository extends JpaRepository<Wishlist,Long>
     @Query(value = "SELECT EXISTS (SELECT FROM wishlist WHERE customer_id = :customerId AND product_id=:productId)",nativeQuery = true)
     boolean findByProductIdAndCustomerId(@Param("productId") long productId, @Param("customerId") long customerId);
     Wishlist findById(long id);
+
+
+
+    @Query(value = "SELECT COUNT(*) FROM wishlist WHERE customer_id = :customerId", nativeQuery = true)
+    int countByCustomerId(@Param("customerId") long customerId);
 }
 
