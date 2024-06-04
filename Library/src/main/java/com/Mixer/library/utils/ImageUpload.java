@@ -22,9 +22,9 @@ public class ImageUpload
 {
     //    String rootPath = System.getProperty("user.home");
 
-    String UPLOAD_FOLDER = "/Admin/src/main/resources/static/imgs/images";
+    String UPLOAD_FOLDER = "/home/ubuntu/Mixer/Admin/src/main/resources/static/imgs/images";
 
-    String UPLOAD_FOLDER_CUSTOMER ="/Customer/src/main/resources/static/imgs/images";
+    String UPLOAD_FOLDER_CUSTOMER ="/home/ubuntu/Mixer/Customer/src/main/resources/static/imgs/images";
 
 
     public String storeFile(MultipartFile file) throws IOException
