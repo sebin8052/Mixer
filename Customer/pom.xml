@@ -35,10 +35,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
@@ -57,23 +53,12 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
-        </dependency>
 
 
         <dependency>
             <groupId>com.twilio.sdk</groupId>
             <artifactId>twilio</artifactId>
             <version>8.1.0</version>
-        </dependency>
-
-<!--    use to create java class in the runtime[create class on demand /manipulate existing class/intercept existing class]     -->
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.14.10 </version> <!-- Use the version suitable for your project -->
         </dependency>
 
 
@@ -110,11 +95,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>                          <!-- use to create random string for email -->
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.14.10 </version> <!-- Use the version suitable for your project -->
-        </dependency>
 
         <!-- ModelMapper -->
         <dependency>
